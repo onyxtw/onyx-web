@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO 優化與關鍵字設定 -->
+    <title>ONYX | DEEP TECH 奧尼克斯科技 - 未來流動數據與邊緣運算權威</title>
+    <meta name="description"
+        content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資、RTK 定位修正與負碳運算技術。作為未來的數據權威，我們提供最尖端的深科技解決方案。">
+    <meta name="keywords" content="ONYX, DEEP TECH, 奧尼克斯, 奧尼克斯科技, 晶體生長演算法, 負碳運算, 邊緣運算, Edge AI, 數據權威, 韌性節點, 科技工作室">
+    <meta name="author" content="ONYX DEEP TECH STUDIO">
+
+    <!-- Open Graph (社群分享優化) -->
+    <meta property="og:title" content="ONYX | DEEP TECH 奧尼克斯科技">
+    <meta property="og:description" content="探索奧尼克斯科技的逆熵運算與邊緣智慧技術。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onyx.tw">
+
+    <!-- 結構化數據 (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ONYX DEEP TECH STUDIO 奧尼克斯科技工作室",
+      "alternateName": "ONYX 奧尼克斯科技",
+      "url": "https://onyx.tw",
+      "logo": "https://onyx.tw/IMG_4642.jpg",
+      "taxID": "00466122",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "onyxstudio@onyx.tw",
+        "contactType": "customer service"
+      },
+      "keywords": "onyx, DEEP TECH, 奧尼克斯, 邊緣運算, AI"
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --deep-space: #0b0c15;
+            --signal-cyan: #00f0ff;
+            --luxury-gold: #d4af37;
+            --glass-surface: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+
+            --font-tech: 'JetBrains Mono', monospace;
+            --font-fashion: 'Playfair Display', serif;
+            --font-body: 'Noto Serif TC', serif;
+
+            --glass-blur: 12px;
+            --transition-speed: 0.4s;
+        }
+
+        body {
+            background-color: var(--deep-space);
+            color: #e2e8f0;
+            font-family: var(--font-body);
+            overflow-x: hidden;
+        }
+
+        .font-tech { font-family: var(--font-tech); }
+        .font-fashion { font-family: var(--font-fashion); }
+        .font-body { font-family: var(--font-body); }
+
+        /* 背景特效：極光流動 */
+        .ambient-flow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05), transparent 25%);
+            animation: pulse-flow 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-flow {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* 元素懸浮動畫 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* 網格紋理 */
+        .grid-texture {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.15;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        /* 高級玻璃擬態面板 */
+        .glass-card {
+            background: var(--glass-surface);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* 導航按鈕特效 */
+        .nav-link {
+            position: relative;
+            opacity: 0.6;
+            transition: 0.3s;
+            padding-bottom: 4px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            opacity: 1;
+            color: white;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--luxury-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* 頁面切換動畫 */
+        .section-view {
+            display: none;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .section-view.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    </style>
+</head>
+
+<body class="selection:bg-cyan-500/30 selection:text-white">
+
+    <div class="ambient-flow"></div>
+    <div class="grid-texture"></div>
+
+    <!-- Header 品牌標誌區 -->
+    <header class="fixed top-0 w-full z-50 glass-card border-x-0 border-t-0 h-20 flex items-center justify-between px-6 md:px-12">
+        <div class="flex items-center gap-4 group cursor-pointer" onclick="switchTab('home')">
+            <!-- 運用 IMG_4642 作為微型 Icon，採用濾色(mix-blend-screen)去黑底 -->
+            <img src="IMG_4642.jpg" alt="ONYX Icon" class="w-12 h-12 object-contain mix-blend-screen opacity-90 group-hover:opacity-100 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.6)] transition duration-500">
+            
+            <div>
+                <h1 class="font-fashion text-2xl tracking-[0.1em] text-white flex items-center gap-2">
+                    ONYX <span class="text-luxury-gold font-light text-xl">|</span> <span class="italic text-gray-300">DEEP TECH</span>
+                </h1>
+                <div class="flex items-center gap-2 mt-0.5">
+                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                    <p class="font-body text-[11px] text-gray-400 tracking-[0.25em] font-light">奧尼克斯科技</p>
+                </div>
+            </div>
+        </div>
+
+        <nav id="desktop-nav" class="hidden xl:flex gap-8 font-tech text-[10px] tracking-[0.15em] uppercase">
+            <button class="nav-link active" onclick="switchTab('home')">首頁 Origin</button>
+            <button class="nav-link" onclick="switchTab('crystal')">技術 Crystal</button>
+            <button class="nav-link" onclick="switchTab('whitepaper')">白皮書 WP</button>
+            <button class="nav-link" onclick="switchTab('fieldops')">實地行動 Ops</button>
+            <button class="nav-link" onclick="switchTab('contact')">聯繫 Contact</button>
+        </nav>
+
+        <button class="xl:hidden text-white/80" onclick="toggleMobileMenu(true)">
+            <i class="fa-solid fa-bars-staggered text-xl"></i>
+        </button>
+    </header>
+
+    <!-- 手機版選單 -->
+    <div id="mobile-nav" class="fixed inset-0 z-[60] bg-[#0b0c15]/98 backdrop-blur-xl pt-24 px-8 flex flex-col gap-8 transform translate-x-full transition-transform duration-500 xl:hidden">
+        <button onclick="toggleMobileMenu(false)" class="absolute top-8 right-8 text-white/50">
+            <i class="fa-solid fa-xmark text-3xl"></i>
+        </button>
+        <button class="text-left text-2xl font-fashion text-white border-b border-white/10 pb-4" onclick="switchTab('home')">首頁 ORIGIN</button>
+        <button class="text-left text-2xl font-fashion text-white border-b border-white/10 pb-4" onclick="switchTab('crystal')">技術 CRYSTAL</button>
+        <button class="text-left text-2xl font-fashion text-white border-b border-white/10 pb-4" onclick="switchTab('whitepaper')">白皮書 WP</button>
+        <button class="text-left text-2xl font-fashion text-white border-b border-white/10 pb-4" onclick="switchTab('fieldops')">實地行動 OPS</button>
+        <button class="text-left text-2xl font-fashion text-white border-b border-white/10 pb-4" onclick="switchTab('contact')">聯繫 CONTACT</button>
+    </div>
+
+    <main class="pt-32 pb-20 px-6 md:px-12 max-w-[1400px] mx-auto min-h-screen">
+
+        <!-- 1. Home / Origin -->
+        <section id="home" class="section-view active">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[60vh]">
+                <div class="space-y-8 relative z-10">
+                    <div class="border-l-2 border-luxury-gold pl-6">
+                        <span class="font-tech text-[10px] text-luxury-gold tracking-[0.3em] block mb-4 italic">FOUNDER'S VISION</span>
+                        <h2 class="text-5xl md:text-7xl font-fashion text-white leading-[1.1]">
+                            極致科技，<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-luxury-gold italic">淬煉於深處。</span>
+                        </h2>
+                    </div>
+                    <p class="text-gray-400 font-light text-lg leading-loose text-justify">
+                        ONYX | DEEP TECH 奧尼克斯科技致力於在極端環境中尋求穩定。如同黑曜石經由地質壓力淬煉而成，我們的數據演算法與韌性節點設計，是為了在最嚴酷的挑戰下提供絕對的精準度。我們不只是科技的創造者，更是智慧數據的提煉者。
+                    </p>
+                    <div class="pt-4">
+                        <button onclick="switchTab('contact')" class="glass-card px-8 py-4 text-xs font-tech tracking-widest text-white border-white/20 hover:border-cyan-400 transition">
+                            與我們聯繫 <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 運用 IMG_4623 作為首頁主視覺，帶有青金雙色完美呼應主題 -->
+                <div class="relative flex justify-center items-center h-[400px] lg:h-full">
+                    <div class="absolute inset-0 bg-cyan-500/10 blur-[100px] rounded-full"></div>
+                    <!-- 加上 mix-blend-screen 完美去背，並加上 animate-float 懸浮特效 -->
+                    <img src="IMG_4623.jpg" alt="ONYX Core Visual" class="w-full max-w-[500px] object-contain mix-blend-screen animate-float relative z-10 drop-shadow-[0_0_25px_rgba(0,240,255,0.15)]">
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Crystal / Technology -->
+        <section id="crystal" class="section-view">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5 space-y-8">
+                    <h2 class="text-4xl font-fashion text-white italic">Crystal Growth <span class="text-gray-500">晶體生長演算法</span></h2>
+                    <p class="text-gray-400 leading-relaxed text-justify font-light">
+                        我們拒絕盲目的暴力運算。ONYX 的核心技術「晶體生長演算法」採用逆熵架構，模擬自然界礦物的結構化過程，在訓練初期便建立邏輯骨架，大幅降低無謂的算力損耗，實現真正的智慧提純。
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card p-6 text-center">
+                            <div class="text-3xl text-cyan-400 font-tech mb-2">-68%</div>
+                            <div class="text-[10px] text-gray-500 tracking-widest uppercase">能源冗餘降低</div>
+                        </div>
+                        <div class="glass-card p-6 text-center">
+                            <div class="text-3xl text-luxury-gold font-tech mb-2">99.9%</div>
+                            <div class="text-[10px] text-gray-500 tracking-widest uppercase">數據處理精度</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-7 glass-card p-8 min-h-[400px]">
+                    <h4 class="font-tech text-[10px] text-gray-500 mb-6 border-b border-white/10 pb-2 uppercase">Deep Tech Performance Radar</h4>
+                    <div class="relative h-[300px]">
+                        <canvas id="crystalChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Whitepaper -->
+        <section id="whitepaper" class="section-view">
+            <div class="glass-card p-10 md:p-20 max-w-4xl mx-auto border-luxury-gold/20">
+                <div class="flex justify-between items-end border-b border-white/10 pb-8 mb-10">
+                    <div>
+                        <h2 class="text-3xl font-fashion text-white tracking-widest uppercase">Technical Whitepaper</h2>
+                        <p class="font-tech text-[10px] text-gray-500 mt-2">DOC_ID: ONX-2026-REVISION-A // INTERNAL USE ONLY</p>
+                    </div>
+                    <i class="fa-solid fa-file-shield text-3xl text-luxury-gold/50"></i>
+                </div>
+
+                <div class="space-y-12 text-gray-300 font-light">
+                    <div>
+                        <h3 class="text-xl text-white font-medium mb-3 font-fashion italic">01. 逆熵運算架構 (Anti-Entropy Computing)</h3>
+                        <p class="text-sm opacity-80 leading-loose">我們認為數據不應只是堆疊。透過 ONYX Protocol，我們將雜訊轉化為有序的幾何邏輯體，讓運算過程本身即是能源優化的過程。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-white font-medium mb-3 font-fashion italic">02. 負碳協議 (Negative Carbon Protocol)</h3>
+                        <p class="text-sm opacity-80 leading-loose">利用邊緣運算節點的熱能循環系統，我們將伺服器廢熱轉化為可供當地農業或微電網使用的二次能源，實現運算與生態的共生。</p>
+                    </div>
+                    <div>
+                        <h3 class="text-xl text-white font-medium mb-3 font-fashion italic">03. 智慧財產聲明 (Intellectual Property)</h3>
+                        <div class="bg-white/5 border-l-2 border-luxury-gold p-6 space-y-3">
+                            <p class="text-[10px] font-tech text-luxury-gold">> PATENT PENDING STATUS</p>
+                            <ul class="space-y-2 text-xs opacity-80 font-tech">
+                                <li class="flex gap-3"><i class="fa-solid fa-lock text-gray-600"></i> Crystal Growth Algorithm (V2.1)</li>
+                                <li class="flex gap-3"><i class="fa-solid fa-lock text-gray-600"></i> Lidao Edge Node Cooling Architecture</li>
+                                <li class="flex gap-3"><i class="fa-solid fa-lock text-gray-600"></i> RTK Precision Correction Network</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Field Ops -->
+        <section id="fieldops" class="section-view">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 glass-card p-8 md:p-12 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-8 opacity-10">
+                        <i class="fa-solid fa-microchip text-8xl text-cyan-500 animate-pulse"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-fashion text-white mb-6 italic">Sector Zero <span class="text-cyan-400">Node</span></h2>
+                    <p class="text-gray-400 text-sm mb-10 max-w-lg">位於極端環境的實地運算節點，目前正為導航系統與微電網提供即時同步數據。</p>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/10 pt-8">
+                        <div>
+                            <div class="text-[9px] font-tech text-gray-500 mb-1">LATENCY</div>
+                            <div class="text-xl text-white font-tech">8<span class="text-sm text-gray-500 ml-1">ms</span></div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] font-tech text-gray-500 mb-1">STABILITY</div>
+                            <div class="text-xl text-green-400 font-tech">99.98%</div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] font-tech text-gray-500 mb-1">PROTOCOL</div>
+                            <div class="text-xl text-cyan-400 font-tech">RTK+</div>
+                        </div>
+                        <div>
+                            <div class="text-[9px] font-tech text-gray-500 mb-1">STRATEGIC</div>
+                            <div class="flex gap-3 text-white/50 text-lg mt-1">
+                                <i class="fa-brands fa-google hover:text-white transition"></i>
+                                <i class="fa-solid fa-bolt hover:text-luxury-gold transition"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 flex flex-col h-[400px]">
+                    <h3 class="font-tech text-xs text-luxury-gold tracking-widest mb-6 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-luxury-gold rounded-full animate-ping"></span> SYSTEM_LIVE_LOGS
+                    </h3>
+                    <div id="log-container" class="flex-1 overflow-y-auto space-y-4 font-tech text-[10px] custom-scrollbar pr-2">
+                        <div class="text-gray-500 border-l border-white/10 pl-3 py-1">Initializing Secure Uplink...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Contact -->
+        <section id="contact" class="section-view">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                <div class="glass-card p-10 space-y-8">
+                    <h2 class="text-4xl font-fashion text-white">Get in Touch</h2>
+                    <p class="text-gray-400 font-light leading-relaxed">我們歡迎任何關於數據權威、負碳運算或邊緣 AI 架構的商務合作與技術諮詢。</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 glass-card flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 transition">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-500 font-tech uppercase tracking-widest">Official Email</p>
+                                <a href="mailto:onyxstudio@onyx.tw" class="text-white font-tech hover:text-cyan-400 transition">onyxstudio@onyx.tw</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 group">
+                            <div class="w-12 h-12 glass-card flex items-center justify-center text-luxury-gold group-hover:border-luxury-gold transition">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-500 font-tech uppercase tracking-widest">Deep Tech Node</p>
+                                <p class="text-white font-tech">Sector Zero, TW (Deep Tech Infrastructure)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-10 h-full flex flex-col justify-center border-white/5 relative overflow-hidden">
+                    <div class="absolute -bottom-10 -right-10 opacity-10 rotate-12">
+                        <img src="IMG_4642.jpg" class="w-64 h-64 mix-blend-screen" alt="BG">
+                    </div>
+                    <h3 class="text-xl font-fashion text-white mb-6 relative z-10">品牌理念 Analysis</h3>
+                    <p class="text-xs text-gray-500 leading-loose italic relative z-10">
+                        "ONYX | DEEP TECH 奧尼克斯科技" 代表著純粹、堅韌與不可被輕易窺探的核心價值。我們追求如黑曜石般的切面——俐落、冷鋒且充滿力量感。在全球科技競爭的浪潮中，我們選擇隱身於深處，為未來世界提供最穩固的底層邏輯。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer 版權資訊與極簡智財宣告 -->
+    <footer class="mt-20 border-t border-white/10 bg-black/60 backdrop-blur-md pt-16 pb-8 px-6 md:px-12 relative z-10">
+        
+        <!-- 上層：連結、聯絡資訊與品牌資訊 -->
+        <div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start gap-12 mb-16">
+            
+            <!-- 左側：使用 IMG_4666 作為 Footer 強勢收尾 -->
+            <div class="space-y-6 shrink-0 md:w-1/3">
+                <img src="IMG_4666.jpg" alt="ONYX DEEP TECH STUDIO" class="h-16 w-auto object-contain mix-blend-screen opacity-90">
+                <div class="flex flex-col gap-3 font-body text-xs text-gray-400 mt-2 border-t border-white/10 pt-6">
+                    <a href="#" class="hover:text-cyan-400 transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-[8px]"></i> 隱私權政策</a>
+                    <a href="#" class="hover:text-cyan-400 transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-[8px]"></i> 網站使用條款</a>
+                    <a href="#" class="hover:text-cyan-400 transition flex items-center gap-2"><i class="fa-solid fa-angle-right text-[8px]"></i> 智產權保護政策</a>
+                </div>
+            </div>
+
+            <!-- 右側：聯繫方式與品牌統編區塊 (依照上一版的精簡排版) -->
+            <div class="text-left md:text-right pt-2 md:w-1/3">
+                <h4 class="font-tech text-xs text-gray-500 tracking-widest uppercase border-b border-white/10 pb-2 inline-block">Stay Connected</h4>
+                <a href="mailto:onyxstudio@onyx.tw" class="block font-tech text-sm text-gray-300 hover:text-cyan-400 transition mb-6 mt-4">
+                    onyxstudio@onyx.tw
+                </a>
+                
+                <div class="flex md:justify-end gap-6 text-xl text-gray-600">
+                    <a href="#" class="hover:text-white transition cursor-pointer"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-cyan-400 transition cursor-pointer"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="hover:text-white transition cursor-pointer"><i class="fa-brands fa-x-twitter"></i></a>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-white/5">
+                    <h2 class="font-fashion text-xl text-white tracking-widest mb-2">ONYX DEEP TECH STUDIO</h2>
+                    <p class="font-body text-xs text-gray-400 tracking-[0.2em] mb-4">奧尼克斯科技工作室</p>
+                    <p class="font-tech text-[10px] text-gray-500 tracking-widest uppercase">TAX ID : 00466122</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 下層（最底部）：版權、全英文極簡智財宣告 -->
+        <div class="max-w-[1400px] mx-auto border-t border-white/10 pt-8 flex flex-col xl:flex-row justify-between items-start gap-8">
+            <div class="space-y-3 shrink-0">
+                <p class="text-gray-400 font-tech text-xs tracking-widest uppercase">
+                    © 2026 ONYX DEEP TECH STUDIO. ALL RIGHTS RESERVED.
+                </p>
+            </div>
+            
+            <div class="xl:max-w-3xl text-left xl:text-right">
+                <p class="text-gray-500/60 font-tech text-[9px] leading-relaxed uppercase">
+                    <strong class="text-gray-400">INTELLECTUAL PROPERTY & PATENT NOTICE:</strong> All core technologies, including the Crystal Growth Algorithm and Edge Node Architectures, are the exclusive property of ONYX DEEP TECH STUDIO. Unauthorized reproduction, modification, or reverse engineering is strictly prohibited.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 頁面切換邏輯
+        function switchTab(id) {
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active');
+            
+            // 手機版選單自動關閉
+            toggleMobileMenu(false);
+
+            // 更新導航列狀態
+            const links = document.querySelectorAll('.nav-link');
+            const map = { 'home': 0, 'crystal': 1, 'whitepaper': 2, 'fieldops': 3, 'contact': 4 };
+            if (map[id] !== undefined) links[map[id]].classList.add('active');
+
+            // 如果切換到晶體頁面，重新繪製圖表
+            if (id === 'crystal') initChart();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu(show) {
+            const menu = document.getElementById('mobile-nav');
+            if (show) {
+                menu.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+
+        // Chart.js 圖表初始化
+        let crystalChart = null;
+        function initChart() {
+            if (crystalChart) return;
+            const ctx = document.getElementById('crystalChart').getContext('2d');
+            crystalChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['能源效率', '數據精度', '結構穩定', '負碳協議', '響應速度'],
+                    datasets: [{
+                        label: 'ONYX Crystal Protocol',
+                        data: [96, 99, 92, 88, 95],
+                        backgroundColor: 'rgba(0, 240, 255, 0.2)',
+                        borderColor: '#00f0ff',
+                        pointBackgroundColor: '#fff',
+                        borderWidth: 2
+                    }, {
+                        label: 'Standard Deep Tech',
+                        data: [45, 75, 55, 30, 70],
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderColor: '#d4af37',
+                        borderWidth: 1,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            pointLabels: { color: '#aaa', font: { family: 'JetBrains Mono', size: 10 } },
+                            ticks: { display: false, backdropColor: 'transparent' }
+                        }
+                    },
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: { color: '#fff', font: { family: 'Noto Serif TC', size: 10 } } 
+                        } 
+                    }
+                }
+            });
+        }
+
+        // 模擬系統日誌
+        const logs = [
+            "Uplink established with Sector Zero Node.",
+            "Analyzing geological frequency data...",
+            "Negative Carbon Protocol: ACTIVE. Heat exchange optimized.",
+            "Crystal Growth Algorithm V2.1: Re-aligning logic branches.",
+            "RTK Correction signal strength: 98.4dB.",
+            "Encrypted data stream sync complete.",
+            "Deep Tech Infrastructure: ALL SYSTEMS NOMINAL."
+        ];
+        const logContainer = document.getElementById('log-container');
+        let logIdx = 0;
+
+        function addLog() {
+            const log = document.createElement('div');
+            log.className = "border-l border-cyan-500/30 pl-3 py-1 animate-[fadeIn_0.5s_ease-out]";
+            log.innerHTML = `<span class="text-cyan-500 font-bold">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-300">${logs[logIdx]}</span>`;
+            logContainer.prepend(log);
+            logIdx = (logIdx + 1) % logs.length;
+        }
+
+        setInterval(addLog, 3000);
+        window.onload = () => {
+            initChart();
+            for(let i=0; i<3; i++) addLog();
+        };
+    </script>
+</body>
+
+</html>
