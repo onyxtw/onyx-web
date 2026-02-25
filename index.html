@@ -894,15 +894,83 @@
         gsap.registerPlugin(ScrollTrigger);
 
         // ==========================================
+        // ✨ 新增：手機版選單開關函式
+        // ==========================================
+        function toggleMobileMenu(show) {
+            const menu = document.getElementById('mobile-nav');
+            if (show) {
+                menu.classList.remove('translate-x-full');
+                menu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('translate-x-0');
+                menu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        // ==========================================
+        // ✨ 新增：AI 聊天視窗開關函式
+        // ==========================================
+        function toggleAIChat() {
+            const chatWindow = document.getElementById('ai-chat-window');
+            const isHidden = chatWindow.classList.contains('hidden');
+            if (isHidden) {
+                chatWindow.classList.remove('hidden', 'opacity-0', 'scale-95');
+                chatWindow.classList.add('flex');
+            } else {
+                chatWindow.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                    chatWindow.classList.remove('flex');
+                }, 300);
+            }
+        }
+        
+        // ==========================================
+        // ✨ 新增：AI 聊天訊息發送函式
+        // ==========================================
+        async function sendAIChatMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const messagesContainer = document.getElementById('ai-chat-messages');
+            const query = input.value.trim();
+            if (!query) return;
+
+            // Display user message
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = "flex flex-col gap-1 items-end";
+            userMsgDiv.innerHTML = `
+                <span class="text-[9px] font-tech text-gray-500 tracking-widest">USER_INPUT</span>
+                <div class="bg-gray-700/30 border border-gray-600/50 text-gray-200 px-4 py-3 rounded-2xl rounded-br-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
+                    ${query}
+                </div>`;
+            messagesContainer.appendChild(userMsgDiv);
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Display loading indicator and prepare AI response container
+            const aiMsgContainer = document.createElement('div');
+            aiMsgContainer.className = "flex flex-col gap-1 items-start";
+            aiMsgContainer.innerHTML = `
+                <span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI CORE</span>
+                <div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
+                    <i class="fa-solid fa-circle-notch fa-spin text-cyan-400"></i>
+                </div>`;
+            messagesContainer.appendChild(aiMsgContainer);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Call the streaming AI function
+            await callGemini(query, "You are ONYX AI Core. Respond in Traditional Chinese.", true, aiMsgContainer.querySelector('div'));
+        }
+
+        // ==========================================
         // 頁面與選單切換 (分頁式)
         // ==========================================
         function switchTab(id, isMobile = false) {
-            // 隱藏所有頁面並移除 active 狀態
             document.querySelectorAll('.section-view').forEach(el => {
                 if (el.classList.contains('active')) {
-                    gsap.to(el, { opacity: 0, y: -30, duration: 0.5, ease: "power2.out", onComplete: () => {
+                    gsap.to(el, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in", onComplete: () => {
                         el.classList.remove('active');
-                        el.style.display = 'none'; // 確保完全隱藏
                     }});
                 }
             });
@@ -910,32 +978,14 @@
             
             const targetSection = document.getElementById(id);
             if (targetSection) {
-                // 顯示目標頁面並觸發 GSAP 進場動畫
+                targetSection.classList.add('active');
                 gsap.fromTo(targetSection, 
-                    { opacity: 0, y: 30, display: 'block' }, // 確保 display: block 在動畫開始前設置
+                    { opacity: 0, y: 20 },
                     { 
-                        opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.2, // 延遲讓舊頁面有時間淡出
-                        onStart: () => {
-                            targetSection.classList.add('active'); 
-                        },
+                        opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.3,
                         onComplete: () => {
-                            // 延遲觸發內部元素的 GSAP 動畫，以形成層次感
-                            gsap.utils.toArray(`#${id} .gsap-reveal`).forEach(elem => {
-                                gsap.fromTo(elem, 
-                                    { y: 60, opacity: 0, visibility: 'hidden' }, 
-                                    { y: 0, opacity: 1, visibility: 'visible', duration: 1.2, ease: "power3.out", stagger: 0.08, delay: 0, overwrite: true } // 內部元素再依次進場
-                                );
-                            });
-                            // 重新觸發 scrambleText 特效
-                            gsap.utils.toArray(`#${id} .scramble-target`).forEach(el => {
-                                if (el.hasAttribute('data-val')) {
-                                    el.innerText = '----'; // 重設為亂碼前狀態
-                                    scrambleText(el);
-                                }
-                            });
-                            // 重新初始化圖表 (如果需要的話，並防止重複初始化)
-                            if (id === 'research') initChart();
-                            if (id === 'energy') initEnergyChart();
+                            gsap.to(window, { duration: 0.5, scrollTo: 0 });
+                            triggerPageAnimations(id);
                         }
                     }
                 );
@@ -950,8 +1000,40 @@
             if (isMobile) {
                 toggleMobileMenu(false);
             }
+        }
+        
+        // ✨ 優化：將頁面載入後的動畫觸發邏輯獨立成一個函式
+        function triggerPageAnimations(pageId) {
+            const targetSection = document.getElementById(pageId);
+            if (!targetSection) return;
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // 觸發內部元素的 GSAP 動畫
+            gsap.utils.toArray(targetSection.querySelectorAll('.gsap-reveal')).forEach((elem, i) => {
+                gsap.fromTo(elem, 
+                    { y: 50, opacity: 0, visibility: 'hidden' }, 
+                    { 
+                        y: 0, 
+                        opacity: 1, 
+                        visibility: 'visible', 
+                        duration: 1, 
+                        ease: "power3.out", 
+                        delay: i * 0.07,
+                        overwrite: true 
+                    }
+                );
+            });
+
+            // 觸發亂碼特效
+            gsap.utils.toArray(targetSection.querySelectorAll('.scramble-target')).forEach(el => {
+                if (el.hasAttribute('data-val')) {
+                    el.innerText = '----';
+                    scrambleText(el);
+                }
+            });
+
+            // 初始化圖表
+            if (pageId === 'research') initChart();
+            if (pageId === 'energy') initEnergyChart();
         }
 
         // 終端機亂碼解碼特效 (駭客感)
@@ -959,15 +1041,14 @@
             const finalValue = element.getAttribute('data-val') || element.innerText;
             let chars = '!<>-_\\/[]{}—=+*^?#________';
             let iterations = 0;
-            const initialText = '----'; // 假設初始狀態是亂碼占位符
+            const initialText = '----'; 
             
-            // 清除任何現有的亂碼動畫，防止重疊
             if (element.scrambleInterval) {
                 clearInterval(element.scrambleInterval);
             }
             
             element.scrambleInterval = setInterval(() => {
-                element.innerText = initialText.split('').map((letter, index) => { 
+                element.innerText = finalValue.split('').map((letter, index) => { 
                     if(index < iterations) return finalValue[index] || ''; 
                     return chars[Math.floor(Math.random() * chars.length)];
                 }).join('');
@@ -982,7 +1063,7 @@
         // ==========================================
         // 🚨 AI 修復：安全呼叫 Cloudflare Function API & 串流輸出
         // ==========================================
-        async function callGemini(promptText, systemInstruction = "", isStreaming = true) {
+        async function callGemini(promptText, systemInstruction = "", isStreaming = true, streamTargetElement = null) {
             const url = `/api/chat`; 
             
             const payload = { contents: [{ parts:[{ text: promptText }] }] };
@@ -990,105 +1071,59 @@
                 payload.systemInstruction = { parts:[{ text: systemInstruction }] };
             }
 
-            let delay = 1000;
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ ...payload, stream: isStreaming }) 
-                    });
-                    
-                    if (!response.ok) {
-                        const errorData = await response.json().catch(() => ({ message: response.statusText }));
-                        console.error("Gemini API call failed:", response.status, errorData);
-                        throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
-                    }
-
-                    if (isStreaming) {
-                        const reader = response.body.getReader();
-                        const decoder = new TextDecoder();
-                        
-                        const container = document.getElementById('ai-chat-messages');
-                        const loadingMsg = document.getElementById('loading-' + (Date.now() - 1)); 
-                        if (loadingMsg) loadingMsg.remove(); 
-                        
-                        const aiMsgDiv = document.createElement('div');
-                        aiMsgDiv.className = "flex flex-col gap-1 items-start";
-                        aiMsgDiv.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI CORE</span>`;
-                        
-                        // 創建一個 span 元素來逐字顯示內容
-                        const aiMessageSpan = document.createElement('span');
-                        aiMessageSpan.className = "bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner";
-                        aiMsgDiv.appendChild(aiMessageSpan);
-                        container.appendChild(aiMsgDiv);
-
-                        container.scrollTop = container.scrollHeight; // 滾動到底部
-
-                        while (true) {
-                            const { done, value } = await reader.read();
-                            if (done) break;
-                            const chunk = decoder.decode(value, { stream: true });
-                            aiMessageSpan.innerHTML += chunk.replace(/\n/g, '<br>'); // 逐字逐句顯示
-                            container.scrollTop = container.scrollHeight; // 保持滾動到底部
-                        }
-                        return aiMessageSpan.innerText; // 返回累積的完整文字 (非串流模式才會實際用到返回值)
-                    } else {
-                        const data = await response.json();
-                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "無資料可供分析。";
-                    }
-
-                } catch (e) {
-                    console.error("Error in callGemini:", e);
-                    if (i === 4) return "無法與 ONYX AI 核心建立連線。請確認 Cloudflare Functions `/api/chat` 已正確設定金鑰且運行正常。錯誤: " + e.message;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2; 
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...payload, stream: isStreaming }) 
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: response.statusText }));
+                    console.error("Gemini API call failed:", response.status, errorData);
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+
+                if (isStreaming && streamTargetElement) {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    streamTargetElement.innerHTML = ''; // Clear loading spinner
+                    
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        const chunk = decoder.decode(value, { stream: true });
+                        streamTargetElement.innerHTML += chunk.replace(/\n/g, '<br>');
+                        streamTargetElement.parentElement.parentElement.scrollTop = streamTargetElement.parentElement.parentElement.scrollHeight;
+                    }
+                    return streamTargetElement.innerText;
+                } else {
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "無資料可供分析。";
+                }
+
+            } catch (e) {
+                console.error("Error in callGemini:", e);
+                const errorMsg = "無法與 ONYX AI 核心建立連線。請檢查 Cloudflare Functions 部署與 API 金鑰設定。";
+                if(streamTargetElement) streamTargetElement.innerHTML = errorMsg;
+                return errorMsg;
             }
         }
 
         // ==========================================
         // ✨ Three.js 升級：動態利稻村地形數位監控地圖
         // ==========================================
-        let scene, camera, renderer, terrainMesh, nodeGroup;
+        let scene, camera, renderer, terrainMesh;
         let mouseX = 0, mouseY = 0;
         let loader = new THREE.TextureLoader();
 
-        const NODE_DATA = [ // 虛構的經緯度，用於在地形上放置節點
-            { lat: 23.187, lon: 121.021, name: "利稻主節點", color: 0x00f0ff, type: "MAIN" },
-            { lat: 23.195, lon: 121.030, name: "東側數據中繼", color: 0xd4af37, type: "RELAY" },
-            { lat: 23.178, lon: 121.015, name: "西向通訊站", color: 0x00ff00, type: "COMM" },
-            { lat: 23.190, lon: 121.010, name: "北端環境感測", color: 0xff00cc, type: "SENSOR" },
-            { lat: 23.170, lon: 121.025, name: "南區能源分析", color: 0xff8c00, type: "ENERGY" }
-        ];
-
-        // 經緯度到 Three.js 平面坐標的轉換 (近似值，針對利稻村小範圍)
-        const LAT_CENTER = 23.18;
-        const LON_CENTER = 121.02;
-        const MAP_SCALE_FACTOR = 4000; // 調整地圖單位與經緯度間的比例，數值越大，地圖範圍越小，地形起伏越劇烈
-
-        function latLonToVector3(lat, lon, terrainWidth, terrainHeight, displacementStrength) {
-            const x = (lon - LON_CENTER) * MAP_SCALE_FACTOR;
-            const y = (lat - LAT_CENTER) * MAP_SCALE_FACTOR;
-            
-            // 從地形的 Displacement Map 中獲取近似高度（這裡簡化，實際需要更複雜的計算）
-            // 在這裡我們無法直接讀取 GPU 上的紋理數據，所以只能模擬一個相對高度
-            // 實際高度需要地形資料或在 Shader 中計算後傳回 CPU
-            // 暫時以簡單的正弦函數疊加來模擬地形高度變化
-            const elevationFactor = Math.sin(lat * 150 - lon * 200) * 0.5 + Math.cos(lat * 80 + lon * 120) * 0.3;
-            const elevation = 5 + elevationFactor * (displacementStrength / 2); // 基礎高度 + 模擬地形起伏
-            
-            return new THREE.Vector3(x, elevation, -y); // -y 是因為 Three.js 的 Z 軸通常是深度，地圖的 Y 軸對應緯度
-        }
-
-
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
-            if (!container) return;
+            if (!container || !THREE) return;
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-            camera.position.set(0, 300, 400); // 俯瞰視角
+            camera.position.set(0, 250, 350); 
             camera.lookAt(0, 0, 0);
 
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
@@ -1096,32 +1131,14 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
 
-            // 載入地形紋理與網格紋理
-            loader.load('ONYX_Lidao_Aerial_1.jpg', (texture) => {
-                // 將圖片自身用作高度圖
-                const displacementTexture = texture; 
-                
-                // 嘗試載入 grid_pattern.png，否則生成一個
-                loader.load('grid_pattern.png', (gridTexture) => {
-                    if (!gridTexture.image || gridTexture.image.width === 0) {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = 32; canvas.height = 32;
-                        const ctx = canvas.getContext('2d');
-                        ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(0, 0); ctx.lineTo(32, 32);
-                        ctx.moveTo(32, 0); ctx.lineTo(0, 32);
-                        ctx.stroke();
-                        ctx.beginPath();
-                        ctx.moveTo(0, 16); ctx.lineTo(32, 16);
-                        ctx.moveTo(16, 0); ctx.lineTo(16, 32);
-                        ctx.stroke();
-                        gridTexture = new THREE.CanvasTexture(canvas);
-                    }
+            loader.load(
+                'ONYX_Lidao_Aerial_1.jpg',
+                (texture) => { // onSuccess
+                    const displacementTexture = texture; 
+                    const gridTexture = createGridTexture();
 
-                    const terrainGeometry = new THREE.PlaneGeometry(800, 800, 256, 256); // 更多分段實現更細緻地形
-                    const DISPLACEMENT_STRENGTH = 100; // 地形起伏強度
+                    const terrainGeometry = new THREE.PlaneGeometry(800, 800, 256, 256);
+                    const DISPLACEMENT_STRENGTH = 100;
                     const customMaterial = new THREE.ShaderMaterial({
                         uniforms: {
                             uTime: { value: 0 },
@@ -1140,72 +1157,22 @@
                     });
 
                     terrainMesh = new THREE.Mesh(terrainGeometry, customMaterial);
-                    terrainMesh.rotation.x = -Math.PI / 2; // 讓平面水平
+                    terrainMesh.rotation.x = -Math.PI / 2;
                     scene.add(terrainMesh);
+                },
+                undefined, // onProgress callback not needed
+                (err) => { // onError
+                    console.error('An error happened while loading the terrain texture.', err);
+                    // You could add a fallback background here
+                }
+            );
 
-                    // 加入節點與訊號流動
-                    nodeGroup = new THREE.Group();
-                    
-                    // 嘗試載入 signal_dot.png，否則生成一個
-                    loader.load('signal_dot.png', (signalDotTexture) => {
-                        if (!signalDotTexture.image || signalDotTexture.image.width === 0) {
-                            const canvas = document.createElement('canvas');
-                            canvas.width = 64; canvas.height = 64;
-                            const ctx = canvas.getContext('2d');
-                            const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-                            gradient.addColorStop(0, `rgba(255,255,255,1)`);
-                            gradient.addColorStop(1, `rgba(255,255,255,0)`);
-                            ctx.fillStyle = gradient;
-                            ctx.fillRect(0, 0, 64, 64);
-                            signalDotTexture = new THREE.CanvasTexture(canvas);
-                        }
-
-                        NODE_DATA.forEach(node => {
-                            const pos = latLonToVector3(node.lat, node.lon, 800, 800, DISPLACEMENT_STRENGTH);
-                            
-                            // 節點本身 (Sprite，始終面向攝像機)
-                            const nodeSprite = new THREE.Sprite(new THREE.SpriteMaterial({ 
-                                map: signalDotTexture, 
-                                color: new THREE.Color(node.color), 
-                                transparent: true, 
-                                blending: THREE.AdditiveBlending 
-                            }));
-                            nodeSprite.position.set(pos.x, pos.y + 10, pos.z); // 稍微抬高
-                            nodeSprite.scale.set(30, 30, 1); 
-                            nodeSprite.userData = { originalScale: 30, pulseSpeed: Math.random() * 0.05 + 0.02, pulseFactor: Math.random() * 0.1 + 0.9 }; 
-                            nodeGroup.add(nodeSprite);
-
-                            // 節點之間的連線 (簡化為連接主節點)
-                            if (node.type !== "MAIN") {
-                                const mainNodePos = latLonToVector3(NODE_DATA[0].lat, NODE_DATA[0].lon, 800, 800, DISPLACEMENT_STRENGTH);
-                                const points = [];
-                                points.push(new THREE.Vector3(pos.x, pos.y + 5, pos.z));
-                                points.push(new THREE.Vector3(mainNodePos.x, mainNodePos.y + 5, mainNodePos.z));
-                                const geometry = new THREE.BufferGeometry().setFromPoints(points);
-                                const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ 
-                                    color: new THREE.Color(node.color), 
-                                    transparent: true, 
-                                    opacity: 0.6, 
-                                    linewidth: 2, 
-                                    blending: THREE.AdditiveBlending 
-                                }));
-                                nodeGroup.add(line);
-                            }
-                        });
-                        scene.add(nodeGroup);
-                    });
-                });
-            });
-
-
-            // 燈光佈置
-            const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+            const ambient = new THREE.AmbientLight(0xffffff, 0.5);
             scene.add(ambient);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(200, 300, 200);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+            directionalLight.position.set(150, 250, 150);
             scene.add(directionalLight);
 
-            // 滑鼠視差事件
             document.addEventListener('mousemove', (e) => {
                 mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -1215,36 +1182,34 @@
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
-            });
+            }, false);
 
             animateTerrain();
         }
+        
+        function createGridTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64; canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(64, 0); ctx.lineTo(64, 64); ctx.lineTo(0, 64); ctx.lineTo(0, 0);
+            ctx.stroke();
+            return new THREE.CanvasTexture(canvas);
+        }
 
         function animateTerrain() {
+            if(!renderer) return;
             requestAnimationFrame(animateTerrain);
 
             if (terrainMesh) {
-                terrainMesh.material.uniforms.uTime.value += 0.01; // 更新著色器時間
-                terrainMesh.rotation.z += 0.0005; // 地圖緩慢自轉
+                terrainMesh.material.uniforms.uTime.value += 0.005;
             }
 
-            // 節點脈衝動畫
-            if (nodeGroup) {
-                nodeGroup.children.forEach(obj => {
-                    if (obj.isSprite && obj.userData.originalScale) {
-                        const scale = obj.userData.originalScale * (obj.userData.pulseFactor + Math.sin(Date.now() * obj.userData.pulseSpeed) * 0.1);
-                        obj.scale.set(scale, scale, 1);
-                    }
-                    if (obj.isLine) { // 簡化線條動畫，讓透明度閃爍
-                        obj.material.opacity = 0.5 + Math.sin(Date.now() * 0.003) * 0.3;
-                    }
-                });
-            }
-
-            // 滑鼠視差
-            camera.position.x += (mouseX * 50 - camera.position.x) * 0.02;
-            camera.position.y += (mouseY * 50 + 300 - camera.position.y) * 0.02; // 調整基準 Y 軸
-            camera.lookAt(0, 0, 0); // 始終看向地圖中心
+            camera.position.x += (mouseX * 40 - camera.position.x) * 0.02;
+            camera.position.y += (-mouseY * 40 + 250 - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
             
             renderer.render(scene, camera);
         }
@@ -1279,7 +1244,6 @@
                 document.getElementById('env-aqi').innerHTML = `${aqiCurrent.us_aqi} ${aqiStatus}`;
             } catch(e) {
                 console.error("Error fetching environmental telemetry:", e);
-                // Fallback or error display
             }
             
             const qT = new Date(Date.now() - 1000 * 60 * 60 * (Math.random() * 5 + 1)); 
@@ -1374,51 +1338,34 @@
         // ==========================================
         let crystalChart = null;
         function initChart() {
-            if (crystalChart) {
-                crystalChart.destroy(); // 銷毀舊圖表實例，防止重複渲染
-                crystalChart = null;
-            }
-            const ctx = document.getElementById('crystalChart').getContext('2d');
-            if (ctx) { // 確保 Canvas 元素存在
+            if (crystalChart) crystalChart.destroy();
+            const ctx = document.getElementById('crystalChart')?.getContext('2d');
+            if (ctx) {
                 crystalChart = new Chart(ctx, {
                     type: 'radar',
                     data: {
                         labels: ['能源效率', '數據精度', '結構穩定', '負碳協議', '響應速度'],
                         datasets: [{
-                            label: 'ONYX Protocol',
-                            data: [96, 99, 92, 88, 95],
-                            backgroundColor: 'rgba(0, 240, 255, 0.15)',
-                            borderColor: '#00f0ff',
-                            pointBackgroundColor: '#fff',
-                            pointBorderColor: '#00f0ff',
-                            borderWidth: 1.5
+                            label: 'ONYX Protocol', data: [96, 99, 92, 88, 95],
+                            backgroundColor: 'rgba(0, 240, 255, 0.15)', borderColor: '#00f0ff',
+                            pointBackgroundColor: '#fff', pointBorderColor: '#00f0ff', borderWidth: 1.5
                         }, {
-                            label: 'Standard Edge',
-                            data: [45, 75, 55, 30, 70],
-                            backgroundColor: 'transparent',
-                            borderColor: 'rgba(212, 175, 55, 0.4)',
-                            borderWidth: 1,
-                            borderDash: [4, 4],
-                            pointRadius: 0
+                            label: 'Standard Edge', data: [45, 75, 55, 30, 70],
+                            backgroundColor: 'transparent', borderColor: 'rgba(212, 175, 55, 0.4)',
+                            borderWidth: 1, borderDash: [4, 4], pointRadius: 0
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            r: {
-                                angleLines: { color: 'rgba(255,255,255,0.05)' },
-                                grid: { color: 'rgba(255,255,255,0.03)' },
-                                pointLabels: { color: '#888', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 },
-                                ticks: { display: false, backdropColor: 'transparent' }
-                            }
-                        },
-                        plugins: { 
-                            legend: { 
-                                position: 'bottom',
-                                labels: { color: '#aaa', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 } 
-                            } 
-                        }
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { r: {
+                            angleLines: { color: 'rgba(255,255,255,0.05)' },
+                            grid: { color: 'rgba(255,255,255,0.03)' },
+                            pointLabels: { color: '#888', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 },
+                            ticks: { display: false, backdropColor: 'transparent' }
+                        }},
+                        plugins: { legend: { 
+                            position: 'bottom', labels: { color: '#aaa', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 } 
+                        }}
                     }
                 });
             }
@@ -1426,12 +1373,9 @@
 
         let energyChart = null;
         function initEnergyChart() {
-            if (energyChart) {
-                energyChart.destroy(); // 銷毀舊圖表實例，防止重複渲染
-                energyChart = null;
-            }
-            const ctx = document.getElementById('energyChart').getContext('2d');
-            if (ctx) { // 確保 Canvas 元素存在
+            if (energyChart) energyChart.destroy();
+            const ctx = document.getElementById('energyChart')?.getContext('2d');
+            if (ctx) {
                 energyChart = new Chart(ctx, {
                     type: 'doughnut',
                     data: {
@@ -1439,26 +1383,17 @@
                         datasets: [{
                             data: [2.5, 0.5],
                             backgroundColor: ['rgba(249, 115, 22, 0.8)', 'rgba(250, 204, 21, 0.8)'],
-                            borderColor: '#05060a',
-                            borderWidth: 3,
-                            hoverOffset: 6
+                            borderColor: '#05060a', borderWidth: 3, hoverOffset: 6
                         }]
                     },
                     options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        cutout: '78%',
+                        responsive: true, maintainAspectRatio: false, cutout: '78%',
                         plugins: {
                             legend: { display: false },
                             tooltip: {
-                                backgroundColor: 'rgba(0,0,0,0.8)',
-                                titleFont: { family: 'JetBrains Mono', size: 11 },
-                                bodyFont: { family: 'JetBrains Mono', size: 11 },
-                                padding: 12,
-                                cornerRadius: 8,
-                                callbacks: {
-                                    label: function(context) { return ' ' + context.label + ': ' + context.raw + ' MW'; }
-                                }
+                                backgroundColor: 'rgba(0,0,0,0.8)', titleFont: { family: 'JetBrains Mono', size: 11 },
+                                bodyFont: { family: 'JetBrains Mono', size: 11 }, padding: 12, cornerRadius: 8,
+                                callbacks: { label: (c) => ` ${c.label}: ${c.raw} MW` }
                             }
                         }
                     }
@@ -1477,15 +1412,8 @@
                 if (!response.ok) throw new Error('Network error');
                 globalArticles = await response.json();
             } catch (error) {
-                console.warn("使用備用預設資料。");
-                globalArticles = [{
-                    "id": "mock-1",
-                    "date": "2026-03-01",
-                    "category": "SYSTEM NOTICE",
-                    "title": "如何更新您的焦點訊息？",
-                    "summary": "此為預設畫面。將網頁上傳至主機後，系統會自動讀取 articles.json，無需改動程式碼。",
-                    "content": "<p>請確認資料夾中包含 <code>articles.json</code> 檔案，並放置於伺服器環境中執行。</p>"
-                }];
+                console.warn("Using fallback articles data.");
+                globalArticles = [{"id": "mock-1", "date": "2026-03-01", "category": "SYSTEM NOTICE", "title": "無法載入焦點訊息", "summary": "請確認 articles.json 檔案已正確上傳至網站根目錄，且內容為有效的 JSON 格式。", "content": "<p>這是備用訊息。</p>"}];
             }
             renderArticles();
         }
@@ -1495,7 +1423,7 @@
             container.innerHTML = ''; 
             globalArticles.forEach(article => {
                 const card = document.createElement('div');
-                card.className = "glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/30 group cursor-pointer hover:bg-white/[0.04] transition duration-500 gsap-reveal";
+                card.className = "glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/30 group cursor-pointer hover:bg-white/[0.04] transition duration-500";
                 card.onclick = () => openArticleModal(article.id);
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-6">
@@ -1522,36 +1450,19 @@
             document.getElementById('modal-body').innerHTML = article.content;
             
             const modal = document.getElementById('article-modal');
-            const content = document.getElementById('article-modal-content');
-            
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            setTimeout(() => { 
-                modal.classList.remove('opacity-0');
-                modal.classList.add('opacity-100');
-                content.classList.remove('translate-y-8', 'scale-95');
-                content.classList.add('translate-y-0', 'scale-100');
-            }, 10);
-            document.body.style.overflow = 'hidden'; // 阻止背景滾動
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            document.body.style.overflow = 'hidden';
         }
 
         function closeArticleModal() {
             const modal = document.getElementById('article-modal');
-            const content = document.getElementById('article-modal-content');
-            
-            modal.classList.remove('opacity-100');
             modal.classList.add('opacity-0');
-            content.classList.remove('translate-y-0', 'scale-100');
-            content.classList.add('translate-y-8', 'scale-95');
-            
-            const summaryContainer = document.getElementById('ai-summary-container');
-            summaryContainer.classList.add('hidden');
-            summaryContainer.innerHTML = '';
-            
+            document.getElementById('ai-summary-container').classList.add('hidden');
             setTimeout(() => { 
-                modal.classList.remove('flex'); 
                 modal.classList.add('hidden'); 
-                document.body.style.overflow = ''; // 恢復背景滾動
+                document.body.style.overflow = '';
             }, 400);
         }
 
@@ -1567,7 +1478,6 @@
             btn.disabled = true;
 
             const prompt = `請以繁體中文，為以下這篇文章產生 3 到 4 點的精簡重點摘要。使用列表格式，語氣須保持冷靜、專業且具有科技感：\n\n${articleText}`;
-            // AI 摘要不需要串流，所以 isStreaming 設定為 false
             const aiResponse = await callGemini(prompt, undefined, false);
 
             container.innerHTML = `
@@ -1590,7 +1500,6 @@
         // ==========================================
         async function generateNodeAIAnalysis() {
             const btn = document.getElementById('ai-node-btn');
-            // 從頁面獲取真實數據
             const temp = document.getElementById('env-temp').innerText;
             const weather = document.getElementById('env-weather').innerText;
             const vph = document.getElementById('traffic-vph').innerText;
@@ -1604,10 +1513,8 @@
 - 環境溫度：${temp}
 - 鄰近公路即時車流：${vph}
 - 當前通訊衛星鏈結：${sat}
+請根據上述數據，以「ONYX AI 中央核心」的角色，用繁體中文寫出一段約 60 字的「節點系統營運評估與戰略建議」。語氣要極度冷靜、專業、具備深科技感。`;
 
-請根據上述數據，以「ONYX AI 中央核心」的角色，用繁體中文寫出一段大約 60 字的「節點系統營運評估與戰略建議」。語氣要極度冷靜、專業、具備深科技感。`;
-
-            // AI 分析不需要串流，所以 isStreaming 設定為 false
             const analysisResult = await callGemini(prompt, undefined, false);
 
             const lc = document.getElementById('log-container');
@@ -1619,8 +1526,8 @@
                 </div>
                 <div class="text-gray-200 text-[13px] leading-[2.2] tracking-wide font-light">${analysisResult.replace(/\n/g, '<br>')}</div>
             `;
-            
             lc.prepend(log);
+            lc.scrollTop = 0;
 
             btn.innerHTML = `<i class="fa-solid fa-check"></i> ✨ 演算完成`;
             setTimeout(() => {
@@ -1629,7 +1536,10 @@
             }, 3000);
         }
 
-        window.onload = () => {
+        // ==========================================
+        // ✨ 優化：網站初始化主函式
+        // ==========================================
+        function initializeSite() {
             initThreeJS();
             loadArticles();
             
@@ -1637,11 +1547,16 @@
             updateTrafficDynamics(); setInterval(updateTrafficDynamics, 4500); 
             updateNetworkAndSatellite(); setInterval(updateNetworkAndSatellite, 1000); 
             updateEnergyDynamics(); setInterval(updateEnergyDynamics, 1500); 
-            setInterval(addLog, 3000); for(let i=0; i<3; i++) addLog(); // Initial logs
+            setInterval(addLog, 3000);
+            for(let i=0; i<3; i++) addLog(); // Initial logs
             
-            // 首次加載時啟動 Home 頁面，並觸發其內部 GSAP 動畫
-            switchTab('home'); 
-        };
+            // 觸發首頁的進場動畫
+            triggerPageAnimations('home');
+        }
+        
+        // 確保 DOM 載入後再執行初始化，防止錯誤
+        document.addEventListener('DOMContentLoaded', initializeSite);
+
     </script>
 </body>
 </html>
