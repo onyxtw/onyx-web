@@ -107,7 +107,7 @@ export async function onRequestPost(context) {
             });
 
         } else {
-            // 如果不是串流模式 (例如用於 AI 摘要、分析等，一次性回覆)
+            // 處理非串流回應 (用於 AI 摘要、分析等，一次性回覆)
             const data = await geminiResponse.json();
             return new Response(JSON.stringify(data), {
                 headers: { 'Content-Type': 'application/json' }
@@ -120,4 +120,3 @@ export async function onRequestPost(context) {
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 }
-
