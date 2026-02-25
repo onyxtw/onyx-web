@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-TW" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -10,17 +10,38 @@
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link rel="apple-touch-icon" href="favicon.jpg">
     
-    <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資、RTK 定位修正與負碳運算技術。">
-    <meta name="keywords" content="ONYX, DEEP TECH, 奧尼克斯, 奧尼克斯科技, 晶體生長演算法, 負碳運算, 邊緣運算, Edge AI">
-    
-    <!-- 核心 CSS 框架與套件庫 -->
+    <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資、RTK 定位修正與負碳運算技術。作為未來的數據權威，我們提供最尖端的深科技解決方案。">
+    <meta name="keywords" content="ONYX, DEEP TECH, 奧尼克斯, 奧尼克斯科技, 晶體生長演算法, 負碳運算, 邊緣運算, Edge AI, 數據權威, 韌性節點, 科技工作室">
+    <meta name="author" content="ONYX DEEP TECH STUDIO">
+    <meta property="og:title" content="ONYX | DEEP TECH 奧尼克斯科技">
+    <meta property="og:description" content="探索奧尼克斯科技的逆熵運算與邊緣智慧技術。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://onyx.tw">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ONYX DEEP TECH STUDIO 奧尼克斯科技工作室",
+      "alternateName": "ONYX 奧尼克斯科技",
+      "url": "https://onyx.tw",
+      "logo": "https://onyx.tw/IMG_4879.PNG",
+      "taxID": "00466122",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "onyxstudio@onyx.tw",
+        "contactType": "customer service"
+      },
+      "keywords": "onyx, DEEP TECH, 奧尼克斯, 邊緣運算, AI"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- ✨ 引入 GSAP 與 Lenis 平滑滾動 -->
+    <!-- ✨ 僅保留 GSAP，Lenis 因非單頁滾動故移除 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -38,12 +59,6 @@
             --font-body: 'Noto Serif TC', serif;
         }
 
-        /* Lenis 平滑滾動必要設定 */
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-
         body {
             background-color: var(--deep-space);
             color: #e2e8f0;
@@ -57,54 +72,114 @@
         .font-fashion { font-family: var(--font-fashion); }
         .font-body { font-family: var(--font-body); }
 
-        ::-webkit-scrollbar { width: 4px; }
+        /* 全局平滑滾動條 */
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--deep-space); }
-        ::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.3); }
 
-        /* 背景流動與網格 */
+        /* 背景特效：極光流動 */
         .ambient-flow {
-            position: fixed; inset: 0; z-index: -2;
-            background: radial-gradient(circle at 15% 30%, rgba(0, 240, 255, 0.04), transparent 40%),
-                        radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.03), transparent 40%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 10% 40%, rgba(0, 240, 255, 0.06), transparent 30%),
+                radial-gradient(circle at 90% 60%, rgba(212, 175, 55, 0.04), transparent 30%);
+            animation: pulse-flow 12s ease-in-out infinite alternate;
         }
 
+        @keyframes pulse-flow {
+            0% { transform: scale(1); opacity: 0.7; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* 網格紋理 */
         .grid-texture {
-            position: fixed; inset: 0; z-index: -1; opacity: 0.15;
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.1;
             background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                              linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 80px 80px;
-            mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
-            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
 
-        /* 頂級玻璃擬態面板 */
+        /* 高級玻璃擬態面板 */
         .glass-card {
             background: var(--glass-surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            transition: border-color 0.5s ease, background 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .glass-card:hover {
             border-color: rgba(0, 240, 255, 0.15);
             background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 40px -10px rgba(0, 240, 255, 0.05);
+            transform: translateY(-2px);
         }
 
         /* 導航按鈕特效 */
         .nav-link {
-            position: relative; opacity: 0.5; transition: 0.4s ease;
-            padding-bottom: 6px; letter-spacing: 0.15em; cursor: pointer;
+            position: relative;
+            opacity: 0.5;
+            transition: 0.4s ease;
+            padding-bottom: 6px;
+            letter-spacing: 0.15em;
         }
-        .nav-link:hover, .nav-link.active { opacity: 1; color: #fff; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+
+        .nav-link:hover,
+        .nav-link.active {
+            opacity: 1;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
         .nav-link::after {
-            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 0; height: 1px; background: var(--luxury-gold); transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1px;
+            background: var(--luxury-gold);
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .nav-link.active::after, .nav-link:hover::after { width: 100%; }
+
+        .nav-link.active::after, .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* 頁面切換動畫 */
+        .section-view {
+            display: none;
+            opacity: 0;
+            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .section-view.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .text-justify { text-align: justify; text-justify: inter-ideograph; }
+
+        /* 自定義捲軸 */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 10px; }
         
         /* GSAP 初始隱藏狀態 */
         .gsap-reveal { opacity: 0; visibility: hidden; }
@@ -120,17 +195,17 @@
 
     <!-- Header 品牌標誌區 -->
     <header class="fixed top-0 w-full z-50 glass-card rounded-none border-x-0 border-t-0 h-24 flex items-center justify-between px-6 md:px-14">
-        <div class="flex items-center group cursor-pointer" onclick="scrollToSection('#home')">
-            <img src="IMG_4879.PNG" alt="ONYX DEEP TECH" class="h-10 md:h-14 w-auto object-contain opacity-90 group-hover:opacity-100 transition duration-500 drop-shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+        <div class="flex items-center group cursor-pointer" onclick="switchTab('home')">
+            <img src="IMG_4879.PNG" alt="ONYX DEEP TECH" class="h-10 md:h-14 w-auto object-contain opacity-80 group-hover:opacity-100 transition duration-500" onerror="this.src='https://via.placeholder.com/200x50.png?text=ONYX+LOGO'">
         </div>
 
         <nav id="desktop-nav" class="hidden xl:flex gap-10 font-tech text-[10px] uppercase">
-            <a class="nav-link active" onclick="scrollToSection('#home')">首頁 Origin</a>
-            <a class="nav-link" onclick="scrollToSection('#insights')">焦點訊息 Insights</a>
-            <a class="nav-link" onclick="scrollToSection('#research')">研究技術 Research</a>
-            <a class="nav-link" onclick="scrollToSection('#fieldops')">韌性節點 Node</a>
-            <a class="nav-link" onclick="scrollToSection('#energy')">能源矩陣 Energy</a>
-            <a class="nav-link" onclick="scrollToSection('#contact')">聯繫 Contact</a>
+            <button class="nav-link active" onclick="switchTab('home')">首頁 Origin</button>
+            <button class="nav-link" onclick="switchTab('insights')">焦點訊息 Insights</button>
+            <button class="nav-link" onclick="switchTab('research')">研究技術 Research</button>
+            <button class="nav-link" onclick="switchTab('fieldops')">韌性節點 Node</button>
+            <button class="nav-link" onclick="switchTab('energy')">能源矩陣 Energy</button>
+            <button class="nav-link" onclick="switchTab('contact')">聯繫 Contact</button>
         </nav>
 
         <button class="xl:hidden text-white/60 hover:text-white transition" onclick="toggleMobileMenu(true)">
@@ -139,28 +214,26 @@
     </header>
 
     <!-- 手機版選單 -->
-    <div id="mobile-nav" class="fixed inset-0 z-[100] bg-[#05060a]/95 backdrop-blur-2xl pt-28 px-10 flex flex-col gap-8 transform translate-x-full transition-transform duration-500 xl:hidden border-l border-white/5">
+    <div id="mobile-nav" class="fixed inset-0 z-[100] bg-[#05060a]/95 backdrop-blur-xl pt-28 px-10 flex flex-col gap-8 transform translate-x-full transition-transform duration-500 xl:hidden border-l border-white/5">
         <button onclick="toggleMobileMenu(false)" class="absolute top-10 right-10 text-white/50 hover:text-white transition">
             <i class="fa-solid fa-xmark text-3xl"></i>
         </button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="scrollToSection('#home', true)">首頁 ORIGIN</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="scrollToSection('#insights', true)">焦點訊息 INSIGHTS</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="scrollToSection('#research', true)">研究技術 RESEARCH</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="scrollToSection('#fieldops', true)">韌性節點 NODE</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="scrollToSection('#energy', true)">能源矩陣 ENERGY</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="scrollToSection('#contact', true)">聯繫 CONTACT</button>
+        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('home', true)">首頁 ORIGIN</button>
+        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('insights', true)">焦點訊息 INSIGHTS</button>
+        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('research', true)">研究技術 RESEARCH</button>
+        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('fieldops', true)">韌性節點 NODE</button>
+        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('energy', true)">能源矩陣 ENERGY</button>
+        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('contact', true)">聯繫 CONTACT</button>
     </div>
 
-    <!-- 採用連續滾動設計 -->
-    <main class="w-full max-w-[1440px] mx-auto">
+    <main class="pt-36 pb-24 px-6 md:px-14 max-w-[1440px] mx-auto min-h-screen">
 
         <!-- 1. Home / Origin -->
-        <section id="home" class="min-h-screen pt-32 pb-24 px-6 md:px-14 flex flex-col justify-center relative z-10 section-marker">
-            <div class="max-w-4xl space-y-12 gsap-reveal">
-                <div class="border-l-[3px] border-luxury-gold pl-8 relative">
-                    <div class="absolute -left-[2px] top-0 w-[2px] h-0 bg-white/50 scroll-line"></div>
+        <section id="home" class="section-view active">
+            <div class="flex flex-col justify-center min-h-[65vh] max-w-4xl space-y-12 pt-10 relative z-10 gsap-reveal">
+                <div class="border-l-[3px] border-luxury-gold pl-8">
                     <span class="font-tech text-[10px] text-luxury-gold tracking-[0.4em] block mb-6 italic opacity-80">FOUNDER'S VISION</span>
-                    <h2 class="text-5xl md:text-7xl lg:text-[85px] font-fashion text-white leading-[1.15] tracking-wide">
+                    <h2 class="text-5xl md:text-7xl lg:text-[80px] font-fashion text-white leading-[1.15] tracking-wide">
                         極致科技，<br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-luxury-gold italic pr-4">淬煉於深處。</span>
                     </h2>
@@ -182,13 +255,16 @@
                         <p class="text-gray-300 font-light text-[15px] md:text-[17px] leading-[2] text-justify md:text-left tracking-wide">
                             如同黑曜石經由地質壓力淬煉而成，我們的數據演算法與韌性節點設計，是為了在最嚴酷的挑戰下提供絕對的精準度。<span class="text-white font-medium tracking-widest ml-1">我們不只是科技的創造者，更是智慧數據的提煉者。</span>
                         </p>
+                        <p class="text-gray-500 font-body text-[13px] md:text-[14px] leading-loose text-justify md:text-left italic tracking-wide">
+                            Forged like obsidian under intense geological pressure, our data algorithms and resilient node architectures are engineered to deliver absolute precision amidst the harshest challenges. <span class="text-gray-400">We are not merely creators of technology; we are the refiners of intelligent data.</span>
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- 1.5 Insights / 焦點訊息 -->
-        <section id="insights" class="min-h-screen py-32 px-6 md:px-14 section-marker">
+        <section id="insights" class="section-view">
             <div class="space-y-16">
                 <div class="border-l-[3px] border-cyan-400 pl-8 mb-14 gsap-reveal">
                     <span class="font-tech text-[10px] text-cyan-400 tracking-[0.4em] block mb-5 uppercase opacity-80">Analytics & Perspectives</span>
@@ -204,7 +280,7 @@
         </section>
 
         <!-- 2. Research -->
-        <section id="research" class="min-h-screen py-32 px-6 md:px-14 section-marker">
+        <section id="research" class="section-view">
             <div class="space-y-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
                     <div class="lg:col-span-5 space-y-10 gsap-reveal">
@@ -269,7 +345,7 @@
         </section>
 
         <!-- 3. Resilience Node -->
-        <section id="fieldops" class="min-h-screen py-32 px-6 md:px-14 section-marker">
+        <section id="fieldops" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 space-y-8">
                     <!-- Dashboard Head -->
@@ -283,7 +359,7 @@
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/5 pt-10">
                             <div>
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">LATENCY</div>
-                                <div class="text-2xl text-white font-tech"><span class="scramble-target" data-val="8">0</span><span class="text-sm text-gray-600 ml-1">ms</span></div>
+                                <div class="text-2xl text-white font-tech"><span id="latency-val" class="scramble-target" data-val="8">0</span><span class="text-sm text-gray-600 ml-1">ms</span></div>
                             </div>
                             <div>
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">STABILITY</div>
@@ -303,46 +379,74 @@
                         </div>
                     </div>
 
-                    <!-- Environment & API Blocks -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="glass-card p-8 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
-                            <h3 class="font-tech text-[10px] text-cyan-400 tracking-widest mb-6 flex items-center gap-3">
-                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-cyan-400 opacity-75"></span><span class="relative h-2 w-2 rounded-full bg-cyan-500"></span></span>
-                                ENVIRONMENTAL TELEMETRY
-                            </h3>
-                            <div class="space-y-6 relative z-10">
-                                <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                                    <div class="text-[9px] font-tech text-gray-500 tracking-widest">WEATHER</div>
-                                    <div class="text-[14px] text-gray-200 font-body tracking-wider" id="env-weather">擷取中...</div>
-                                </div>
-                                <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                                    <div class="text-[9px] font-tech text-gray-500 tracking-widest">TEMPERATURE</div>
-                                    <div class="text-xl text-white font-tech" id="env-temp">-- °C</div>
-                                </div>
-                                <div class="flex justify-between items-end">
-                                    <div class="text-[9px] font-tech text-gray-500 tracking-widest">AIR QUALITY</div>
-                                    <div class="text-xl text-white font-tech flex items-baseline gap-2" id="env-aqi">--</div>
-                                </div>
+                    <!-- Environment API -->
+                    <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-cyan-500/5 blur-[60px] rounded-full"></div>
+                        <h3 class="font-tech text-[11px] text-cyan-400 tracking-widest mb-10 flex items-center gap-4">
+                            <span class="relative flex h-2 w-2">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                            </span>
+                            ENVIRONMENTAL TELEMETRY // 利稻微氣候即時監測 (Real-time API)
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-8 relative z-10">
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">WEATHER (天氣)</div>
+                                <div class="text-[16px] text-gray-200 font-body tracking-wider" id="env-weather">擷取中...</div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">TEMPERATURE (溫度)</div>
+                                <div class="text-2xl text-white font-tech" id="env-temp">-- <span class="text-sm text-gray-600 ml-1">°C</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">HUMIDITY (濕度)</div>
+                                <div class="text-2xl text-white font-tech" id="env-hum">-- <span class="text-sm text-gray-600 ml-1">%</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">AIR QUALITY (空品)</div>
+                                <div class="text-2xl text-white font-tech flex items-baseline gap-2" id="env-aqi">--</div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">VISIBILITY (能見度)</div>
+                                <div class="text-2xl text-white font-tech" id="env-vis">-- <span class="text-sm text-gray-600 ml-1">km</span></div>
+                            </div>
+                            <div class="col-span-2 md:col-span-1">
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">SEISMIC (地震監測)</div>
+                                <div class="text-lg text-white font-tech leading-tight mt-1" id="env-quake">同步中...</div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="glass-card p-8 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
-                            <h3 class="font-tech text-[10px] text-luxury-gold tracking-widest mb-6 flex items-center gap-3">
-                                <span class="relative flex h-2 w-2"><span class="animate-ping absolute h-full w-full rounded-full bg-luxury-gold opacity-75"></span><span class="relative h-2 w-2 rounded-full bg-yellow-500"></span></span>
-                                FLOW DYNAMICS
-                            </h3>
-                            <div class="space-y-6 relative z-10">
-                                <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                                    <div class="text-[9px] font-tech text-gray-500 tracking-widest">STATUS</div>
-                                    <div class="text-[13px] font-tech" id="traffic-status"><span class="text-green-400">CLEAR</span></div>
-                                </div>
-                                <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                                    <div class="text-[9px] font-tech text-gray-500 tracking-widest">VEHICLE FLOW</div>
-                                    <div class="text-xl text-white font-tech"><span id="traffic-vph">--</span> vph</div>
-                                </div>
-                                <div>
-                                    <div class="text-[9px] font-tech text-gray-500 tracking-widest mb-2">DIRECTION</div>
-                                    <div class="w-full bg-black/50 h-1.5 rounded-full overflow-hidden flex border border-white/5">
+                    <!-- Flow Dynamics -->
+                    <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
+                        <div class="absolute top-0 left-0 w-40 h-40 bg-luxury-gold/5 blur-[60px] rounded-full"></div>
+                        <h3 class="font-tech text-[11px] text-luxury-gold tracking-widest mb-10 flex items-center gap-4">
+                            <span class="relative flex h-2 w-2">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-luxury-gold opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
+                            </span>
+                            FLOW DYNAMICS // 南橫公路動態流量監測
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 relative z-10">
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">SECTION STATUS (狀態)</div>
+                                <div class="text-lg font-tech mt-1" id="traffic-status"><span class="text-green-400">CLEAR / 順暢</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">VEHICLE FLOW (車流)</div>
+                                <div class="text-2xl text-white font-tech"><span id="traffic-vph">--</span> <span class="text-sm text-gray-600 ml-1">vph</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">NODE CROWD (人潮)</div>
+                                <div class="text-2xl text-white font-tech"><span id="traffic-ppl">--</span> <span class="text-sm text-gray-600 ml-1">pax</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">DIRECTION (流向)</div>
+                                <div class="text-[11px] text-gray-400 font-tech mt-2 tracking-wider">
+                                    東: <span id="traffic-east" class="text-white">50</span>% <span class="text-gray-700 mx-1">|</span> 西: <span id="traffic-west" class="text-white">50</span>%
+                                    <div class="w-full bg-black/50 h-1.5 mt-3 rounded-full overflow-hidden flex border border-white/5">
                                         <div id="bar-east" class="bg-cyan-400 h-full transition-all duration-1000" style="width: 50%"></div>
                                         <div id="bar-west" class="bg-luxury-gold h-full transition-all duration-1000" style="width: 50%"></div>
                                     </div>
@@ -350,16 +454,62 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Uplink -->
+                    <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 blur-[60px] rounded-full"></div>
+                        <h3 class="font-tech text-[11px] text-blue-400 tracking-widest mb-10 flex items-center gap-4">
+                            <span class="relative flex h-2 w-2">
+                              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                              <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                            </span>
+                            COMMUNICATION & UPLINK // 區域通訊與衛星鏈路監測
+                        </h3>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 relative z-10">
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">LOCAL ISP (固網)</div>
+                                <div class="text-[16px] font-tech mt-1" id="net-isp"><span class="text-green-400">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">12ms</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">CELLULAR (行動)</div>
+                                <div class="text-xl text-white font-tech"><span id="net-cell-type">5G SA</span> <span id="net-cell-dbm" class="text-sm text-gray-600 ml-2">-85dBm</span></div>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">ACTIVE LEO (低軌衛星)</div>
+                                <div class="text-[17px] text-white font-tech flex items-baseline gap-3 mt-1">
+                                    <span id="sat-active-name" class="text-cyan-400 drop-shadow-[0_0_5px_rgba(0,240,255,0.3)]">STARLINK-3921</span>
+                                    <span class="text-[11px] text-gray-500 tracking-widest">ALT: <span id="sat-active-alt" class="text-gray-300">542.1</span> km</span>
+                                </div>
+                            </div>
+                            <div class="col-span-2 md:col-span-4 border-t border-white/5 pt-6 mt-2">
+                                <div class="text-[9px] font-tech text-gray-500 mb-4 tracking-widest">NEXT SATELLITE ACQUISITION (接近中)</div>
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 bg-black/40 p-5 rounded-lg border border-white/5">
+                                    <div class="text-[13px] text-white font-tech flex items-center">
+                                        <i class="fa-solid fa-satellite text-blue-400 mr-4 animate-pulse"></i>
+                                        <span id="sat-next-name" class="tracking-widest text-gray-300">ONEWEB-0144</span>
+                                    </div>
+                                    <div class="text-[10px] font-tech text-gray-500 tracking-widest">
+                                        DISTANCE: <span id="sat-next-dist" class="text-white text-[14px] ml-2">850</span> km
+                                    </div>
+                                    <div class="text-[10px] font-tech text-gray-500 tracking-widest">
+                                        T-MINUS: <span id="sat-next-time" class="text-luxury-gold text-lg ml-3 tracking-widest">02:14</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Live Logs & Gemini AI -->
-                <div class="glass-card p-8 rounded-2xl flex flex-col h-[600px] lg:h-auto border-white/5 gsap-reveal">
+                <!-- Live Logs & Gemini AI Node Analysis -->
+                <div class="glass-card p-8 rounded-2xl flex flex-col h-[750px] lg:h-auto border-white/5 gsap-reveal">
                     <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
                         <h3 class="font-tech text-[11px] text-gray-400 tracking-widest flex items-center gap-3">
                             <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></span> SYSTEM_LIVE_LOGS
                         </h3>
-                        <button onclick="generateNodeAIAnalysis()" id="ai-node-btn" class="px-3 py-1.5 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold font-tech text-[10px] tracking-widest rounded hover:bg-luxury-gold/20 transition flex items-center gap-2">
-                            <i class="fa-solid fa-sparkles"></i> ✨ AI 環境分析
+                        <!-- AI Analysis Button -->
+                        <button onclick="generateNodeAIAnalysis()" id="ai-node-btn" class="px-3 py-1.5 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold font-tech text-[10px] tracking-widest rounded hover:bg-luxury-gold/20 transition flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-sparkles"></i> ✨ AI 節點環境分析
                         </button>
                     </div>
                     <div id="log-container" class="flex-1 overflow-y-auto space-y-5 font-tech text-[11px] tracking-wider custom-scrollbar pr-4">
@@ -370,7 +520,7 @@
         </section>
 
         <!-- 4. Energy Matrix -->
-        <section id="energy" class="min-h-screen py-32 px-6 md:px-14 section-marker">
+        <section id="energy" class="section-view">
             <div class="text-center mb-20 gsap-reveal">
                 <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase">LIDAO MICROGRID</span>
                 <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide">Energy <span class="text-luxury-gold">Matrix</span></h2>
@@ -380,6 +530,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
                 <div class="lg:col-span-8 space-y-10">
                     
+                    <!-- 地熱探勘分析面板 -->
                     <div class="glass-card p-10 rounded-2xl border-orange-500/10 relative overflow-hidden group lg:col-span-12 gsap-reveal">
                         <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-orange-500/5 blur-[80px] rounded-full"></div>
                         
@@ -388,50 +539,117 @@
                                 <h3 class="font-tech text-[11px] text-orange-400 tracking-widest flex items-center gap-4">
                                     <i class="fa-solid fa-fire-flame-curved animate-pulse"></i> GEOTHERMAL INTELLIGENCE // 深層地熱探勘模型
                                 </h3>
+                                <p class="text-[12px] text-gray-500 mt-2 font-body tracking-wider">同步實測數據庫與利稻板塊地質動態預測</p>
                             </div>
-                            <span class="px-3 py-1.5 bg-orange-500/10 border border-orange-500/20 text-[9px] text-orange-400 font-tech rounded-md tracking-widest">AI SIMULATION ACTIVE</span>
+                            <span class="px-3 py-1.5 bg-orange-500/10 border border-orange-500/20 text-[9px] text-orange-400 font-tech rounded-md tracking-widest shrink-0">AI SIMULATION ACTIVE</span>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+                            <!-- 左側：霧鹿真實數據 -->
                             <div class="space-y-6 pr-0 md:pr-10 md:border-r border-white/5">
                                 <h4 class="text-[10px] text-gray-400 font-tech tracking-widest mb-5 flex items-center gap-3">
                                     <span class="text-orange-500 text-[8px]">■</span> REFERENCE: 霧鹿探勘實測數據
                                 </h4>
                                 <div class="bg-black/30 rounded-xl p-6 border border-white/5 space-y-5">
-                                    <div class="flex justify-between items-center"><span class="text-[10px] text-gray-500 font-tech">霧鹿一號井</span><span class="text-[13px] text-gray-300 font-tech">1000m <span class="text-orange-400 ml-3">114°C</span></span></div>
-                                    <div class="flex justify-between items-center"><span class="text-[10px] text-gray-500 font-tech">霧鹿二號井</span><span class="text-[13px] text-gray-300 font-tech">2004m <span class="text-orange-400 ml-3">140°C</span></span></div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] text-gray-500 font-tech tracking-wider">霧鹿一號井 (Well-01)</span>
+                                        <span class="text-[13px] text-gray-300 font-tech">1000m <span class="text-orange-400 ml-3">114°C</span></span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] text-gray-500 font-tech tracking-wider">霧鹿二號井 (Well-02)</span>
+                                        <span class="text-[13px] text-gray-300 font-tech">2004m <span class="text-orange-400 ml-3">140°C</span></span>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-4 border-t border-white/5">
+                                        <span class="text-[10px] text-gray-500 font-tech tracking-wider">目標溫度範圍 (Target Range)</span>
+                                        <span class="text-[13px] text-white font-tech tracking-widest">150 ~ 210°C</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-[10px] text-gray-500 font-tech tracking-wider">區域發電潛能 (Potential)</span>
+                                        <span class="text-[13px] text-white font-tech tracking-widest">18 MW</span>
+                                    </div>
                                 </div>
+                                <p class="text-[9px] text-gray-600 font-tech text-right tracking-widest">* Data source: 地熱探勘資訊平台</p>
                             </div>
+
+                            <!-- 右側：利稻預估數據 -->
                             <div class="space-y-6">
                                 <h4 class="text-[10px] text-gray-400 font-tech tracking-widest mb-5 flex items-center gap-3">
                                     <span class="text-cyan-500 text-[8px]">■</span> LIDAO NODE: 利稻地質演算預測
                                 </h4>
+                                <p class="text-[11px] text-gray-400 font-tech leading-[2] border-l-[2px] border-cyan-500/30 pl-4 tracking-wider">
+                                    GEO-PROFILE: 歐亞與菲律賓海板塊交界<br>
+                                    BASE ALTITUDE: 1068m<br>
+                                    EST. GRADIENT: 6.5°C / 100m
+                                </p>
                                 <div class="grid grid-cols-3 gap-4 pt-4">
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 text-center">
-                                        <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Depth</div>
-                                        <div class="text-xl text-white font-tech"><span id="lidao-sim-depth">2100</span>m</div>
+                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5">
+                                        <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Scan Depth</div>
+                                        <div class="text-xl text-white font-tech"><span id="lidao-sim-depth">2100</span><span class="text-[9px] text-gray-600 ml-1">m</span></div>
                                     </div>
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 text-center">
-                                        <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Temp</div>
-                                        <div class="text-xl text-orange-400 font-tech drop-shadow-[0_0_5px_rgba(249,115,22,0.3)]"><span id="lidao-sim-temp">156.5</span>°C</div>
+                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5">
+                                        <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Core Temp</div>
+                                        <div class="text-xl text-orange-400 font-tech drop-shadow-[0_0_5px_rgba(249,115,22,0.3)]"><span id="lidao-sim-temp">156.5</span><span class="text-[9px] text-orange-600 ml-1">°C</span></div>
                                     </div>
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 text-center">
-                                        <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Yield</div>
-                                        <div class="text-xl text-yellow-500 font-tech drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]"><span id="lidao-sim-mw">2.82</span>MW</div>
+                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5">
+                                        <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Est. Yield</div>
+                                        <div class="text-xl text-yellow-500 font-tech drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]"><span id="lidao-sim-mw">2.82</span><span class="text-[9px] text-yellow-700 ml-1">MW</span></div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 太陽能發電 -->
+                    <div class="glass-card p-10 rounded-2xl border-yellow-400/10 relative overflow-hidden gsap-reveal">
+                        <div class="absolute -top-10 -left-10 w-48 h-48 bg-yellow-400/5 blur-[60px] rounded-full"></div>
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 relative z-10 border-b border-white/5 pb-6 gap-4">
+                            <div>
+                                <h3 class="font-tech text-[11px] text-yellow-400 tracking-widest flex items-center gap-4">
+                                    <i class="fa-solid fa-solar-panel"></i> SOLAR ARRAY // 高山光儲陣列
+                                </h3>
+                                <p class="text-[12px] text-gray-500 mt-2 font-body tracking-wider">基於利稻村 (Alt. 1068m) 環境光照模型推算</p>
+                            </div>
+                            <span id="solar-status" class="px-3 py-1.5 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded-md tracking-widest shrink-0">GENERATING</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">IRRADIANCE (日照強度)</div>
+                                <div class="text-2xl text-white font-tech"><span id="solar-irrad">850</span> <span class="text-[10px] text-gray-600 ml-1">W/m²</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">OUTPUT (發電)</div>
+                                <div class="text-2xl text-yellow-400 font-tech drop-shadow-[0_0_8px_rgba(250,204,21,0.2)]"><span id="solar-output">185</span> <span class="text-[10px] text-yellow-600 ml-1">kW</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">EFF. SUN HOURS (有效)</div>
+                                <div class="text-2xl text-white font-tech">3.2 <span class="text-[10px] text-gray-600 ml-1">hr/d</span></div>
+                            </div>
+                            <div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">PLANNED CAP. (規劃)</div>
+                                <div class="text-2xl text-white font-tech">500 <span class="text-[10px] text-gray-600 ml-1">kWp</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-4 glass-card p-10 rounded-2xl flex flex-col h-full border-white/5 gsap-reveal">
-                    <h4 class="font-tech text-[10px] text-gray-500 mb-8 border-b border-white/5 pb-4 uppercase tracking-widest">CAPACITY FORECAST</h4>
-                    <div class="relative flex-1 min-h-[250px] flex items-center justify-center">
+                    <h4 class="font-tech text-[10px] text-gray-500 mb-8 border-b border-white/5 pb-4 uppercase tracking-widest">CAPACITY FORECAST // 綜合配比</h4>
+                    <div class="relative flex-1 min-h-[280px] flex items-center justify-center">
                         <canvas id="energyChart"></canvas>
                         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2">
                             <span class="text-3xl font-tech text-white tracking-widest scramble-target" data-val="3.0">0.0</span>
                             <span class="text-[9px] font-tech text-gray-500 uppercase tracking-widest mt-2">Total MW</span>
+                        </div>
+                    </div>
+                    <div class="mt-10 space-y-4">
+                        <div class="flex justify-between items-center text-[11px] font-tech tracking-wider">
+                            <span class="flex items-center gap-3 text-gray-300"><span class="w-2.5 h-2.5 rounded-full bg-orange-500/80"></span> 地熱基載</span>
+                            <span class="text-white">2.5 MW <span class="text-gray-600 ml-2">(83%)</span></span>
+                        </div>
+                        <div class="flex justify-between items-center text-[11px] font-tech tracking-wider">
+                            <span class="flex items-center gap-3 text-gray-300"><span class="w-2.5 h-2.5 rounded-full bg-yellow-400/80"></span> 高山太陽能</span>
+                            <span class="text-white">0.5 MW <span class="text-gray-600 ml-2">(17%)</span></span>
                         </div>
                     </div>
                     <p class="text-[12px] text-gray-500 leading-[2] mt-8 italic border-t border-white/5 pt-6 tracking-wide text-justify">
@@ -442,7 +660,7 @@
         </section>
 
         <!-- 5. Contact -->
-        <section id="contact" class="min-h-[70vh] py-32 px-6 md:px-14 section-marker">
+        <section id="contact" class="section-view">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
                 <div class="glass-card p-12 rounded-2xl space-y-10 border-white/5 gsap-reveal">
                     <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide">Get in Touch</h2>
@@ -456,6 +674,15 @@
                             <div>
                                 <p class="text-[9px] text-gray-500 font-tech uppercase tracking-[0.2em] mb-1">Official Email</p>
                                 <a href="mailto:onyxstudio@onyx.tw" class="text-white font-tech text-[15px] hover:text-cyan-400 transition tracking-wider">onyxstudio@onyx.tw</a>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 group cursor-pointer">
+                            <div class="w-14 h-14 bg-black/40 rounded-xl border border-white/5 flex items-center justify-center text-luxury-gold group-hover:border-luxury-gold/50 group-hover:shadow-[0_0_15px_rgba(212,175,55,0.1)] transition duration-500">
+                                <i class="fa-solid fa-location-dot text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-500 font-tech uppercase tracking-[0.2em] mb-1">Deep Tech Node</p>
+                                <p class="text-white font-tech text-[13px] tracking-wider">Sector Zero, TW (Deep Tech Infrastructure)</p>
                             </div>
                         </div>
                     </div>
@@ -473,23 +700,26 @@
 
     </main>
 
-    <!-- ✨ AI 聊天按鈕與視窗 -->
-    <button onclick="toggleAIChat()" class="fixed bottom-8 right-8 z-[150] w-14 h-14 bg-[#05060a]/80 border border-cyan-500/50 rounded-full flex items-center justify-center hover:bg-cyan-500/20 hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-110 transition-all duration-300 backdrop-blur-md group overflow-hidden p-0">
+    <!-- ✨ 懸浮 AI 終端按鈕 (更新圖示為 IMG_4889.jpeg 並保留發光特效) -->
+    <button onclick="toggleAIChat()" class="fixed bottom-8 right-8 z-[150] w-14 h-14 bg-[#07080d]/80 border border-cyan-500/50 rounded-full flex items-center justify-center hover:bg-cyan-500/20 hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-110 transition-all duration-300 backdrop-blur-md group overflow-hidden p-0">
         <img src="IMG_4889.jpeg" alt="ONYX AI" class="w-full h-full object-cover rounded-full opacity-90 group-hover:opacity-100 transition duration-300 group-hover:animate-pulse" onerror="this.src='https://via.placeholder.com/60/05060a/00f0ff?text=AI'">
     </button>
 
+    <!-- ✨ AI 聊天終端視窗 -->
     <div id="ai-chat-window" class="fixed bottom-28 right-8 z-[150] w-[360px] h-[520px] bg-[#05060a]/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex-col hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0 shadow-[0_10px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+        <!-- Chat Header -->
         <div class="p-5 border-b border-white/10 flex justify-between items-center bg-cyan-500/5">
             <div class="flex items-center gap-3">
                 <span class="relative flex h-2.5 w-2.5">
-                    <span class="animate-ping absolute h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                    <span class="relative h-2.5 w-2.5 rounded-full bg-cyan-500"></span>
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
                 </span>
                 <span class="font-tech text-xs text-cyan-400 tracking-widest uppercase">ONYX AI CORE</span>
             </div>
-            <button onclick="toggleAIChat()" class="text-gray-400 hover:text-white transition w-6 h-6"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="toggleAIChat()" class="text-gray-400 hover:text-white transition w-6 h-6 flex items-center justify-center rounded hover:bg-white/10"><i class="fa-solid fa-xmark"></i></button>
         </div>
         
+        <!-- Chat Messages -->
         <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto custom-scrollbar space-y-6 font-body text-sm flex flex-col bg-gradient-to-b from-transparent to-black/40">
             <div class="flex flex-col gap-1 items-start">
                 <span class="text-[9px] font-tech text-cyan-500 tracking-widest">SYSTEM_READY</span>
@@ -499,128 +729,175 @@
             </div>
         </div>
         
+        <!-- Chat Input -->
         <div class="p-4 border-t border-white/10 bg-black/40 flex gap-3">
             <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-tech text-xs focus:outline-none focus:border-cyan-400/50 transition placeholder-gray-600 tracking-wider" placeholder="輸入查詢指令..." onkeypress="if(event.key === 'Enter') sendAIChatMessage()">
-            <button onclick="sendAIChatMessage()" class="w-12 h-12 bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 rounded-xl hover:bg-cyan-500/40 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition flex justify-center items-center">
+            <button onclick="sendAIChatMessage()" class="w-12 h-12 bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 rounded-xl hover:bg-cyan-500/40 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] transition flex items-center justify-center shrink-0 cursor-pointer">
                 <i class="fa-solid fa-paper-plane"></i>
             </button>
         </div>
     </div>
 
-    <!-- 文章彈出視窗 -->
+    <!-- 文章閱讀彈出視窗 Modal & Gemini AI Summarizer -->
     <div id="article-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-400">
-        <div class="absolute inset-0 bg-[#05060a]/90 backdrop-blur-md" onclick="closeArticleModal()"></div>
+        <div class="absolute inset-0 bg-[#07080d]/90 backdrop-blur-md" onclick="closeArticleModal()"></div>
+        
         <div class="relative w-full max-w-4xl max-h-[90vh] bg-[#0b0c15] border border-white/10 rounded-xl overflow-hidden flex flex-col transform translate-y-8 transition-all duration-500 shadow-2xl" id="article-modal-content">
-            <div class="flex justify-between items-center p-8 border-b border-white/5 shrink-0">
+            <div class="flex justify-between items-center p-8 border-b border-white/5 shrink-0 bg-white/[0.01]">
                 <div class="flex items-center gap-4">
-                    <span id="modal-category" class="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-[9px] text-cyan-400 font-tech rounded-md"></span>
-                    <span id="modal-date" class="text-[10px] text-gray-500 font-tech"></span>
+                    <span id="modal-category" class="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-[9px] text-cyan-400 font-tech rounded-md uppercase tracking-widest"></span>
+                    <span id="modal-date" class="text-[10px] text-gray-500 font-tech tracking-widest"></span>
                 </div>
-                <button onclick="closeArticleModal()" class="text-gray-500 hover:text-white transition w-10 h-10 rounded-full hover:bg-white/5"><i class="fa-solid fa-xmark text-xl"></i></button>
+                <button onclick="closeArticleModal()" class="text-gray-500 hover:text-white transition w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
             </div>
             
-            <div class="p-8 md:p-14 overflow-y-auto custom-scrollbar flex-1">
+            <div class="p-8 md:p-14 overflow-y-auto custom-scrollbar flex-1 bg-gradient-to-b from-transparent to-black/20">
+                <!-- Title & AI Button -->
                 <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-10">
                     <h2 id="modal-title" class="text-3xl md:text-5xl font-fashion text-white leading-[1.2] tracking-wide"></h2>
-                    <button onclick="generateAISummary()" id="ai-summary-btn" class="px-4 py-2.5 bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 font-tech text-[11px] rounded-lg hover:bg-cyan-500/30 transition flex items-center gap-2 shrink-0">
+                    <button onclick="generateAISummary()" id="ai-summary-btn" class="px-4 py-2.5 bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 font-tech text-[11px] tracking-widest rounded-lg hover:bg-cyan-500/30 transition flex items-center justify-center gap-2 shrink-0 cursor-pointer">
                         <i class="fa-solid fa-sparkles"></i> ✨ AI 洞察摘要
                     </button>
                 </div>
-                <div id="ai-summary-container" class="hidden mb-10 p-6 bg-[#05060a] border border-cyan-500/20 border-l-[3px] border-l-cyan-400 rounded-r-xl text-gray-300 font-light text-[14px] leading-[2]"></div>
-                <div id="modal-body" class="text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] space-y-8 text-justify"></div>
+                
+                <!-- AI Summary Output Container -->
+                <div id="ai-summary-container" class="hidden mb-10 p-6 bg-[#07080d] border border-cyan-500/20 border-l-[3px] border-l-cyan-400 rounded-r-xl text-gray-300 font-light text-[14px] leading-[2] tracking-wide shadow-inner">
+                </div>
+
+                <div id="modal-body" class="text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] space-y-8 text-justify tracking-wide">
+                    <!-- 內容渲染區 -->
+                </div>
+            </div>
+            
+            <div class="p-6 border-t border-white/5 bg-[#07080d] text-center shrink-0">
+                <p class="font-tech text-[9px] text-gray-600 tracking-[0.3em] uppercase">END OF FILE // ONYX DEEP TECH STUDIO</p>
             </div>
         </div>
     </div>
 
-    <footer class="mt-24 border-t border-white/5 bg-[#05060a] pt-24 pb-20 px-6 md:px-14 relative z-10">
+    <!-- Footer (信箱字體與顏色調整為與地址、統編一致，並整合排序) -->
+    <footer class="mt-24 border-t border-white/5 bg-[#07080d] pt-24 pb-20 px-6 md:px-14 relative z-10">
         <div class="max-w-[1440px] mx-auto flex flex-col items-start">
+            
             <div class="mb-16">
                 <h2 class="font-fashion text-2xl text-white tracking-[0.15em] mb-2">ONYX DEEP TECH STUDIO</h2>
                 <p class="font-body text-[13px] text-gray-500 tracking-[0.05em] mb-6">奧尼克斯科技工作室</p>
-                <div class="space-y-4 mb-8 text-gray-500 font-tech text-[10px] tracking-widest">
-                    <p>TAX ID : 00466122</p>
-                    <p>台東縣海端鄉利稻村文化8號</p>
-                    <p>onyxstudio@onyx.tw</p>
+                
+                <!-- 資訊區塊整合：字體顏色均設為 gray-500/600 -->
+                <div class="space-y-4 mb-8">
+                    <p class="font-tech text-[10px] text-gray-600 tracking-[0.1em] uppercase">TAX ID : 00466122</p>
+                    <p class="font-body text-[13px] text-gray-500 tracking-wider">台東縣海端鄉利稻村文化8號</p>
+                    <a href="mailto:onyxstudio@onyx.tw" class="block font-body text-[13px] text-gray-500 tracking-wider hover:text-cyan-400 transition">
+                        onyxstudio@onyx.tw
+                    </a>
+                </div>
+
+                <div class="flex gap-4 text-2xl text-gray-600 mt-10">
+                    <a href="#" class="hover:text-white transition cursor-pointer"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-cyan-400 transition cursor-pointer"><i class="fa-brands fa-linkedin-in"></i></a>
                 </div>
             </div>
+
+            <!-- 底下分隔線與智慧財產宣告 -->
             <div class="w-full border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-start gap-6">
-                <p class="text-gray-500 font-tech text-[10px] tracking-widest uppercase">© 2026 ONYX DEEP TECH STUDIO. ALL RIGHTS RESERVED.</p>
+                <p class="text-gray-500 font-tech text-[10px] tracking-widest uppercase">
+                    © 2026 ONYX DEEP TECH STUDIO. ALL RIGHTS RESERVED.
+                </p>
+                <p class="text-gray-600 font-tech text-[9px] leading-relaxed uppercase md:text-right md:max-w-2xl tracking-widest">
+                    <strong class="text-gray-500">INTELLECTUAL PROPERTY & PATENT NOTICE:</strong> All core technologies, including the Crystal Growth Algorithm and Edge Node Architectures, are the exclusive property of ONYX DEEP TECH STUDIO.
+                </p>
             </div>
         </div>
     </footer>
 
     <script>
-        // ==========================================
-        // ✨ GSAP 與 Lenis 頂級平滑滾動初始化
-        // ==========================================
-        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
-
         gsap.registerPlugin(ScrollTrigger);
 
-        // 導航滾動綁定
-        function scrollToSection(id, isMobile = false) {
-            if (isMobile) toggleMobileMenu(false);
-            lenis.scrollTo(id, { offset: -100 });
+        // ==========================================
+        // 頁面與選單切換 - 已恢復為原始分頁式切換
+        // ==========================================
+        function switchTab(id, isMobile = false) {
+            // 移除所有頁面的 active 狀態
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            // 移除所有導航連結的 active 狀態
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            
+            // 啟用目標頁面
+            const targetSection = document.getElementById(id);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // 為新頁面內的元素觸發 GSAP 動畫
+                gsap.utils.toArray(`#${id} .gsap-reveal`).forEach(elem => {
+                    gsap.fromTo(elem, 
+                        { y: 60, opacity: 0, visibility: 'hidden' }, 
+                        { y: 0, opacity: 1, visibility: 'visible', duration: 1.2, ease: "power3.out", overwrite: true }
+                    );
+                });
+                // 重新觸發 scrambleText
+                gsap.utils.toArray(`#${id} .scramble-target`).forEach(el => {
+                    if (el.scrambleTrigger && el.scrambleTrigger.isActive) {
+                        el.scrambleTrigger.kill(); // 殺掉舊的 ScrollTrigger
+                    }
+                    el.innerText = '----'; // 重設為亂碼前狀態
+                    el.scrambleTrigger = ScrollTrigger.create({ // 重新創建 ScrollTrigger
+                        trigger: el,
+                        start: "top 90%",
+                        onEnter: () => scrambleText(el),
+                        once: true
+                    });
+                });
+            }
+
+            // 啟用目標導航連結
+            const links = document.querySelectorAll('.nav-link');
+            const map = { 'home': 0, 'insights': 1, 'research': 2, 'fieldops': 3, 'energy': 4, 'contact': 5 };
+            if (map[id] !== undefined && links[map[id]]) {
+                links[map[id]].classList.add('active');
+            }
+
+            // 關閉手機選單 (如果是從手機選單點擊)
+            if (isMobile) {
+                toggleMobileMenu(false);
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 監聽滾動更新選單 Highlight
-        const sections = document.querySelectorAll('.section-marker');
-        const navLinks = document.querySelectorAll('#desktop-nav .nav-link');
-        
-        sections.forEach((sec, i) => {
-            ScrollTrigger.create({
-                trigger: sec,
-                start: "top 50%",
-                end: "bottom 50%",
-                onToggle: self => {
-                    if(self.isActive) {
-                        navLinks.forEach(l => l.classList.remove('active'));
-                        if(navLinks[i]) navLinks[i].classList.add('active');
-                    }
-                }
-            });
-        });
-
-        // 元素進場動畫 (Glass Cards & Text)
-        gsap.utils.toArray('.gsap-reveal').forEach(elem => {
-            gsap.fromTo(elem, 
-                { y: 60, opacity: 0, visibility: 'hidden' }, 
-                {
-                    scrollTrigger: { trigger: elem, start: "top 85%" },
-                    y: 0, opacity: 1, visibility: 'visible',
-                    duration: 1.2, ease: "power3.out"
-                }
-            );
-        });
+        // 元素進場動畫 (Glass Cards & Text) - 調整為當頁面活躍時觸發
+        // GSAP.utils.toArray('.gsap-reveal').forEach(elem => {
+        //     gsap.fromTo(elem, 
+        //         { y: 60, opacity: 0, visibility: 'hidden' }, 
+        //         {
+        //             scrollTrigger: { trigger: elem, start: "top 85%" }, // 僅在元素可見時觸發
+        //             y: 0, opacity: 1, visibility: 'visible',
+        //             duration: 1.2, ease: "power3.out"
+        //         }
+        //     );
+        // });
 
         // 終端機亂碼解碼特效 (駭客感)
         function scrambleText(element) {
-            const finalValue = element.getAttribute('data-val');
+            const finalValue = element.getAttribute('data-val') || element.innerText;
             let chars = '!<>-_\\/[]{}—=+*^?#________';
             let iterations = 0;
-            const interval = setInterval(() => {
-                element.innerText = element.innerText.split('').map((letter, index) => {
-                    if(index < iterations) return finalValue[index];
+            const originalText = element.innerText; 
+            
+            clearInterval(element.scrambleInterval); 
+
+            element.scrambleInterval = setInterval(() => {
+                element.innerText = originalText.split('').map((letter, index) => { 
+                    if(index < iterations) return finalValue[index] || ''; 
                     return chars[Math.floor(Math.random() * chars.length)];
                 }).join('');
                 if(iterations >= finalValue.length) {
                     element.innerText = finalValue;
-                    clearInterval(interval);
+                    clearInterval(element.scrambleInterval);
                 }
                 iterations += 1 / 3;
             }, 30);
         }
-
-        gsap.utils.toArray('.scramble-target').forEach(el => {
-            ScrollTrigger.create({
-                trigger: el,
-                start: "top 90%",
-                onEnter: () => scrambleText(el),
-                once: true
-            });
-        });
 
         // ==========================================
         // 🚨 AI 修復：安全呼叫 Cloudflare Function API
@@ -642,11 +919,17 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    if (!response.ok) {
+                        // 嘗試解析錯誤訊息
+                        const errorData = await response.json().catch(() => ({ message: response.statusText }));
+                        console.error("Gemini API call failed:", response.status, errorData);
+                        throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
+                    }
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "無資料可供分析。";
                 } catch (e) {
-                    if (i === 4) return "無法與 ONYX AI 核心建立連線。請確認 Cloudflare Functions `/api/chat` 已正確設定金鑰。";
+                    console.error("Error in callGemini:", e);
+                    if (i === 4) return "無法與 ONYX AI 核心建立連線。請確認 Cloudflare Functions `/api/chat` 已正確設定金鑰且運行正常。錯誤: " + e.message;
                     await new Promise(res => setTimeout(res, delay));
                     delay *= 2; 
                 }
@@ -668,22 +951,20 @@
             camera.position.z = 250;
 
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 效能優化
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
 
             crystalGroup = new THREE.Group();
 
-            // 晶體幾何體 (Octahedron 變形)
             const geometry = new THREE.OctahedronGeometry(60, 0);
             const positions = geometry.attributes.position;
             for(let i=0; i<positions.count; i++) {
                 let y = positions.getY(i);
-                positions.setY(i, y * 1.8); // 拉長成為晶柱體
+                positions.setY(i, y * 1.8);
             }
             geometry.computeVertexNormals();
 
-            // 黑色高級反射材質
             const material = new THREE.MeshPhysicalMaterial({
                 color: 0x050505, metalness: 0.9, roughness: 0.1,
                 clearcoat: 1.0, clearcoatRoughness: 0.2,
@@ -691,7 +972,6 @@
             });
             const mesh = new THREE.Mesh(geometry, material);
 
-            // 青藍色發光邊緣
             const edges = new THREE.EdgesGeometry(geometry);
             const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.8, linewidth: 2 });
             const wireframe = new THREE.LineSegments(edges, lineMaterial);
@@ -699,7 +979,6 @@
             mesh.add(wireframe);
             crystalGroup.add(mesh);
 
-            // 加入些微的碎片圍繞
             for(let i=0; i<15; i++) {
                 const shardGeo = new THREE.OctahedronGeometry(Math.random() * 8 + 2, 0);
                 const shard = new THREE.Mesh(shardGeo, material);
@@ -710,11 +989,9 @@
                 crystalGroup.add(shard);
             }
 
-            // 晶體偏右擺放
             crystalGroup.position.x = window.innerWidth > 768 ? 80 : 0;
             scene.add(crystalGroup);
 
-            // 燈光佈置
             const ambient = new THREE.AmbientLight(0xffffff, 0.2);
             scene.add(ambient);
             const light1 = new THREE.DirectionalLight(0x00f0ff, 2);
@@ -724,24 +1001,13 @@
             light2.position.set(-100, -100, 50);
             scene.add(light2);
 
-            // 滑鼠視差事件
             document.addEventListener('mousemove', (e) => {
                 mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
             });
 
-            // 結合 ScrollTrigger：往下拉時晶體會物理旋轉
-            gsap.to(crystalGroup.rotation, {
-                y: Math.PI * 3,
-                z: Math.PI * 0.5,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: document.body,
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: 1
-                }
-            });
+            // 將 Three.js 動畫從 ScrollTrigger 解耦，使其作為獨立背景動態
+            // gsap.to(crystalGroup.rotation, { ...移除 ScrollTrigger 綁定... });
 
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
@@ -755,11 +1021,10 @@
 
         function animateCrystal() {
             requestAnimationFrame(animateCrystal);
-            // 基礎自轉與緩動浮空
             crystalGroup.rotation.y += 0.002;
+            crystalGroup.rotation.z += 0.0005; // 微調讓它持續旋轉
             crystalGroup.position.y = Math.sin(Date.now() * 0.001) * 10;
             
-            // 滑鼠視差
             camera.position.x += (mouseX * 30 - camera.position.x) * 0.05;
             camera.position.y += (mouseY * 30 - camera.position.y) * 0.05;
             camera.lookAt(scene.position);
@@ -768,57 +1033,263 @@
         }
 
         // ==========================================
-        // 其他原有邏輯 (Chart.js, 文章拉取, 資料模擬)
+        // 核心數據 API 邏輯 - 已恢復完整功能
         // ==========================================
-        function initChart() {
-            const ctx1 = document.getElementById('crystalChart')?.getContext('2d');
-            if (ctx1 && !window.cChart) {
-                window.cChart = new Chart(ctx1, {
-                    type: 'radar',
-                    data: {
-                        labels: ['能源效率', '數據精度', '結構穩定', '負碳協議', '響應速度'],
-                        datasets: [{ label: 'ONYX Protocol', data:[96, 99, 92, 88, 95], backgroundColor: 'rgba(0, 240, 255, 0.15)', borderColor: '#00f0ff', borderWidth: 1.5 }, 
-                                   { label: 'Standard Edge', data:[45, 75, 55, 30, 70], backgroundColor: 'transparent', borderColor: 'rgba(212, 175, 55, 0.4)', borderWidth: 1, borderDash:[4, 4] }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, scales: { r: { angleLines: { color: 'rgba(255,255,255,0.05)' }, grid: { color: 'rgba(255,255,255,0.03)' }, pointLabels: { color: '#888', font: { family: 'JetBrains Mono', size: 10 } }, ticks: { display: false } } }, plugins: { legend: { position: 'bottom', labels: { color: '#aaa' } } } }
-                });
+        async function fetchTelemetry() {
+            try {
+                const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m,weather_code,visibility&timezone=Asia%2FTaipei');
+                const weatherData = await weatherRes.json();
+                const aqiRes = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=23.187&longitude=121.021&current=us_aqi&timezone=Asia%2FTaipei');
+                const aqiData = await aqiRes.json();
+
+                const weatherMap = {
+                    0: 'Clear / 晴朗', 1: 'Mostly Clear / 晴時多雲', 2: 'Partly Cloudy / 多雲', 3: 'Overcast / 陰天',
+                    45: 'Fog / 雲霧', 48: 'Fog / 霧霾', 51: 'Drizzle / 輕微霧雨', 53: 'Drizzle / 霧雨', 
+                    61: 'Rain / 微雨', 63: 'Rain / 降雨', 71: 'Snow / 微雪', 95: 'Storm / 雷雨'
+                };
+
+                const current = weatherData.current;
+                const aqiCurrent = aqiData.current;
+
+                document.getElementById('env-temp').innerHTML = `${current.temperature_2m} <span class="text-sm text-gray-600 ml-1">°C</span>`;
+                document.getElementById('env-hum').innerHTML = `${current.relative_humidity_2m} <span class="text-sm text-gray-600 ml-1">%</span>`;
+                document.getElementById('env-vis').innerHTML = `${(current.visibility / 1000).toFixed(1)} <span class="text-sm text-gray-600 ml-1">km</span>`;
+                document.getElementById('env-weather').innerText = weatherMap[current.weather_code] || 'Anomaly / 異常';
+
+                let aqiStatus = '<span class="text-[9px] text-green-400 bg-green-400/10 px-2 py-0.5 rounded tracking-widest ml-2">GOOD</span>';
+                if(aqiCurrent.us_aqi > 50) aqiStatus = '<span class="text-[9px] text-yellow-400 bg-yellow-400/10 px-2 py-0.5 rounded tracking-widest ml-2">MODERATE</span>';
+                if(aqiCurrent.us_aqi > 100) aqiStatus = '<span class="text-[9px] text-red-400 bg-red-400/10 px-2 py-0.5 rounded tracking-widest ml-2">UNHEALTHY</span>';
+                document.getElementById('env-aqi').innerHTML = `${aqiCurrent.us_aqi} ${aqiStatus}`;
+            } catch(e) {
+                console.error("Error fetching environmental telemetry:", e);
+                // Fallback or error display
             }
-            const ctx2 = document.getElementById('energyChart')?.getContext('2d');
-            if (ctx2 && !window.eChart) {
-                window.eChart = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: { labels: ['地熱基載', '高山太陽能'], datasets:[{ data: [2.5, 0.5], backgroundColor:['rgba(249, 115, 22, 0.8)', 'rgba(250, 204, 21, 0.8)'], borderColor: '#05060a', borderWidth: 3 }] },
-                    options: { responsive: true, maintainAspectRatio: false, cutout: '78%', plugins: { legend: { display: false } } }
-                });
-            }
+            
+            const qT = new Date(Date.now() - 1000 * 60 * 60 * (Math.random() * 5 + 1)); 
+            document.getElementById('env-quake').innerHTML = `M ${(Math.random() * 2 + 1.5).toFixed(1)} <span class="text-[10px] text-gray-500 ml-2 tracking-widest">@ 花東近海 (${qT.getHours().toString().padStart(2,'0')}:${qT.getMinutes().toString().padStart(2,'0')})</span>`;
         }
 
-        // 載入文章
-        let globalArticles =[];
+        function updateTrafficDynamics() {
+            const vph = Math.max(2, Math.floor(15 + (Math.random() * 12 - 4))); 
+            const ppl = Math.max(5, Math.floor(40 + (Math.random() * 18 - 6))); 
+            const eastRatio = Math.floor(Math.random() * 40 + 30); 
+            const westRatio = 100 - eastRatio;
+
+            document.getElementById('traffic-vph').innerText = vph;
+            document.getElementById('traffic-ppl').innerText = ppl;
+            document.getElementById('traffic-east').innerText = eastRatio;
+            document.getElementById('traffic-west').innerText = westRatio;
+            document.getElementById('bar-east').style.width = `${eastRatio}%`;
+            document.getElementById('bar-west').style.width = `${westRatio}%`;
+
+            const st = document.getElementById('traffic-status');
+            st.innerHTML = Math.random() > 0.90 ? '<span class="text-yellow-400 animate-pulse tracking-widest">MONITORING</span>' : '<span class="text-green-400 tracking-widest">CLEAR / 順暢</span>';
+        }
+
+        let satState = { active: { name: 'STARLINK-' + Math.floor(Math.random()*8000+1000), alt: 550.5, altDelta: -0.2 }, next: { name: 'ONEWEB-' + Math.floor(Math.random()*800+100), dist: 1250, tta: 45 } };
+        function updateNetworkAndSatellite() {
+            document.getElementById('net-isp').innerHTML = `<span class="text-green-400 tracking-widest">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">${Math.floor(Math.random() * 8 + 10)}ms</span>`;
+            document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE'; // Added dynamic cell type
+            document.getElementById('net-cell-dbm').innerText = `-${Math.floor(Math.random() * 12 + 82)}dBm`;
+
+            satState.active.alt += satState.active.altDelta;
+            if (satState.active.alt < 538) satState.active.altDelta = Math.abs(satState.active.altDelta); 
+            satState.next.tta -= 1; satState.next.dist -= 7.5; 
+            
+            if (satState.next.tta <= 0) {
+                satState.active = { name: satState.next.name, alt: 555.0, altDelta: -0.3 };
+                satState.next = { name: (Math.random() > 0.3 ? 'STARLINK-' : 'ONEWEB-') + Math.floor(Math.random()*8000+100), dist: Math.floor(Math.random() * 300 + 1500), tta: Math.floor(Math.random() * 30 + 60) };
+                const log = document.createElement('div');
+                log.className = "border-l-[2px] border-luxury-gold/50 pl-4 py-1 animate-[fadeIn_0.5s_ease-out]";
+                log.innerHTML = `<span class="text-luxury-gold font-bold">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-300">SATELLITE HANDOVER: Connected to ${satState.active.name}</span>`;
+                document.getElementById('log-container').prepend(log);
+            }
+
+            document.getElementById('sat-active-name').innerText = satState.active.name;
+            document.getElementById('sat-active-alt').innerText = satState.active.alt.toFixed(1);
+            document.getElementById('sat-next-name').innerText = satState.next.name;
+            document.getElementById('sat-next-dist').innerText = satState.next.dist.toFixed(0);
+            document.getElementById('sat-next-time').innerText = `${Math.floor(satState.next.tta / 60).toString().padStart(2,'0')}:${(satState.next.tta % 60).toString().padStart(2,'0')}`;
+        }
+
+        let lidaoSimDepth = 1500.0, lidaoSimDir = 1;
+        function updateEnergyDynamics() {
+            lidaoSimDepth += (Math.random() * 35 * lidaoSimDir);
+            if (lidaoSimDepth > 3200) lidaoSimDir = -1;
+            if (lidaoSimDepth < 1500) lidaoSimDir = 1;
+            const geoTemp = 20 + (lidaoSimDepth / 100) * 6.5;
+            
+            document.getElementById('lidao-sim-depth').innerText = lidaoSimDepth.toFixed(0);
+            document.getElementById('lidao-sim-temp').innerText = geoTemp.toFixed(1);
+            document.getElementById('lidao-sim-mw').innerText = geoTemp > 100 ? ((geoTemp - 100) * 0.045).toFixed(2) : "0.00";
+
+            const h = new Date().getHours();
+            let irrad = 0, statusHtml = '<span class="px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 text-[9px] text-blue-400 font-tech rounded-md tracking-widest shrink-0">NIGHT STANDBY</span>';
+            if (h >= 6 && h < 12) { irrad = Math.floor(400 + Math.random() * 500); statusHtml = '<span class="px-3 py-1.5 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded-md tracking-widest shrink-0">GENERATING</span>'; }
+            else if (h >= 12 && h < 17) { irrad = Math.floor(100 + Math.random() * 400); statusHtml = '<span class="px-3 py-1.5 bg-gray-500/10 border border-gray-500/20 text-[9px] text-gray-400 font-tech rounded-md tracking-widest shrink-0">PARTIAL CLOUD</span>'; }
+            
+            document.getElementById('solar-irrad').innerText = irrad;
+            document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85);
+            document.getElementById('solar-status').innerHTML = statusHtml;
+        }
+
+        const logs = [
+            "Analyzing geological frequency data...",
+            "Negative Carbon Protocol: ACTIVE. Heat exchange optimized.",
+            "Crystal Growth Algorithm V2.1: Re-aligning logic branches.",
+            "RTK Correction signal strength: 98.4dB.",
+            "Fetching localized micro-climate data...",
+            "Deep Tech Infrastructure: ALL SYSTEMS NOMINAL."
+        ];
+        let logIdx = 0;
+        function addLog() {
+            const lc = document.getElementById('log-container');
+            const log = document.createElement('div');
+            log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1 animate-[fadeIn_0.5s_ease-out]";
+            log.innerHTML = `<span class="text-cyan-500 font-bold tracking-widest">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${logs[logIdx]}</span>`;
+            if(lc.childElementCount > 25) lc.lastChild.remove();
+            lc.prepend(log);
+            logIdx = (logIdx + 1) % logs.length;
+        }
+
+        // ==========================================
+        // Chart.js 圖表
+        // ==========================================
+        let crystalChart = null;
+        function initChart() {
+            if (crystalChart) return; // Prevent re-initialization
+            const ctx = document.getElementById('crystalChart').getContext('2d');
+            crystalChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['能源效率', '數據精度', '結構穩定', '負碳協議', '響應速度'],
+                    datasets: [{
+                        label: 'ONYX Protocol',
+                        data: [96, 99, 92, 88, 95],
+                        backgroundColor: 'rgba(0, 240, 255, 0.15)',
+                        borderColor: '#00f0ff',
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#00f0ff',
+                        borderWidth: 1.5
+                    }, {
+                        label: 'Standard Edge',
+                        data: [45, 75, 55, 30, 70],
+                        backgroundColor: 'transparent',
+                        borderColor: 'rgba(212, 175, 55, 0.4)',
+                        borderWidth: 1,
+                        borderDash: [4, 4],
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255,255,255,0.05)' },
+                            grid: { color: 'rgba(255,255,255,0.03)' },
+                            pointLabels: { color: '#888', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 },
+                            ticks: { display: false, backdropColor: 'transparent' }
+                        }
+                    },
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: { color: '#aaa', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 } 
+                        } 
+                    }
+                }
+            });
+        }
+
+        let energyChart = null;
+        function initEnergyChart() {
+            if (energyChart) return; // Prevent re-initialization
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            energyChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['地熱基載', '高山太陽能'],
+                    datasets: [{
+                        data: [2.5, 0.5],
+                        backgroundColor: ['rgba(249, 115, 22, 0.8)', 'rgba(250, 204, 21, 0.8)'],
+                        borderColor: '#05060a',
+                        borderWidth: 3,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '78%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { family: 'JetBrains Mono', size: 11 },
+                            bodyFont: { family: 'JetBrains Mono', size: 11 },
+                            padding: 12,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) { return ' ' + context.label + ': ' + context.raw + ' MW'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // 焦點訊息資料處理
+        // ==========================================
+        let globalArticles = [];
         async function loadArticles() {
+            const container = document.getElementById('articles-container');
             try {
                 const response = await fetch('articles.json');
+                if (!response.ok) throw new Error('Network error');
                 globalArticles = await response.json();
             } catch (error) {
-                globalArticles =[{ "id": "mock-1", "date": "2026-03-01", "category": "SYSTEM", "title": "預設資料庫", "summary": "將 articles.json 放入伺服器即可自動更新。", "content": "<p>這是預設畫面。</p>" }];
+                console.warn("使用備用預設資料。");
+                globalArticles = [{
+                    "id": "mock-1",
+                    "date": "2026-03-01",
+                    "category": "SYSTEM NOTICE",
+                    "title": "如何更新您的焦點訊息？",
+                    "summary": "此為預設畫面。將網頁上傳至主機後，系統會自動讀取 articles.json，無需改動程式碼。",
+                    "content": "<p>請確認資料夾中包含 <code>articles.json</code> 檔案，並放置於伺服器環境中執行。</p>"
+                }];
             }
+            renderArticles();
+        }
+
+        function renderArticles() {
             const container = document.getElementById('articles-container');
             container.innerHTML = ''; 
-            globalArticles.forEach(a => {
-                container.innerHTML += `
-                    <div class="glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/30 group cursor-pointer" onclick="openArticleModal('${a.id}')">
-                        <div class="flex justify-between items-center mb-6"><span class="text-[9px] font-tech text-cyan-400 border border-cyan-500/20 px-2 py-1 bg-cyan-500/10 rounded-md">${a.category}</span><span class="text-[10px] font-tech text-gray-500">${a.date}</span></div>
-                        <h3 class="text-xl md:text-2xl font-fashion text-white mb-4 group-hover:text-cyan-300 transition">${a.title}</h3>
-                        <p class="text-gray-400 text-[13px] leading-[1.8] font-light mb-8 flex-1">${a.summary}</p>
-                        <div class="border-t border-white/5 pt-5 flex items-center justify-between text-gray-500 group-hover:text-white transition">
-                            <span class="font-tech text-[9px] tracking-[0.2em] uppercase">Read Report</span><i class="fa-solid fa-arrow-right-long transform group-hover:translate-x-2 transition text-sm"></i>
-                        </div>
-                    </div>`;
+            globalArticles.forEach(article => {
+                const card = document.createElement('div');
+                card.className = "glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/30 group cursor-pointer hover:bg-white/[0.04] transition duration-500 gsap-reveal";
+                card.onclick = () => openArticleModal(article.id);
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[9px] font-tech text-cyan-400 tracking-[0.15em] border border-cyan-500/20 px-2 py-1 bg-cyan-500/10 rounded-md">${article.category}</span>
+                        <span class="text-[10px] font-tech text-gray-500 tracking-wider">${article.date}</span>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-fashion text-white mb-4 group-hover:text-cyan-300 transition duration-500 leading-snug">${article.title}</h3>
+                    <p class="text-gray-400 text-[13px] leading-[1.8] font-light mb-8 flex-1 tracking-wide">${article.summary}</p>
+                    <div class="mt-auto border-t border-white/5 pt-5 flex items-center justify-between text-gray-500 group-hover:text-white transition duration-500">
+                        <span class="font-tech text-[9px] tracking-[0.2em] uppercase">Read Report</span>
+                        <i class="fa-solid fa-arrow-right-long transform group-hover:translate-x-2 transition duration-500 text-sm"></i>
+                    </div>
+                `;
+                container.appendChild(card);
             });
+            // 由於分頁切換，這裡不需要自動觸發 GSAP，會在 switchTab 時處理
         }
 
         function openArticleModal(id) {
             const article = globalArticles.find(a => a.id === id);
+            if (!article) return;
             document.getElementById('modal-category').innerText = article.category;
             document.getElementById('modal-date').innerText = article.date;
             document.getElementById('modal-title').innerText = article.title;
@@ -826,29 +1297,114 @@
             
             const modal = document.getElementById('article-modal');
             const content = document.getElementById('article-modal-content');
-            modal.classList.remove('hidden'); modal.classList.add('flex');
-            setTimeout(() => { modal.classList.remove('opacity-0'); modal.classList.add('opacity-100'); content.classList.remove('translate-y-8', 'scale-95'); content.classList.add('translate-y-0', 'scale-100'); }, 10);
-            lenis.stop(); // 停止底層滾動
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => { 
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                content.classList.remove('translate-y-8', 'scale-95');
+                content.classList.add('translate-y-0', 'scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // 阻止背景滾動
         }
 
         function closeArticleModal() {
             const modal = document.getElementById('article-modal');
             const content = document.getElementById('article-modal-content');
-            modal.classList.remove('opacity-100'); modal.classList.add('opacity-0');
-            content.classList.remove('translate-y-0', 'scale-100'); content.classList.add('translate-y-8', 'scale-95');
-            document.getElementById('ai-summary-container').classList.add('hidden');
-            setTimeout(() => { modal.classList.remove('flex'); modal.classList.add('hidden'); lenis.start(); }, 400);
+            
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            content.classList.remove('translate-y-0', 'scale-100');
+            content.classList.add('translate-y-8', 'scale-95');
+            
+            const summaryContainer = document.getElementById('ai-summary-container');
+            summaryContainer.classList.add('hidden');
+            summaryContainer.innerHTML = '';
+            
+            setTimeout(() => { 
+                modal.classList.remove('flex'); 
+                modal.classList.add('hidden'); 
+                document.body.style.overflow = ''; // 恢復背景滾動
+            }, 400);
         }
 
-        async function generateAISummary() {
-            const btn = document.getElementById('ai-summary-btn');
-            const container = document.getElementById('ai-summary-container');
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 神經鏈結分析中...`; btn.disabled = true;
-            const res = await callGemini(`為以下文章產生3點精簡摘要。冷靜科技語氣：\n\n${document.getElementById('modal-body').innerText}`);
-            container.innerHTML = `<div class="font-tech text-cyan-400 mb-3 text-[10px] tracking-widest uppercase"><span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse inline-block mr-2"></span> AI CORE EXTRACTED</div>${res.replace(/\n/g, '<br>')}`;
-            container.classList.remove('hidden');
-            btn.innerHTML = `<i class="fa-solid fa-check text-green-400"></i> AI 摘要完成`;
-            setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 洞察摘要`; btn.disabled = false; }, 3000);
+        // ==========================================
+        // ✨ AI 聊天終端邏輯 - 修復點擊無反應問題
+        // ==========================================
+        function toggleAIChat() {
+            const chat = document.getElementById('ai-chat-window');
+            if (chat.classList.contains('hidden')) {
+                chat.classList.remove('hidden');
+                chat.classList.add('flex');
+                // 為了確保 transition 正常觸發，需要強制瀏覽器重新計算樣式
+                void chat.offsetWidth; 
+                setTimeout(() => { // 稍作延遲，確保 display:flex 已應用
+                    chat.classList.remove('scale-95', 'opacity-0');
+                    chat.classList.add('scale-100', 'opacity-100');
+                    document.getElementById('ai-chat-input').focus();
+                }, 10); // 微小的延遲確保 class 改變被識別
+            } else {
+                chat.classList.remove('scale-100', 'opacity-100');
+                chat.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    chat.classList.remove('flex');
+                    chat.classList.add('hidden');
+                }, 300); // 確保與 CSS transition 時間一致
+            }
+        }
+
+        async function sendAIChatMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const container = document.getElementById('ai-chat-messages');
+
+            // 顯示使用者對話
+            const userMsg = document.createElement('div');
+            userMsg.className = "flex flex-col gap-1 items-end";
+            userMsg.innerHTML = `
+                <span class="text-[9px] font-tech text-gray-500 tracking-widest uppercase">GUEST_USER</span>
+                <div class="bg-white/10 border border-white/10 text-white px-4 py-3 rounded-2xl rounded-tr-none leading-[1.8] tracking-wide text-[13px]">
+                    ${message}
+                </div>
+            `;
+            container.appendChild(userMsg);
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // 顯示載入中
+            const loadingId = 'loading-' + Date.now();
+            const loadingMsg = document.createElement('div');
+            loadingMsg.id = loadingId;
+            loadingMsg.className = "flex flex-col gap-1 items-start";
+            loadingMsg.innerHTML = `
+                <span class="text-[9px] font-tech text-cyan-500 tracking-widest">SYSTEM_PROCESSING</span>
+                <div class="bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] flex items-center gap-3">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> 正在調用神經節點...
+                </div>
+            `;
+            container.appendChild(loadingMsg);
+            container.scrollTop = container.scrollHeight;
+
+            const sysPrompt = `你是 ONYX DEEP TECH STUDIO 的『中央神經核心 AI』。你的語氣應專業、俐落且具備科技感。一律使用繁體中文。
+背景：專注於極端環境韌性節點、RTK、負碳運算。核心技術為晶體生長演算法。`;
+            
+            const aiResponse = await callGemini(message, sysPrompt);
+
+            document.getElementById(loadingId).remove();
+            
+            const aiMsg = document.createElement('div');
+            aiMsg.className = "flex flex-col gap-1 items-start";
+            aiMsg.innerHTML = `
+                <span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI CORE</span>
+                <div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
+                    ${aiResponse.replace(/\n/g, '<br>')}
+                </div>
+            `;
+            container.appendChild(aiMsg);
+            container.scrollTop = container.scrollHeight;
         }
 
         function toggleMobileMenu(show) {
@@ -857,58 +1413,20 @@
             else menu.classList.add('translate-x-full');
         }
 
-        // Chatbot UI Toggle
-        function toggleAIChat() {
-            const chat = document.getElementById('ai-chat-window');
-            if (chat.classList.contains('hidden')) {
-                chat.classList.remove('hidden'); chat.classList.add('flex');
-                setTimeout(() => { chat.classList.remove('scale-95', 'opacity-0'); chat.classList.add('scale-100', 'opacity-100'); document.getElementById('ai-chat-input').focus(); }, 10);
-            } else {
-                chat.classList.remove('scale-100', 'opacity-100'); chat.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => { chat.classList.remove('flex'); chat.classList.add('hidden'); }, 300);
-            }
-        }
-        
-        async function sendAIChatMessage() {
-            const input = document.getElementById('ai-chat-input');
-            const msg = input.value.trim(); if (!msg) return;
-            const container = document.getElementById('ai-chat-messages');
-            container.innerHTML += `<div class="flex flex-col gap-1 items-end"><span class="text-[9px] font-tech text-gray-500">GUEST</span><div class="bg-white/10 text-white px-4 py-3 rounded-2xl rounded-tr-none text-[13px]">${msg}</div></div>`;
-            input.value = ''; container.scrollTop = container.scrollHeight;
-            const loadId = 'ld-'+Date.now();
-            container.innerHTML += `<div id="${loadId}" class="flex flex-col gap-1 items-start"><span class="text-[9px] font-tech text-cyan-500">SYSTEM</span><div class="bg-cyan-500/10 text-cyan-400 px-4 py-3 rounded-2xl rounded-tl-none text-[13px]"><i class="fa-solid fa-circle-notch fa-spin"></i> 調用中...</div></div>`;
-            container.scrollTop = container.scrollHeight;
-            const res = await callGemini(msg, "你是 ONYX 中央神經核心 AI。語氣專業、俐落且具備科技感。繁體中文。");
-            document.getElementById(loadId).remove();
-            container.innerHTML += `<div class="flex flex-col gap-1 items-start"><span class="text-[9px] font-tech text-cyan-500">ONYX AI CORE</span><div class="bg-cyan-500/10 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none text-[13px] shadow-inner">${res.replace(/\n/g, '<br>')}</div></div>`;
-            container.scrollTop = container.scrollHeight;
-        }
-
-        async function generateNodeAIAnalysis() {
-            const btn = document.getElementById('ai-node-btn');
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 演算中...`; btn.disabled = true;
-            const res = await callGemini("根據極端環境生成一段約60字的節點戰略營運分析，極度冷靜科技感。");
-            const lc = document.getElementById('log-container');
-            lc.innerHTML = `<div class="border-l-[3px] border-luxury-gold bg-luxury-gold/5 p-5 my-3 rounded-r-lg"><div class="text-luxury-gold font-tech font-bold text-[10px] mb-3"><i class="fa-solid fa-sparkles"></i> STRATEGIC ANALYSIS</div><div class="text-gray-200 text-[13px]">${res.replace(/\n/g, '<br>')}</div></div>` + lc.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-check"></i> 演算完成`;
-            setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 環境分析`; btn.disabled = false; }, 3000);
-        }
-
-        // Live API Mock data loop
-        function updateDynamics() {
-            document.getElementById('env-temp').innerText = (12 + Math.random()*5).toFixed(1) + " °C";
-            document.getElementById('traffic-vph').innerText = Math.floor(10 + Math.random()*10);
-            document.getElementById('traffic-status').innerHTML = Math.random() > 0.9 ? '<span class="text-yellow-400">MONITORING</span>' : '<span class="text-green-400">CLEAR</span>';
-            const lc = document.getElementById('log-container');
-            if(Math.random() > 0.5) lc.innerHTML = `<div class="border-l-[2px] border-cyan-500/30 pl-4 py-1"><span class="text-cyan-500 font-bold">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">Telemetry sync optimal.</span></div>` + lc.innerHTML;
-            if(lc.childElementCount > 15) lc.lastChild.remove();
-        }
-
         window.onload = () => {
-            initThreeJS();
-            initChart();
+            initChart(); // Initializing charts on load (can be optimized to init on tab switch for performance)
+            initEnergyChart();
+            initThreeJS(); // Three.js should run regardless of tab
             loadArticles();
-            setInterval(updateDynamics, 3000);
+            
+            fetchTelemetry(); setInterval(fetchTelemetry, 300000); 
+            updateTrafficDynamics(); setInterval(updateTrafficDynamics, 4500); 
+            updateNetworkAndSatellite(); setInterval(updateNetworkAndSatellite, 1000); 
+            updateEnergyDynamics(); setInterval(updateEnergyDynamics, 1500); 
+            setInterval(addLog, 3000); for(let i=0; i<3; i++) addLog(); // Initial logs
+            
+            // 首次加載觸發 Home 頁面的 GSAP 動畫
+            switchTab('home'); 
         };
     </script>
 </body>
