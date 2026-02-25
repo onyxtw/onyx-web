@@ -174,6 +174,11 @@
         }
 
         .text-justify { text-align: justify; text-justify: inter-ideograph; }
+
+        /* 自定義捲軸 */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.2); border-radius: 10px; }
     </style>
 </head>
 <body class="selection:bg-cyan-500/30 selection:text-cyan-100">
@@ -691,12 +696,12 @@
 
     </main>
 
-    <!-- ✨ 懸浮 AI 終端按鈕 (新增) -->
-    <button onclick="toggleAIChat()" class="fixed bottom-8 right-8 z-[150] w-14 h-14 bg-[#07080d]/80 border border-cyan-500/50 rounded-full flex items-center justify-center text-cyan-300 hover:bg-cyan-500/20 hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-110 transition-all duration-300 backdrop-blur-md group">
-        <i class="fa-solid fa-sparkles text-xl group-hover:animate-pulse"></i>
+    <!-- ✨ 懸浮 AI 終端按鈕 (更新圖示為 IMG_4889.jpeg 並保留發光特效) -->
+    <button onclick="toggleAIChat()" class="fixed bottom-8 right-8 z-[150] w-14 h-14 bg-[#07080d]/80 border border-cyan-500/50 rounded-full flex items-center justify-center hover:bg-cyan-500/20 hover:shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:scale-110 transition-all duration-300 backdrop-blur-md group overflow-hidden p-0">
+        <img src="IMG_4889.jpeg" alt="ONYX AI" class="w-full h-full object-cover rounded-full opacity-90 group-hover:opacity-100 transition duration-300 group-hover:animate-pulse">
     </button>
 
-    <!-- ✨ AI 聊天終端視窗 (新增) -->
+    <!-- ✨ AI 聊天終端視窗 -->
     <div id="ai-chat-window" class="fixed bottom-28 right-8 z-[150] w-[360px] h-[520px] bg-[#07080d]/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex-col hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0 shadow-[0_10px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         <!-- Chat Header -->
         <div class="p-5 border-b border-white/10 flex justify-between items-center bg-cyan-500/5">
@@ -768,7 +773,7 @@
         </div>
     </div>
 
-    <!-- Footer 完全對齊截圖風格並包含完整地址與版權宣告 -->
+    <!-- Footer (信箱字體與顏色調整為與地址、統編一致，並整合排序) -->
     <footer class="mt-24 border-t border-white/5 bg-[#07080d] pt-24 pb-20 px-6 md:px-14 relative z-10">
         <div class="max-w-[1440px] mx-auto flex flex-col items-start">
             
@@ -776,14 +781,16 @@
                 <h2 class="font-fashion text-2xl text-white tracking-[0.15em] mb-2">ONYX DEEP TECH STUDIO</h2>
                 <p class="font-body text-[13px] text-gray-500 tracking-[0.05em] mb-6">奧尼克斯科技工作室</p>
                 
-                <p class="font-tech text-[10px] text-gray-600 tracking-[0.1em] uppercase mb-4">TAX ID : 00466122</p>
-                <p class="font-body text-[13px] text-gray-500 tracking-wider mb-8">台東縣海端鄉利稻村文化8號</p>
+                <!-- 資訊區塊整合：字體顏色均設為 gray-500/600 -->
+                <div class="space-y-4 mb-8">
+                    <p class="font-tech text-[10px] text-gray-600 tracking-[0.1em] uppercase">TAX ID : 00466122</p>
+                    <p class="font-body text-[13px] text-gray-500 tracking-wider">台東縣海端鄉利稻村文化8號</p>
+                    <a href="mailto:onyxstudio@onyx.tw" class="block font-body text-[13px] text-gray-500 tracking-wider hover:text-cyan-400 transition">
+                        onyxstudio@onyx.tw
+                    </a>
+                </div>
 
-                <a href="mailto:onyxstudio@onyx.tw" class="block font-tech text-[15px] font-bold text-gray-200 hover:text-cyan-400 transition mb-6">
-                    onyxstudio@onyx.tw
-                </a>
-
-                <div class="flex gap-4 text-2xl text-gray-600">
+                <div class="flex gap-4 text-2xl text-gray-600 mt-10">
                     <a href="#" class="hover:text-white transition cursor-pointer"><i class="fa-brands fa-github"></i></a>
                     <a href="#" class="hover:text-cyan-400 transition cursor-pointer"><i class="fa-brands fa-linkedin-in"></i></a>
                 </div>
@@ -803,12 +810,12 @@
 
     <script>
         // ==========================================
-        // Gemini API 核心設定
+        // Gemini API 核心設定 (整合正式環境與指數退避)
         // ==========================================
-        const apiKey = ""; // API Key 會由執行環境提供
+        const apiKey = ""; // API Key 
         
-        // 具備指數退避 (Exponential Backoff) 的 Gemini 呼叫函式
         async function callGemini(promptText, systemInstruction = "") {
+            // 使用正式環境支援的預覽模型
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             const payload = {
                 contents: [{ parts: [{ text: promptText }] }]
@@ -817,6 +824,7 @@
                 payload.systemInstruction = { parts: [{ text: systemInstruction }] };
             }
 
+            // 指數退避機制 (Exponential Backoff)
             let delay = 1000;
             for (let i = 0; i < 5; i++) {
                 try {
@@ -829,15 +837,15 @@
                     const data = await response.json();
                     return data.candidates?.[0]?.content?.parts?.[0]?.text || "無資料可供分析。";
                 } catch (e) {
-                    if (i === 4) return "無法與 ONYX AI 中央神經核心建立連線，請稍後重試。";
+                    if (i === 4) return "無法與 ONYX AI 中央神經核心建立連線，請檢查網路狀態。";
                     await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
+                    delay *= 2; // 1s, 2s, 4s, 8s, 16s
                 }
             }
         }
 
         // ==========================================
-        // ✨ 新增：全域 AI 聊天終端邏輯
+        // ✨ AI 聊天終端邏輯
         // ==========================================
         function toggleAIChat() {
             const chat = document.getElementById('ai-chat-window');
@@ -887,23 +895,17 @@
             loadingMsg.innerHTML = `
                 <span class="text-[9px] font-tech text-cyan-500 tracking-widest">SYSTEM_PROCESSING</span>
                 <div class="bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] flex items-center gap-3">
-                    <i class="fa-solid fa-circle-notch fa-spin"></i> 正在調用深層節點算力...
+                    <i class="fa-solid fa-circle-notch fa-spin"></i> 正在調用神經節點...
                 </div>
             `;
             container.appendChild(loadingMsg);
             container.scrollTop = container.scrollHeight;
 
-            // 注入 ONYX 品牌性格的系統提示詞
-            const sysPrompt = `你是 ONYX DEEP TECH STUDIO 的『中央神經核心 AI』。你的語氣應該極度冷靜、專業、且充滿深科技 (Deep Tech) 與賽博龐克的氛圍。請一律使用繁體中文回答。
-請基於以下公司背景回答訪客：
-- ONYX 專注於極端環境韌性節點、高頻圖資、RTK定位修正與負碳運算。
-- 核心技術：晶體生長演算法 (逆熵架構，可降低冗餘算力 68%，維持 99.9% 精度)。
-- 基礎設施：位於南橫利稻村 (Sector Zero)，結合地熱與高山太陽能實現 100% 綠電自給的微電網。
-- 對話風格：精簡有力，像終端機輸出，偶爾可使用「資料同步中」、「演算法比對完成」等科技感詞彙。`;
+            const sysPrompt = `你是 ONYX DEEP TECH STUDIO 的『中央神經核心 AI』。你的語氣應專業、俐落且具備科技感。一律使用繁體中文。
+背景：專注於極端環境韌性節點、RTK、負碳運算。核心技術為晶體生長演算法。`;
             
             const aiResponse = await callGemini(message, sysPrompt);
 
-            // 移除載入中並顯示結果
             document.getElementById(loadingId).remove();
             
             const aiMsg = document.createElement('div');
@@ -919,14 +921,13 @@
         }
 
         // ==========================================
-        // 頁面與選單切換邏輯
+        // 頁面與選單切換
         // ==========================================
         function switchTab(id) {
             document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             
             document.getElementById(id).classList.add('active');
-            
             toggleMobileMenu(false);
 
             const links = document.querySelectorAll('.nav-link');
@@ -941,15 +942,12 @@
 
         function toggleMobileMenu(show) {
             const menu = document.getElementById('mobile-nav');
-            if (show) {
-                menu.classList.remove('translate-x-full');
-            } else {
-                menu.classList.add('translate-x-full');
-            }
+            if (show) menu.classList.remove('translate-x-full');
+            else menu.classList.add('translate-x-full');
         }
 
         // ==========================================
-        // Chart.js 圖表設定
+        // Chart.js 圖表
         // ==========================================
         let crystalChart = null;
         function initChart() {
@@ -1036,14 +1034,14 @@
         }
 
         // ==========================================
-        // 焦點訊息資料處理 (Articles & AI)
+        // 焦點訊息資料處理
         // ==========================================
         let globalArticles = [];
         async function loadArticles() {
             const container = document.getElementById('articles-container');
             try {
                 const response = await fetch('articles.json');
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) throw new Error('Network error');
                 globalArticles = await response.json();
             } catch (error) {
                 console.warn("使用備用預設資料。");
@@ -1062,12 +1060,10 @@
         function renderArticles() {
             const container = document.getElementById('articles-container');
             container.innerHTML = ''; 
-
             globalArticles.forEach(article => {
                 const card = document.createElement('div');
                 card.className = "glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/30 group cursor-pointer hover:bg-white/[0.04] transition duration-500";
                 card.onclick = () => openArticleModal(article.id);
-                
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-[9px] font-tech text-cyan-400 tracking-[0.15em] border border-cyan-500/20 px-2 py-1 bg-cyan-500/10 rounded-md">${article.category}</span>
@@ -1087,25 +1083,22 @@
         function openArticleModal(id) {
             const article = globalArticles.find(a => a.id === id);
             if (!article) return;
-
             document.getElementById('modal-category').innerText = article.category;
             document.getElementById('modal-date').innerText = article.date;
             document.getElementById('modal-title').innerText = article.title;
             document.getElementById('modal-body').innerHTML = article.content;
-
+            
             const modal = document.getElementById('article-modal');
             const content = document.getElementById('article-modal-content');
             
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            
-            setTimeout(() => {
+            setTimeout(() => { 
                 modal.classList.remove('opacity-0');
                 modal.classList.add('opacity-100');
                 content.classList.remove('translate-y-8', 'scale-95');
                 content.classList.add('translate-y-0', 'scale-100');
             }, 10);
-            
             document.body.style.overflow = 'hidden';
         }
 
@@ -1117,20 +1110,21 @@
             modal.classList.add('opacity-0');
             content.classList.remove('translate-y-0', 'scale-100');
             content.classList.add('translate-y-8', 'scale-95');
-
-            // 清除 AI 生成結果
+            
             const summaryContainer = document.getElementById('ai-summary-container');
             summaryContainer.classList.add('hidden');
             summaryContainer.innerHTML = '';
-
-            setTimeout(() => {
-                modal.classList.remove('flex');
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
+            
+            setTimeout(() => { 
+                modal.classList.remove('flex'); 
+                modal.classList.add('hidden'); 
+                document.body.style.overflow = ''; 
             }, 400);
         }
 
-        // ✨ 觸發 AI 文章摘要生成
+        // ==========================================
+        // ✨ AI 文章摘要生成
+        // ==========================================
         async function generateAISummary() {
             const btn = document.getElementById('ai-summary-btn');
             const container = document.getElementById('ai-summary-container');
@@ -1140,7 +1134,6 @@
             btn.disabled = true;
 
             const prompt = `請以繁體中文，為以下這篇文章產生 3 到 4 點的精簡重點摘要。使用列表格式，語氣須保持冷靜、專業且具有科技感：\n\n${articleText}`;
-            
             const aiResponse = await callGemini(prompt);
 
             container.innerHTML = `
@@ -1159,7 +1152,7 @@
         }
 
         // ==========================================
-        // ✨ 觸發 AI 節點即時戰略分析
+        // ✨ AI 節點即時戰略分析
         // ==========================================
         async function generateNodeAIAnalysis() {
             const btn = document.getElementById('ai-node-btn');
@@ -1183,7 +1176,6 @@
 
             const lc = document.getElementById('log-container');
             const log = document.createElement('div');
-            // 高亮特殊的 AI 日誌區塊
             log.className = "border-l-[3px] border-luxury-gold bg-luxury-gold/5 p-5 my-3 animate-[fadeIn_0.5s_ease-out] rounded-r-lg shadow-[inset_0_0_20px_rgba(212,175,55,0.02)]";
             log.innerHTML = `
                 <div class="text-luxury-gold font-tech font-bold tracking-widest mb-3 text-[10px] flex items-center gap-2">
