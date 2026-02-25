@@ -7,9 +7,9 @@
 
     <title>ONYX | DEEP TECH 奧尼克斯科技 - 未來流動數據與邊緣運算權威</title>
     
-    <!-- 網頁標籤小圖示 (Favicon) -->
-    <link rel="icon" type="image/jpeg" href="favicon.jpg">
-    <link rel="apple-touch-icon" href="favicon.jpg">
+    <!-- 網頁標籤小圖示 (Favicon) - 已更新 -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
     
     <!-- SEO 優化與社群分享設定 -->
     <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資、RTK 定位修正與負碳運算技術。作為未來的數據權威，我們提供最尖端的深科技解決方案。">
@@ -918,6 +918,8 @@
             if (isHidden) {
                 chatWindow.classList.remove('hidden', 'opacity-0', 'scale-95');
                 chatWindow.classList.add('flex');
+                // ✨ 優化：打開時自動聚焦輸入框
+                setTimeout(() => document.getElementById('ai-chat-input').focus(), 300);
             } else {
                 chatWindow.classList.add('opacity-0', 'scale-95');
                 setTimeout(() => {
@@ -938,10 +940,10 @@
 
             // Display user message
             const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = "flex flex-col gap-1 items-end";
+            userMsgDiv.className = "flex flex-col gap-1 items-end self-end max-w-[85%]";
             userMsgDiv.innerHTML = `
                 <span class="text-[9px] font-tech text-gray-500 tracking-widest">USER_INPUT</span>
-                <div class="bg-gray-700/30 border border-gray-600/50 text-gray-200 px-4 py-3 rounded-2xl rounded-br-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
+                <div class="bg-gray-700/30 border border-gray-600/50 text-gray-200 px-4 py-3 rounded-2xl rounded-br-none leading-[1.8] tracking-wide text-[13px] shadow-inner break-words">
                     ${query}
                 </div>`;
             messagesContainer.appendChild(userMsgDiv);
@@ -950,17 +952,17 @@
 
             // Display loading indicator and prepare AI response container
             const aiMsgContainer = document.createElement('div');
-            aiMsgContainer.className = "flex flex-col gap-1 items-start";
+            aiMsgContainer.className = "flex flex-col gap-1 items-start self-start max-w-[85%]";
             aiMsgContainer.innerHTML = `
                 <span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI CORE</span>
-                <div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
+                <div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner break-words">
                     <i class="fa-solid fa-circle-notch fa-spin text-cyan-400"></i>
                 </div>`;
             messagesContainer.appendChild(aiMsgContainer);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
             // Call the streaming AI function
-            await callGemini(query, "You are ONYX AI Core. Respond in Traditional Chinese.", true, aiMsgContainer.querySelector('div'));
+            await callGemini(query, "You are ONYX AI Core, a deep-tech assistant. Respond in Traditional Chinese with a professional and concise tone.", true, aiMsgContainer.querySelector('div'));
         }
 
         // ==========================================
@@ -969,7 +971,8 @@
         function switchTab(id, isMobile = false) {
             document.querySelectorAll('.section-view').forEach(el => {
                 if (el.classList.contains('active')) {
-                    gsap.to(el, { opacity: 0, y: -20, duration: 0.4, ease: "power2.in", onComplete: () => {
+                    gsap.to(el, { opacity: 0, duration: 0.4, ease: "power2.in", onComplete: () => {
+                        el.style.display = 'none';
                         el.classList.remove('active');
                     }});
                 }
@@ -978,13 +981,16 @@
             
             const targetSection = document.getElementById(id);
             if (targetSection) {
+                targetSection.style.display = 'block';
                 targetSection.classList.add('active');
                 gsap.fromTo(targetSection, 
                     { opacity: 0, y: 20 },
                     { 
                         opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.3,
+                        onStart: () => {
+                             window.scrollTo({ top: 0, behavior: 'smooth' });
+                        },
                         onComplete: () => {
-                            gsap.to(window, { duration: 0.5, scrollTo: 0 });
                             triggerPageAnimations(id);
                         }
                     }
@@ -1119,7 +1125,10 @@
 
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
-            if (!container || !THREE) return;
+            if (!container || typeof THREE === 'undefined') {
+                console.error("Three.js container or library not found.");
+                return;
+            };
 
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
@@ -1160,10 +1169,9 @@
                     terrainMesh.rotation.x = -Math.PI / 2;
                     scene.add(terrainMesh);
                 },
-                undefined, // onProgress callback not needed
-                (err) => { // onError
-                    console.error('An error happened while loading the terrain texture.', err);
-                    // You could add a fallback background here
+                undefined, 
+                (err) => { 
+                    console.error('An error occurred while loading the terrain texture.', err);
                 }
             );
 
@@ -1196,11 +1204,14 @@
             ctx.beginPath();
             ctx.moveTo(0, 0); ctx.lineTo(64, 0); ctx.lineTo(64, 64); ctx.lineTo(0, 64); ctx.lineTo(0, 0);
             ctx.stroke();
-            return new THREE.CanvasTexture(canvas);
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            return texture;
         }
 
         function animateTerrain() {
-            if(!renderer) return;
+            if(!renderer || !scene || !camera) return;
             requestAnimationFrame(animateTerrain);
 
             if (terrainMesh) {
@@ -1420,6 +1431,7 @@
 
         function renderArticles() {
             const container = document.getElementById('articles-container');
+            if(!container) return;
             container.innerHTML = ''; 
             globalArticles.forEach(article => {
                 const card = document.createElement('div');
@@ -1450,15 +1462,23 @@
             document.getElementById('modal-body').innerHTML = article.content;
             
             const modal = document.getElementById('article-modal');
+            const content = document.getElementById('article-modal-content');
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('translate-y-8');
+            }, 10);
             document.body.style.overflow = 'hidden';
         }
 
         function closeArticleModal() {
             const modal = document.getElementById('article-modal');
+            const content = document.getElementById('article-modal-content');
+
             modal.classList.add('opacity-0');
+            content.classList.add('translate-y-8');
             document.getElementById('ai-summary-container').classList.add('hidden');
             setTimeout(() => { 
                 modal.classList.add('hidden'); 
@@ -1547,8 +1567,12 @@
             updateTrafficDynamics(); setInterval(updateTrafficDynamics, 4500); 
             updateNetworkAndSatellite(); setInterval(updateNetworkAndSatellite, 1000); 
             updateEnergyDynamics(); setInterval(updateEnergyDynamics, 1500); 
-            setInterval(addLog, 3000);
-            for(let i=0; i<3; i++) addLog(); // Initial logs
+            
+            // 延遲新增日誌，讓初始畫面更乾淨
+            setTimeout(() => {
+                setInterval(addLog, 4000);
+                addLog();
+            }, 2000);
             
             // 觸發首頁的進場動畫
             triggerPageAnimations('home');
