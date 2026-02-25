@@ -1,4 +1,3 @@
-```javascript
 // functions/api/chat.js
 // 這是 Cloudflare Pages Functions 的標準入口點
 export async function onRequestPost(context) {
@@ -121,4 +120,4 @@ export async function onRequestPost(context) {
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
     }
 }
-```
+
