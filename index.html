@@ -7,9 +7,11 @@
 
     <title>ONYX | DEEP TECH 奧尼克斯科技 - 未來流動數據與邊緣運算權威</title>
     
+    <!-- 網頁標籤小圖示 (Favicon) -->
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
     <link rel="apple-touch-icon" href="favicon.jpg">
     
+    <!-- SEO 優化與社群分享設定 -->
     <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資、RTK 定位修正與負碳運算技術。作為未來的數據權威，我們提供最尖端的深科技解決方案。">
     <meta name="keywords" content="ONYX, DEEP TECH, 奧尼克斯, 奧尼克斯科技, 晶體生長演算法, 負碳運算, 邊緣運算, Edge AI, 數據權威, 韌性節點, 科技工作室">
     <meta name="author" content="ONYX DEEP TECH STUDIO">
@@ -18,6 +20,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://onyx.tw">
 
+    <!-- 結構化數據 (Schema.org) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -39,7 +42,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- ✨ 僅保留 GSAP，Lenis 因非單頁滾動故移除 -->
+    <!-- ✨ 引入 GSAP 與 ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
@@ -78,7 +81,7 @@
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.3); }
 
-        /* 背景特效：極光流動 */
+        /* 背景特效：極光流動 (作為 Three.js 的 fallback 或疊加層) */
         .ambient-flow {
             position: fixed;
             top: 0;
@@ -97,7 +100,7 @@
             100% { transform: scale(1.1); opacity: 1; }
         }
 
-        /* 網格紋理 */
+        /* 網格紋理 (作為 Three.js 的 fallback 或疊加層) */
         .grid-texture {
             position: fixed;
             inset: 0;
@@ -162,16 +165,12 @@
         .section-view {
             display: none;
             opacity: 0;
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            /* 初始狀態由 JS 控制 */
         }
 
         .section-view.active {
             display: block;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+            /* opacity 由 JS 控制 GSAP.fromTo */
         }
 
         .text-justify { text-align: justify; text-justify: inter-ideograph; }
@@ -183,12 +182,29 @@
         
         /* GSAP 初始隱藏狀態 */
         .gsap-reveal { opacity: 0; visibility: hidden; }
+
+        /* Three.js 容器樣式 */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3; /* 確保在背景，但高於 ambient-flow/grid-texture */
+            overflow: hidden;
+            background: transparent;
+        }
+        #canvas-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 <body class="selection:bg-cyan-500/30 selection:text-cyan-100">
 
-    <!-- ✨ 3D 黑曜石晶體背景 -->
-    <div id="canvas-container" class="fixed top-0 left-0 w-full h-screen z-[-3] opacity-[0.85]"></div>
+    <!-- ✨ 3D 利稻村地形數位監控地圖 -->
+    <div id="canvas-container"></div>
 
     <div class="ambient-flow"></div>
     <div class="grid-texture"></div>
@@ -214,7 +230,7 @@
     </header>
 
     <!-- 手機版選單 -->
-    <div id="mobile-nav" class="fixed inset-0 z-[100] bg-[#05060a]/95 backdrop-blur-xl pt-28 px-10 flex flex-col gap-8 transform translate-x-full transition-transform duration-500 xl:hidden border-l border-white/5">
+    <div id="mobile-nav" class="fixed inset-0 z-[100] bg-[#07080d]/95 backdrop-blur-xl pt-28 px-10 flex flex-col gap-8 transform translate-x-full transition-transform duration-500 xl:hidden border-l border-white/5">
         <button onclick="toggleMobileMenu(false)" class="absolute top-10 right-10 text-white/50 hover:text-white transition">
             <i class="fa-solid fa-xmark text-3xl"></i>
         </button>
@@ -230,17 +246,17 @@
 
         <!-- 1. Home / Origin -->
         <section id="home" class="section-view active">
-            <div class="flex flex-col justify-center min-h-[65vh] max-w-4xl space-y-12 pt-10 relative z-10 gsap-reveal">
+            <div class="flex flex-col justify-center min-h-[65vh] max-w-4xl space-y-12 pt-10 relative z-10">
                 <div class="border-l-[3px] border-luxury-gold pl-8">
-                    <span class="font-tech text-[10px] text-luxury-gold tracking-[0.4em] block mb-6 italic opacity-80">FOUNDER'S VISION</span>
-                    <h2 class="text-5xl md:text-7xl lg:text-[80px] font-fashion text-white leading-[1.15] tracking-wide">
+                    <span class="font-tech text-[10px] text-luxury-gold tracking-[0.4em] block mb-6 italic opacity-80 gsap-reveal">FOUNDER'S VISION</span>
+                    <h2 class="text-5xl md:text-7xl lg:text-[80px] font-fashion text-white leading-[1.15] tracking-wide gsap-reveal">
                         極致科技，<br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-luxury-gold italic pr-4">淬煉於深處。</span>
                     </h2>
                 </div>
                 
                 <div class="space-y-12 max-w-3xl">
-                    <div class="space-y-4 border-l border-white/10 pl-6">
+                    <div class="space-y-4 border-l border-white/10 pl-6 gsap-reveal">
                         <p class="text-gray-300 font-light text-[15px] md:text-[17px] leading-[2] text-justify md:text-left tracking-wide">
                             <span class="text-white font-fashion text-xl md:text-2xl tracking-widest mr-2">ONYX</span>
                             來自於南橫公路利稻村，在極端環境中，透過科技與自然環境的共生，創造永續運作的「諾亞方舟」。
@@ -251,7 +267,7 @@
                         </p>
                     </div>
 
-                    <div class="space-y-4 border-l border-white/10 pl-6">
+                    <div class="space-y-4 border-l border-white/10 pl-6 gsap-reveal">
                         <p class="text-gray-300 font-light text-[15px] md:text-[17px] leading-[2] text-justify md:text-left tracking-wide">
                             如同黑曜石經由地質壓力淬煉而成，我們的數據演算法與韌性節點設計，是為了在最嚴酷的挑戰下提供絕對的精準度。<span class="text-white font-medium tracking-widest ml-1">我們不只是科技的創造者，更是智慧數據的提煉者。</span>
                         </p>
@@ -266,10 +282,10 @@
         <!-- 1.5 Insights / 焦點訊息 -->
         <section id="insights" class="section-view">
             <div class="space-y-16">
-                <div class="border-l-[3px] border-cyan-400 pl-8 mb-14 gsap-reveal">
-                    <span class="font-tech text-[10px] text-cyan-400 tracking-[0.4em] block mb-5 uppercase opacity-80">Analytics & Perspectives</span>
-                    <h2 class="text-4xl md:text-[50px] font-fashion text-white italic tracking-wide">Insights <span class="text-gray-400 text-2xl font-body not-italic ml-3 tracking-[0.1em]">焦點訊息與研究</span></h2>
-                    <p class="text-gray-400 mt-6 font-light text-[15px] leading-relaxed max-w-2xl tracking-wide">匯聚 ONYX 核心團隊的深度技術報告、營運日誌與科技思維探討。</p>
+                <div class="border-l-[3px] border-cyan-400 pl-8 mb-14">
+                    <span class="font-tech text-[10px] text-cyan-400 tracking-[0.4em] block mb-5 uppercase opacity-80 gsap-reveal">Analytics & Perspectives</span>
+                    <h2 class="text-4xl md:text-[50px] font-fashion text-white italic tracking-wide gsap-reveal">Insights <span class="text-gray-400 text-2xl font-body not-italic ml-3 tracking-[0.1em]">焦點訊息與研究</span></h2>
+                    <p class="text-gray-400 mt-6 font-light text-[15px] leading-relaxed max-w-2xl tracking-wide gsap-reveal">匯聚 ONYX 核心團隊的深度技術報告、營運日誌與科技思維探討。</p>
                 </div>
 
                 <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -283,20 +299,20 @@
         <section id="research" class="section-view">
             <div class="space-y-28">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
-                    <div class="lg:col-span-5 space-y-10 gsap-reveal">
+                    <div class="lg:col-span-5 space-y-10">
                         <div class="border-l-[3px] border-white pl-6">
-                            <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-2">Crystal Growth</h2>
-                            <span class="text-gray-400 text-xl font-body tracking-[0.2em]">晶體生長演算法</span>
+                            <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-2 gsap-reveal">Crystal Growth</h2>
+                            <span class="text-gray-400 text-xl font-body tracking-[0.2em] gsap-reveal">晶體生長演算法</span>
                         </div>
-                        <p class="text-gray-300 leading-[2] text-justify font-light text-[15px] tracking-wide">
+                        <p class="text-gray-300 leading-[2] text-justify font-light text-[15px] tracking-wide gsap-reveal">
                             我們拒絕盲目的暴力運算。ONYX 的核心技術「晶體生長演算法」採用逆熵架構，模擬自然界礦物的結構化過程，在訓練初期便建立邏輯骨架，大幅降低無謂的算力損耗，實現真正的智慧提純。
                         </p>
                         <div class="grid grid-cols-2 gap-6">
-                            <div class="glass-card p-8 rounded-xl text-center">
+                            <div class="glass-card p-8 rounded-xl text-center gsap-reveal">
                                 <div class="text-3xl md:text-4xl text-cyan-400 font-tech mb-3 tracking-wider scramble-target" data-val="-68%">----</div>
                                 <div class="text-[10px] text-gray-500 tracking-[0.2em] uppercase">能源冗餘降低</div>
                             </div>
-                            <div class="glass-card p-8 rounded-xl text-center">
+                            <div class="glass-card p-8 rounded-xl text-center gsap-reveal">
                                 <div class="text-3xl md:text-4xl text-luxury-gold font-tech mb-3 tracking-wider scramble-target" data-val="99.9%">----</div>
                                 <div class="text-[10px] text-gray-500 tracking-[0.2em] uppercase">數據處理精度</div>
                             </div>
@@ -313,22 +329,22 @@
                 <div class="glass-card p-10 md:p-24 rounded-2xl border-luxury-gold/10 gsap-reveal">
                     <div class="flex justify-between items-end border-b border-white/10 pb-8 mb-12">
                         <div>
-                            <h2 class="text-2xl md:text-3xl font-fashion text-white tracking-[0.2em] uppercase">Technical Whitepaper</h2>
-                            <p class="font-tech text-[10px] text-gray-500 mt-3 tracking-widest">DOC_ID: ONX-2026-REVISION-A // INTERNAL USE ONLY</p>
+                            <h2 class="text-2xl md:text-3xl font-fashion text-white tracking-[0.2em] uppercase gsap-reveal">Technical Whitepaper</h2>
+                            <p class="font-tech text-[10px] text-gray-500 mt-3 tracking-widest gsap-reveal">DOC_ID: ONX-2026-REVISION-A // INTERNAL USE ONLY</p>
                         </div>
-                        <i class="fa-solid fa-file-shield text-4xl text-luxury-gold/30 hidden md:block"></i>
+                        <i class="fa-solid fa-file-shield text-4xl text-luxury-gold/30 hidden md:block gsap-reveal"></i>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-14 text-gray-300 font-light">
-                        <div class="space-y-5">
+                        <div class="space-y-5 gsap-reveal">
                             <h3 class="text-lg text-white font-medium font-fashion italic border-l-2 border-cyan-400 pl-4">01. 逆熵運算架構<br><span class="text-xs text-gray-500 font-tech tracking-widest mt-1 block not-italic">Anti-Entropy Computing</span></h3>
                             <p class="text-[14px] opacity-80 leading-[2] text-justify tracking-wide">我們認為數據不應只是堆疊。透過 ONYX Protocol，我們將雜訊轉化為有序的幾何邏輯體，讓運算過程本身即是能源優化的過程。</p>
                         </div>
-                        <div class="space-y-5">
+                        <div class="space-y-5 gsap-reveal">
                             <h3 class="text-lg text-white font-medium font-fashion italic border-l-2 border-luxury-gold pl-4">02. 負碳協議<br><span class="text-xs text-gray-500 font-tech tracking-widest mt-1 block not-italic">Negative Carbon Protocol</span></h3>
                             <p class="text-[14px] opacity-80 leading-[2] text-justify tracking-wide">利用邊緣運算節點的熱能循環系統，我們將伺服器廢熱轉化為可供當地農業或微電網使用的二次能源，實現運算與生態的共生。</p>
                         </div>
-                        <div class="space-y-5">
+                        <div class="space-y-5 gsap-reveal">
                             <h3 class="text-lg text-white font-medium font-fashion italic border-l-2 border-gray-600 pl-4">03. 智慧財產聲明<br><span class="text-xs text-gray-500 font-tech tracking-widest mt-1 block not-italic">Intellectual Property</span></h3>
                             <div class="bg-black/40 p-5 rounded-lg space-y-3 mt-3 border border-white/5">
                                 <p class="text-[9px] font-tech text-luxury-gold mb-3 tracking-widest">> PATENT PENDING STATUS</p>
@@ -353,24 +369,24 @@
                         <div class="absolute -top-10 -right-10 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition duration-700">
                             <i class="fa-solid fa-microchip text-9xl text-cyan-500 animate-pulse"></i>
                         </div>
-                        <h2 class="text-4xl md:text-5xl font-fashion text-white mb-6 italic tracking-wide">Sector Zero <span class="text-cyan-400">Node</span></h2>
-                        <p class="text-gray-400 text-[15px] mb-12 max-w-xl leading-[1.8] tracking-wide">位於極端環境的實地運算節點，目前正為導航系統與微電網提供即時同步數據。</p>
+                        <h2 class="text-4xl md:text-5xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Sector Zero <span class="text-cyan-400">Node</span></h2>
+                        <p class="text-gray-400 text-[15px] mb-12 max-w-xl leading-[1.8] tracking-wide gsap-reveal">位於極端環境的實地運算節點，目前正為導航系統與微電網提供即時同步數據。</p>
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/5 pt-10">
                             <div>
-                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">LATENCY</div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">LATENCY</div>
                                 <div class="text-2xl text-white font-tech"><span id="latency-val" class="scramble-target" data-val="8">0</span><span class="text-sm text-gray-600 ml-1">ms</span></div>
                             </div>
                             <div>
-                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">STABILITY</div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">STABILITY</div>
                                 <div class="text-2xl text-green-400 font-tech drop-shadow-[0_0_8px_rgba(74,222,128,0.2)] scramble-target" data-val="99.98%">0.00%</div>
                             </div>
                             <div>
-                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">PROTOCOL</div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">PROTOCOL</div>
                                 <div class="text-2xl text-cyan-400 font-tech drop-shadow-[0_0_8px_rgba(0,240,255,0.2)] scramble-target" data-val="RTK+">---</div>
                             </div>
                             <div>
-                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">STRATEGIC</div>
+                                <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">STRATEGIC</div>
                                 <div class="flex gap-4 text-white/30 text-xl mt-1">
                                     <i class="fa-brands fa-google hover:text-white transition"></i>
                                     <i class="fa-solid fa-bolt hover:text-luxury-gold transition"></i>
@@ -382,7 +398,7 @@
                     <!-- Environment API -->
                     <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
                         <div class="absolute top-0 right-0 w-40 h-40 bg-cyan-500/5 blur-[60px] rounded-full"></div>
-                        <h3 class="font-tech text-[11px] text-cyan-400 tracking-widest mb-10 flex items-center gap-4">
+                        <h3 class="font-tech text-[11px] text-cyan-400 tracking-widest mb-10 flex items-center gap-4 gsap-reveal">
                             <span class="relative flex h-2 w-2">
                               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                               <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
@@ -391,27 +407,27 @@
                         </h3>
                         
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-8 relative z-10">
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">WEATHER (天氣)</div>
                                 <div class="text-[16px] text-gray-200 font-body tracking-wider" id="env-weather">擷取中...</div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">TEMPERATURE (溫度)</div>
                                 <div class="text-2xl text-white font-tech" id="env-temp">-- <span class="text-sm text-gray-600 ml-1">°C</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">HUMIDITY (濕度)</div>
                                 <div class="text-2xl text-white font-tech" id="env-hum">-- <span class="text-sm text-gray-600 ml-1">%</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">AIR QUALITY (空品)</div>
                                 <div class="text-2xl text-white font-tech flex items-baseline gap-2" id="env-aqi">--</div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">VISIBILITY (能見度)</div>
                                 <div class="text-2xl text-white font-tech" id="env-vis">-- <span class="text-sm text-gray-600 ml-1">km</span></div>
                             </div>
-                            <div class="col-span-2 md:col-span-1">
+                            <div class="col-span-2 md:col-span-1 gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">SEISMIC (地震監測)</div>
                                 <div class="text-lg text-white font-tech leading-tight mt-1" id="env-quake">同步中...</div>
                             </div>
@@ -421,7 +437,7 @@
                     <!-- Flow Dynamics -->
                     <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
                         <div class="absolute top-0 left-0 w-40 h-40 bg-luxury-gold/5 blur-[60px] rounded-full"></div>
-                        <h3 class="font-tech text-[11px] text-luxury-gold tracking-widest mb-10 flex items-center gap-4">
+                        <h3 class="font-tech text-[11px] text-luxury-gold tracking-widest mb-10 flex items-center gap-4 gsap-reveal">
                             <span class="relative flex h-2 w-2">
                               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-luxury-gold opacity-75"></span>
                               <span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span>
@@ -430,19 +446,19 @@
                         </h3>
                         
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 relative z-10">
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">SECTION STATUS (狀態)</div>
                                 <div class="text-lg font-tech mt-1" id="traffic-status"><span class="text-green-400">CLEAR / 順暢</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">VEHICLE FLOW (車流)</div>
                                 <div class="text-2xl text-white font-tech"><span id="traffic-vph">--</span> <span class="text-sm text-gray-600 ml-1">vph</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">NODE CROWD (人潮)</div>
                                 <div class="text-2xl text-white font-tech"><span id="traffic-ppl">--</span> <span class="text-sm text-gray-600 ml-1">pax</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">DIRECTION (流向)</div>
                                 <div class="text-[11px] text-gray-400 font-tech mt-2 tracking-wider">
                                     東: <span id="traffic-east" class="text-white">50</span>% <span class="text-gray-700 mx-1">|</span> 西: <span id="traffic-west" class="text-white">50</span>%
@@ -458,7 +474,7 @@
                     <!-- Uplink -->
                     <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
                         <div class="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 blur-[60px] rounded-full"></div>
-                        <h3 class="font-tech text-[11px] text-blue-400 tracking-widest mb-10 flex items-center gap-4">
+                        <h3 class="font-tech text-[11px] text-blue-400 tracking-widest mb-10 flex items-center gap-4 gsap-reveal">
                             <span class="relative flex h-2 w-2">
                               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
                               <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -467,22 +483,22 @@
                         </h3>
                         
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 relative z-10">
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">LOCAL ISP (固網)</div>
                                 <div class="text-[16px] font-tech mt-1" id="net-isp"><span class="text-green-400">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">12ms</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">CELLULAR (行動)</div>
                                 <div class="text-xl text-white font-tech"><span id="net-cell-type">5G SA</span> <span id="net-cell-dbm" class="text-sm text-gray-600 ml-2">-85dBm</span></div>
                             </div>
-                            <div class="col-span-2">
+                            <div class="col-span-2 gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">ACTIVE LEO (低軌衛星)</div>
                                 <div class="text-[17px] text-white font-tech flex items-baseline gap-3 mt-1">
                                     <span id="sat-active-name" class="text-cyan-400 drop-shadow-[0_0_5px_rgba(0,240,255,0.3)]">STARLINK-3921</span>
                                     <span class="text-[11px] text-gray-500 tracking-widest">ALT: <span id="sat-active-alt" class="text-gray-300">542.1</span> km</span>
                                 </div>
                             </div>
-                            <div class="col-span-2 md:col-span-4 border-t border-white/5 pt-6 mt-2">
+                            <div class="col-span-2 md:col-span-4 border-t border-white/5 pt-6 mt-2 gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-4 tracking-widest">NEXT SATELLITE ACQUISITION (接近中)</div>
                                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 bg-black/40 p-5 rounded-lg border border-white/5">
                                     <div class="text-[13px] text-white font-tech flex items-center">
@@ -521,10 +537,10 @@
 
         <!-- 4. Energy Matrix -->
         <section id="energy" class="section-view">
-            <div class="text-center mb-20 gsap-reveal">
-                <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase">LIDAO MICROGRID</span>
-                <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide">Energy <span class="text-luxury-gold">Matrix</span></h2>
-                <p class="font-body text-[14px] text-gray-400 tracking-wider">利稻微電網再生能源量能預估</p>
+            <div class="text-center mb-20">
+                <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase gsap-reveal">LIDAO MICROGRID</span>
+                <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Energy <span class="text-luxury-gold">Matrix</span></h2>
+                <p class="font-body text-[14px] text-gray-400 tracking-wider gsap-reveal">利稻微電網再生能源量能預估</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
@@ -536,21 +552,21 @@
                         
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 relative z-10 border-b border-white/5 pb-6 gap-4">
                             <div>
-                                <h3 class="font-tech text-[11px] text-orange-400 tracking-widest flex items-center gap-4">
+                                <h3 class="font-tech text-[11px] text-orange-400 tracking-widest flex items-center gap-4 gsap-reveal">
                                     <i class="fa-solid fa-fire-flame-curved animate-pulse"></i> GEOTHERMAL INTELLIGENCE // 深層地熱探勘模型
                                 </h3>
-                                <p class="text-[12px] text-gray-500 mt-2 font-body tracking-wider">同步實測數據庫與利稻板塊地質動態預測</p>
+                                <p class="text-[12px] text-gray-500 mt-2 font-body tracking-wider gsap-reveal">同步實測數據庫與利稻板塊地質動態預測</p>
                             </div>
-                            <span class="px-3 py-1.5 bg-orange-500/10 border border-orange-500/20 text-[9px] text-orange-400 font-tech rounded-md tracking-widest shrink-0">AI SIMULATION ACTIVE</span>
+                            <span class="px-3 py-1.5 bg-orange-500/10 border border-orange-500/20 text-[9px] text-orange-400 font-tech rounded-md tracking-widest shrink-0 gsap-reveal">AI SIMULATION ACTIVE</span>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
                             <!-- 左側：霧鹿真實數據 -->
                             <div class="space-y-6 pr-0 md:pr-10 md:border-r border-white/5">
-                                <h4 class="text-[10px] text-gray-400 font-tech tracking-widest mb-5 flex items-center gap-3">
+                                <h4 class="text-[10px] text-gray-400 font-tech tracking-widest mb-5 flex items-center gap-3 gsap-reveal">
                                     <span class="text-orange-500 text-[8px]">■</span> REFERENCE: 霧鹿探勘實測數據
                                 </h4>
-                                <div class="bg-black/30 rounded-xl p-6 border border-white/5 space-y-5">
+                                <div class="bg-black/30 rounded-xl p-6 border border-white/5 space-y-5 gsap-reveal">
                                     <div class="flex justify-between items-center">
                                         <span class="text-[10px] text-gray-500 font-tech tracking-wider">霧鹿一號井 (Well-01)</span>
                                         <span class="text-[13px] text-gray-300 font-tech">1000m <span class="text-orange-400 ml-3">114°C</span></span>
@@ -568,29 +584,29 @@
                                         <span class="text-[13px] text-white font-tech tracking-widest">18 MW</span>
                                     </div>
                                 </div>
-                                <p class="text-[9px] text-gray-600 font-tech text-right tracking-widest">* Data source: 地熱探勘資訊平台</p>
+                                <p class="text-[9px] text-gray-600 font-tech text-right tracking-widest gsap-reveal">* Data source: 地熱探勘資訊平台</p>
                             </div>
 
                             <!-- 右側：利稻預估數據 -->
                             <div class="space-y-6">
-                                <h4 class="text-[10px] text-gray-400 font-tech tracking-widest mb-5 flex items-center gap-3">
+                                <h4 class="text-[10px] text-gray-400 font-tech tracking-widest mb-5 flex items-center gap-3 gsap-reveal">
                                     <span class="text-cyan-500 text-[8px]">■</span> LIDAO NODE: 利稻地質演算預測
                                 </h4>
-                                <p class="text-[11px] text-gray-400 font-tech leading-[2] border-l-[2px] border-cyan-500/30 pl-4 tracking-wider">
+                                <p class="text-[11px] text-gray-400 font-tech leading-[2] border-l-[2px] border-cyan-500/30 pl-4 tracking-wider gsap-reveal">
                                     GEO-PROFILE: 歐亞與菲律賓海板塊交界<br>
                                     BASE ALTITUDE: 1068m<br>
                                     EST. GRADIENT: 6.5°C / 100m
                                 </p>
                                 <div class="grid grid-cols-3 gap-4 pt-4">
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5">
+                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 gsap-reveal">
                                         <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Scan Depth</div>
                                         <div class="text-xl text-white font-tech"><span id="lidao-sim-depth">2100</span><span class="text-[9px] text-gray-600 ml-1">m</span></div>
                                     </div>
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5">
+                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 gsap-reveal">
                                         <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Core Temp</div>
                                         <div class="text-xl text-orange-400 font-tech drop-shadow-[0_0_5px_rgba(249,115,22,0.3)]"><span id="lidao-sim-temp">156.5</span><span class="text-[9px] text-orange-600 ml-1">°C</span></div>
                                     </div>
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5">
+                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5 gsap-reveal">
                                         <div class="text-[8px] text-gray-500 font-tech mb-2 uppercase tracking-widest">Est. Yield</div>
                                         <div class="text-xl text-yellow-500 font-tech drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]"><span id="lidao-sim-mw">2.82</span><span class="text-[9px] text-yellow-700 ml-1">MW</span></div>
                                     </div>
@@ -604,28 +620,28 @@
                         <div class="absolute -top-10 -left-10 w-48 h-48 bg-yellow-400/5 blur-[60px] rounded-full"></div>
                         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 relative z-10 border-b border-white/5 pb-6 gap-4">
                             <div>
-                                <h3 class="font-tech text-[11px] text-yellow-400 tracking-widest flex items-center gap-4">
+                                <h3 class="font-tech text-[11px] text-yellow-400 tracking-widest flex items-center gap-4 gsap-reveal">
                                     <i class="fa-solid fa-solar-panel"></i> SOLAR ARRAY // 高山光儲陣列
                                 </h3>
-                                <p class="text-[12px] text-gray-500 mt-2 font-body tracking-wider">基於利稻村 (Alt. 1068m) 環境光照模型推算</p>
+                                <p class="text-[12px] text-gray-500 mt-2 font-body tracking-wider gsap-reveal">基於利稻村 (Alt. 1068m) 環境光照模型推算</p>
                             </div>
-                            <span id="solar-status" class="px-3 py-1.5 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded-md tracking-widest shrink-0">GENERATING</span>
+                            <span id="solar-status" class="px-3 py-1.5 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded-md tracking-widest shrink-0 gsap-reveal">GENERATING</span>
                         </div>
 
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">IRRADIANCE (日照強度)</div>
                                 <div class="text-2xl text-white font-tech"><span id="solar-irrad">850</span> <span class="text-[10px] text-gray-600 ml-1">W/m²</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">OUTPUT (發電)</div>
                                 <div class="text-2xl text-yellow-400 font-tech drop-shadow-[0_0_8px_rgba(250,204,21,0.2)]"><span id="solar-output">185</span> <span class="text-[10px] text-yellow-600 ml-1">kW</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">EFF. SUN HOURS (有效)</div>
                                 <div class="text-2xl text-white font-tech">3.2 <span class="text-[10px] text-gray-600 ml-1">hr/d</span></div>
                             </div>
-                            <div>
+                            <div class="gsap-reveal">
                                 <div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">PLANNED CAP. (規劃)</div>
                                 <div class="text-2xl text-white font-tech">500 <span class="text-[10px] text-gray-600 ml-1">kWp</span></div>
                             </div>
@@ -688,7 +704,7 @@
                     </div>
                 </div>
 
-                <div class="glass-card p-12 rounded-2xl flex flex-col justify-center border-white/5 relative overflow-hidden gsap-reveal">
+                <div class="glass-card p-12 rounded-2xl flex flex-col justify-center border-white/5 gsap-reveal">
                     <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-white/5 blur-[80px] rounded-full pointer-events-none"></div>
                     <h3 class="text-2xl font-fashion text-white mb-8 relative z-10 tracking-widest uppercase">Brand Analysis</h3>
                     <p class="text-[14px] text-gray-400 leading-[2.2] italic relative z-10 text-justify tracking-wide">
@@ -812,52 +828,125 @@
         </div>
     </footer>
 
+    <!-- Vertex Shader for terrain displacement -->
+    <script type="x-shader/x-vertex" id="vertexShader">
+        uniform float uTime;
+        uniform sampler2D uDisplacementMap;
+        uniform float uDisplacementStrength;
+
+        varying vec2 vUv;
+        varying float vElevation;
+
+        void main() {
+            vUv = uv;
+            // 使用紋理的紅色通道作為高度值，並應用強度
+            vec4 displacementData = texture2D(uDisplacementMap, uv);
+            float elev = displacementData.r * uDisplacementStrength; 
+
+            // 根據高度調整頂點位置
+            vec3 newPosition = position + normal * elev;
+
+            vElevation = elev; // 將海拔高度傳遞給片段著色器
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+        }
+    </script>
+
+    <!-- Fragment Shader for terrain texture, grid, and coloring -->
+    <script type="x-shader/x-fragment" id="fragmentShader">
+        uniform sampler2D uTexture;         // 原始地形圖
+        uniform sampler2D uGridTexture;     // 數位網格圖
+        uniform vec3 uColorA;               // 主要科技色 (青色)
+        uniform vec3 uColorB;               // 次要科技色 (金色)
+        uniform float uTime;
+        uniform float uDisplacementStrength;
+        uniform float uAlpha;
+
+        varying vec2 vUv;
+        varying float vElevation; // 從頂點著色器接收的海拔高度
+
+        void main() {
+            vec4 textureColor = texture2D(uTexture, vUv);
+            
+            // 讓網格紋理動起來並疊加
+            vec2 gridUV = vUv * 10.0; // 調整網格重複次數
+            gridUV.x += uTime * 0.05; // 讓網格水平移動
+            gridUV.y += uTime * 0.03; // 讓網格垂直移動 (速度可調)
+            vec4 gridColor = texture2D(uGridTexture, gridUV);
+            
+            // 將原始地形圖顏色調整為更科技的色調
+            vec3 finalColor = mix(textureColor.rgb * 0.6, uColorA * 0.8, vElevation / (uDisplacementStrength * 2.0)); 
+            
+            // 疊加網格，讓網格在高處更明顯，並帶有科技色
+            finalColor = mix(finalColor, uColorA * gridColor.r, gridColor.a * 0.3); // 網格以青色疊加
+            finalColor = mix(finalColor, uColorB * gridColor.g, gridColor.a * 0.1); // 次要網格以金色疊加
+
+            // 根據海拔高度增加一些發光感，特別是在地形高點
+            float glowFactor = smoothstep(0.0, 0.5, vElevation / uDisplacementStrength);
+            finalColor += uColorA * glowFactor * 0.15; // 高處發出青色微光
+
+            gl_FragColor = vec4(finalColor, uAlpha);
+        }
+    </script>
+
+
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
         // ==========================================
-        // 頁面與選單切換 - 已恢復為原始分頁式切換
+        // 頁面與選單切換 (分頁式)
         // ==========================================
         function switchTab(id, isMobile = false) {
-            // 移除所有頁面的 active 狀態
-            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
-            // 移除所有導航連結的 active 狀態
+            // 隱藏所有頁面並移除 active 狀態
+            document.querySelectorAll('.section-view').forEach(el => {
+                if (el.classList.contains('active')) {
+                    gsap.to(el, { opacity: 0, y: -30, duration: 0.5, ease: "power2.out", onComplete: () => {
+                        el.classList.remove('active');
+                        el.style.display = 'none'; // 確保完全隱藏
+                    }});
+                }
+            });
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             
-            // 啟用目標頁面
             const targetSection = document.getElementById(id);
             if (targetSection) {
-                targetSection.classList.add('active');
-                // 為新頁面內的元素觸發 GSAP 動畫
-                gsap.utils.toArray(`#${id} .gsap-reveal`).forEach(elem => {
-                    gsap.fromTo(elem, 
-                        { y: 60, opacity: 0, visibility: 'hidden' }, 
-                        { y: 0, opacity: 1, visibility: 'visible', duration: 1.2, ease: "power3.out", overwrite: true }
-                    );
-                });
-                // 重新觸發 scrambleText
-                gsap.utils.toArray(`#${id} .scramble-target`).forEach(el => {
-                    if (el.scrambleTrigger && el.scrambleTrigger.isActive) {
-                        el.scrambleTrigger.kill(); // 殺掉舊的 ScrollTrigger
+                // 顯示目標頁面並觸發 GSAP 進場動畫
+                gsap.fromTo(targetSection, 
+                    { opacity: 0, y: 30, display: 'block' }, // 確保 display: block 在動畫開始前設置
+                    { 
+                        opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.2, // 延遲讓舊頁面有時間淡出
+                        onStart: () => {
+                            targetSection.classList.add('active'); 
+                        },
+                        onComplete: () => {
+                            // 延遲觸發內部元素的 GSAP 動畫，以形成層次感
+                            gsap.utils.toArray(`#${id} .gsap-reveal`).forEach(elem => {
+                                gsap.fromTo(elem, 
+                                    { y: 60, opacity: 0, visibility: 'hidden' }, 
+                                    { y: 0, opacity: 1, visibility: 'visible', duration: 1.2, ease: "power3.out", stagger: 0.08, delay: 0, overwrite: true } // 內部元素再依次進場
+                                );
+                            });
+                            // 重新觸發 scrambleText 特效
+                            gsap.utils.toArray(`#${id} .scramble-target`).forEach(el => {
+                                if (el.hasAttribute('data-val')) {
+                                    el.innerText = '----'; // 重設為亂碼前狀態
+                                    scrambleText(el);
+                                }
+                            });
+                            // 重新初始化圖表 (如果需要的話，並防止重複初始化)
+                            if (id === 'research') initChart();
+                            if (id === 'energy') initEnergyChart();
+                        }
                     }
-                    el.innerText = '----'; // 重設為亂碼前狀態
-                    el.scrambleTrigger = ScrollTrigger.create({ // 重新創建 ScrollTrigger
-                        trigger: el,
-                        start: "top 90%",
-                        onEnter: () => scrambleText(el),
-                        once: true
-                    });
-                });
+                );
             }
 
-            // 啟用目標導航連結
             const links = document.querySelectorAll('.nav-link');
             const map = { 'home': 0, 'insights': 1, 'research': 2, 'fieldops': 3, 'energy': 4, 'contact': 5 };
             if (map[id] !== undefined && links[map[id]]) {
                 links[map[id]].classList.add('active');
             }
 
-            // 關閉手機選單 (如果是從手機選單點擊)
             if (isMobile) {
                 toggleMobileMenu(false);
             }
@@ -865,29 +954,20 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 元素進場動畫 (Glass Cards & Text) - 調整為當頁面活躍時觸發
-        // GSAP.utils.toArray('.gsap-reveal').forEach(elem => {
-        //     gsap.fromTo(elem, 
-        //         { y: 60, opacity: 0, visibility: 'hidden' }, 
-        //         {
-        //             scrollTrigger: { trigger: elem, start: "top 85%" }, // 僅在元素可見時觸發
-        //             y: 0, opacity: 1, visibility: 'visible',
-        //             duration: 1.2, ease: "power3.out"
-        //         }
-        //     );
-        // });
-
         // 終端機亂碼解碼特效 (駭客感)
         function scrambleText(element) {
             const finalValue = element.getAttribute('data-val') || element.innerText;
             let chars = '!<>-_\\/[]{}—=+*^?#________';
             let iterations = 0;
-            const originalText = element.innerText; 
+            const initialText = '----'; // 假設初始狀態是亂碼占位符
             
-            clearInterval(element.scrambleInterval); 
-
+            // 清除任何現有的亂碼動畫，防止重疊
+            if (element.scrambleInterval) {
+                clearInterval(element.scrambleInterval);
+            }
+            
             element.scrambleInterval = setInterval(() => {
-                element.innerText = originalText.split('').map((letter, index) => { 
+                element.innerText = initialText.split('').map((letter, index) => { 
                     if(index < iterations) return finalValue[index] || ''; 
                     return chars[Math.floor(Math.random() * chars.length)];
                 }).join('');
@@ -900,10 +980,9 @@
         }
 
         // ==========================================
-        // 🚨 AI 修復：安全呼叫 Cloudflare Function API
+        // 🚨 AI 修復：安全呼叫 Cloudflare Function API & 串流輸出
         // ==========================================
-        async function callGemini(promptText, systemInstruction = "") {
-            // 已移除明碼的 apiKey，改為呼叫您即將部署的 Cloudflare API 中繼層
+        async function callGemini(promptText, systemInstruction = "", isStreaming = true) {
             const url = `/api/chat`; 
             
             const payload = { contents: [{ parts:[{ text: promptText }] }] };
@@ -917,16 +996,48 @@
                     const response = await fetch(url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
+                        body: JSON.stringify({ ...payload, stream: isStreaming }) 
                     });
+                    
                     if (!response.ok) {
-                        // 嘗試解析錯誤訊息
                         const errorData = await response.json().catch(() => ({ message: response.statusText }));
                         console.error("Gemini API call failed:", response.status, errorData);
                         throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorData.message}`);
                     }
-                    const data = await response.json();
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "無資料可供分析。";
+
+                    if (isStreaming) {
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder();
+                        
+                        const container = document.getElementById('ai-chat-messages');
+                        const loadingMsg = document.getElementById('loading-' + (Date.now() - 1)); 
+                        if (loadingMsg) loadingMsg.remove(); 
+                        
+                        const aiMsgDiv = document.createElement('div');
+                        aiMsgDiv.className = "flex flex-col gap-1 items-start";
+                        aiMsgDiv.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI CORE</span>`;
+                        
+                        // 創建一個 span 元素來逐字顯示內容
+                        const aiMessageSpan = document.createElement('span');
+                        aiMessageSpan.className = "bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner";
+                        aiMsgDiv.appendChild(aiMessageSpan);
+                        container.appendChild(aiMsgDiv);
+
+                        container.scrollTop = container.scrollHeight; // 滾動到底部
+
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            const chunk = decoder.decode(value, { stream: true });
+                            aiMessageSpan.innerHTML += chunk.replace(/\n/g, '<br>'); // 逐字逐句顯示
+                            container.scrollTop = container.scrollHeight; // 保持滾動到底部
+                        }
+                        return aiMessageSpan.innerText; // 返回累積的完整文字 (非串流模式才會實際用到返回值)
+                    } else {
+                        const data = await response.json();
+                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "無資料可供分析。";
+                    }
+
                 } catch (e) {
                     console.error("Error in callGemini:", e);
                     if (i === 4) return "無法與 ONYX AI 核心建立連線。請確認 Cloudflare Functions `/api/chat` 已正確設定金鑰且運行正常。錯誤: " + e.message;
@@ -937,97 +1048,203 @@
         }
 
         // ==========================================
-        // ✨ Three.js 升級：動態黑曜石晶體引擎
+        // ✨ Three.js 升級：動態利稻村地形數位監控地圖
         // ==========================================
-        let scene, camera, renderer, crystalGroup;
+        let scene, camera, renderer, terrainMesh, nodeGroup;
         let mouseX = 0, mouseY = 0;
+        let loader = new THREE.TextureLoader();
+
+        const NODE_DATA = [ // 虛構的經緯度，用於在地形上放置節點
+            { lat: 23.187, lon: 121.021, name: "利稻主節點", color: 0x00f0ff, type: "MAIN" },
+            { lat: 23.195, lon: 121.030, name: "東側數據中繼", color: 0xd4af37, type: "RELAY" },
+            { lat: 23.178, lon: 121.015, name: "西向通訊站", color: 0x00ff00, type: "COMM" },
+            { lat: 23.190, lon: 121.010, name: "北端環境感測", color: 0xff00cc, type: "SENSOR" },
+            { lat: 23.170, lon: 121.025, name: "南區能源分析", color: 0xff8c00, type: "ENERGY" }
+        ];
+
+        // 經緯度到 Three.js 平面坐標的轉換 (近似值，針對利稻村小範圍)
+        const LAT_CENTER = 23.18;
+        const LON_CENTER = 121.02;
+        const MAP_SCALE_FACTOR = 4000; // 調整地圖單位與經緯度間的比例，數值越大，地圖範圍越小，地形起伏越劇烈
+
+        function latLonToVector3(lat, lon, terrainWidth, terrainHeight, displacementStrength) {
+            const x = (lon - LON_CENTER) * MAP_SCALE_FACTOR;
+            const y = (lat - LAT_CENTER) * MAP_SCALE_FACTOR;
+            
+            // 從地形的 Displacement Map 中獲取近似高度（這裡簡化，實際需要更複雜的計算）
+            // 在這裡我們無法直接讀取 GPU 上的紋理數據，所以只能模擬一個相對高度
+            // 實際高度需要地形資料或在 Shader 中計算後傳回 CPU
+            // 暫時以簡單的正弦函數疊加來模擬地形高度變化
+            const elevationFactor = Math.sin(lat * 150 - lon * 200) * 0.5 + Math.cos(lat * 80 + lon * 120) * 0.3;
+            const elevation = 5 + elevationFactor * (displacementStrength / 2); // 基礎高度 + 模擬地形起伏
+            
+            return new THREE.Vector3(x, elevation, -y); // -y 是因為 Three.js 的 Z 軸通常是深度，地圖的 Y 軸對應緯度
+        }
+
 
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
             if (!container) return;
 
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 250;
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(0, 300, 400); // 俯瞰視角
+            camera.lookAt(0, 0, 0);
 
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
 
-            crystalGroup = new THREE.Group();
+            // 載入地形紋理與網格紋理
+            loader.load('ONYX_Lidao_Aerial_1.jpg', (texture) => {
+                // 將圖片自身用作高度圖
+                const displacementTexture = texture; 
+                
+                // 嘗試載入 grid_pattern.png，否則生成一個
+                loader.load('grid_pattern.png', (gridTexture) => {
+                    if (!gridTexture.image || gridTexture.image.width === 0) {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 32; canvas.height = 32;
+                        const ctx = canvas.getContext('2d');
+                        ctx.strokeStyle = 'rgba(0, 240, 255, 0.3)';
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0); ctx.lineTo(32, 32);
+                        ctx.moveTo(32, 0); ctx.lineTo(0, 32);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(0, 16); ctx.lineTo(32, 16);
+                        ctx.moveTo(16, 0); ctx.lineTo(16, 32);
+                        ctx.stroke();
+                        gridTexture = new THREE.CanvasTexture(canvas);
+                    }
 
-            const geometry = new THREE.OctahedronGeometry(60, 0);
-            const positions = geometry.attributes.position;
-            for(let i=0; i<positions.count; i++) {
-                let y = positions.getY(i);
-                positions.setY(i, y * 1.8);
-            }
-            geometry.computeVertexNormals();
+                    const terrainGeometry = new THREE.PlaneGeometry(800, 800, 256, 256); // 更多分段實現更細緻地形
+                    const DISPLACEMENT_STRENGTH = 100; // 地形起伏強度
+                    const customMaterial = new THREE.ShaderMaterial({
+                        uniforms: {
+                            uTime: { value: 0 },
+                            uTexture: { value: texture },
+                            uDisplacementMap: { value: displacementTexture }, 
+                            uDisplacementStrength: { value: DISPLACEMENT_STRENGTH }, 
+                            uGridTexture: { value: gridTexture },
+                            uColorA: { value: new THREE.Color(0x00f0ff) }, 
+                            uColorB: { value: new THREE.Color(0xd4af37) }, 
+                            uAlpha: { value: 0.95 }
+                        },
+                        vertexShader: document.getElementById('vertexShader').textContent,
+                        fragmentShader: document.getElementById('fragmentShader').textContent,
+                        transparent: true,
+                        side: THREE.DoubleSide
+                    });
 
-            const material = new THREE.MeshPhysicalMaterial({
-                color: 0x050505, metalness: 0.9, roughness: 0.1,
-                clearcoat: 1.0, clearcoatRoughness: 0.2,
-                polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1
+                    terrainMesh = new THREE.Mesh(terrainGeometry, customMaterial);
+                    terrainMesh.rotation.x = -Math.PI / 2; // 讓平面水平
+                    scene.add(terrainMesh);
+
+                    // 加入節點與訊號流動
+                    nodeGroup = new THREE.Group();
+                    
+                    // 嘗試載入 signal_dot.png，否則生成一個
+                    loader.load('signal_dot.png', (signalDotTexture) => {
+                        if (!signalDotTexture.image || signalDotTexture.image.width === 0) {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = 64; canvas.height = 64;
+                            const ctx = canvas.getContext('2d');
+                            const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+                            gradient.addColorStop(0, `rgba(255,255,255,1)`);
+                            gradient.addColorStop(1, `rgba(255,255,255,0)`);
+                            ctx.fillStyle = gradient;
+                            ctx.fillRect(0, 0, 64, 64);
+                            signalDotTexture = new THREE.CanvasTexture(canvas);
+                        }
+
+                        NODE_DATA.forEach(node => {
+                            const pos = latLonToVector3(node.lat, node.lon, 800, 800, DISPLACEMENT_STRENGTH);
+                            
+                            // 節點本身 (Sprite，始終面向攝像機)
+                            const nodeSprite = new THREE.Sprite(new THREE.SpriteMaterial({ 
+                                map: signalDotTexture, 
+                                color: new THREE.Color(node.color), 
+                                transparent: true, 
+                                blending: THREE.AdditiveBlending 
+                            }));
+                            nodeSprite.position.set(pos.x, pos.y + 10, pos.z); // 稍微抬高
+                            nodeSprite.scale.set(30, 30, 1); 
+                            nodeSprite.userData = { originalScale: 30, pulseSpeed: Math.random() * 0.05 + 0.02, pulseFactor: Math.random() * 0.1 + 0.9 }; 
+                            nodeGroup.add(nodeSprite);
+
+                            // 節點之間的連線 (簡化為連接主節點)
+                            if (node.type !== "MAIN") {
+                                const mainNodePos = latLonToVector3(NODE_DATA[0].lat, NODE_DATA[0].lon, 800, 800, DISPLACEMENT_STRENGTH);
+                                const points = [];
+                                points.push(new THREE.Vector3(pos.x, pos.y + 5, pos.z));
+                                points.push(new THREE.Vector3(mainNodePos.x, mainNodePos.y + 5, mainNodePos.z));
+                                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                                const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ 
+                                    color: new THREE.Color(node.color), 
+                                    transparent: true, 
+                                    opacity: 0.6, 
+                                    linewidth: 2, 
+                                    blending: THREE.AdditiveBlending 
+                                }));
+                                nodeGroup.add(line);
+                            }
+                        });
+                        scene.add(nodeGroup);
+                    });
+                });
             });
-            const mesh = new THREE.Mesh(geometry, material);
 
-            const edges = new THREE.EdgesGeometry(geometry);
-            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.8, linewidth: 2 });
-            const wireframe = new THREE.LineSegments(edges, lineMaterial);
-            
-            mesh.add(wireframe);
-            crystalGroup.add(mesh);
 
-            for(let i=0; i<15; i++) {
-                const shardGeo = new THREE.OctahedronGeometry(Math.random() * 8 + 2, 0);
-                const shard = new THREE.Mesh(shardGeo, material);
-                const shardWire = new THREE.LineSegments(new THREE.EdgesGeometry(shardGeo), new THREE.LineBasicMaterial({ color: 0xd4af37, opacity: 0.5, transparent: true }));
-                shard.add(shardWire);
-                shard.position.set((Math.random()-0.5)*200, (Math.random()-0.5)*250, (Math.random()-0.5)*100);
-                shard.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
-                crystalGroup.add(shard);
-            }
-
-            crystalGroup.position.x = window.innerWidth > 768 ? 80 : 0;
-            scene.add(crystalGroup);
-
-            const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+            // 燈光佈置
+            const ambient = new THREE.AmbientLight(0xffffff, 0.4);
             scene.add(ambient);
-            const light1 = new THREE.DirectionalLight(0x00f0ff, 2);
-            light1.position.set(100, 100, 100);
-            scene.add(light1);
-            const light2 = new THREE.DirectionalLight(0xd4af37, 1);
-            light2.position.set(-100, -100, 50);
-            scene.add(light2);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(200, 300, 200);
+            scene.add(directionalLight);
 
+            // 滑鼠視差事件
             document.addEventListener('mousemove', (e) => {
                 mouseX = (e.clientX / window.innerWidth) * 2 - 1;
                 mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
             });
 
-            // 將 Three.js 動畫從 ScrollTrigger 解耦，使其作為獨立背景動態
-            // gsap.to(crystalGroup.rotation, { ...移除 ScrollTrigger 綁定... });
-
             window.addEventListener('resize', () => {
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
-                crystalGroup.position.x = window.innerWidth > 768 ? 80 : 0;
             });
 
-            animateCrystal();
+            animateTerrain();
         }
 
-        function animateCrystal() {
-            requestAnimationFrame(animateCrystal);
-            crystalGroup.rotation.y += 0.002;
-            crystalGroup.rotation.z += 0.0005; // 微調讓它持續旋轉
-            crystalGroup.position.y = Math.sin(Date.now() * 0.001) * 10;
-            
-            camera.position.x += (mouseX * 30 - camera.position.x) * 0.05;
-            camera.position.y += (mouseY * 30 - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
+        function animateTerrain() {
+            requestAnimationFrame(animateTerrain);
+
+            if (terrainMesh) {
+                terrainMesh.material.uniforms.uTime.value += 0.01; // 更新著色器時間
+                terrainMesh.rotation.z += 0.0005; // 地圖緩慢自轉
+            }
+
+            // 節點脈衝動畫
+            if (nodeGroup) {
+                nodeGroup.children.forEach(obj => {
+                    if (obj.isSprite && obj.userData.originalScale) {
+                        const scale = obj.userData.originalScale * (obj.userData.pulseFactor + Math.sin(Date.now() * obj.userData.pulseSpeed) * 0.1);
+                        obj.scale.set(scale, scale, 1);
+                    }
+                    if (obj.isLine) { // 簡化線條動畫，讓透明度閃爍
+                        obj.material.opacity = 0.5 + Math.sin(Date.now() * 0.003) * 0.3;
+                    }
+                });
+            }
+
+            // 滑鼠視差
+            camera.position.x += (mouseX * 50 - camera.position.x) * 0.02;
+            camera.position.y += (mouseY * 50 + 300 - camera.position.y) * 0.02; // 調整基準 Y 軸
+            camera.lookAt(0, 0, 0); // 始終看向地圖中心
             
             renderer.render(scene, camera);
         }
@@ -1089,7 +1306,7 @@
         let satState = { active: { name: 'STARLINK-' + Math.floor(Math.random()*8000+1000), alt: 550.5, altDelta: -0.2 }, next: { name: 'ONEWEB-' + Math.floor(Math.random()*800+100), dist: 1250, tta: 45 } };
         function updateNetworkAndSatellite() {
             document.getElementById('net-isp').innerHTML = `<span class="text-green-400 tracking-widest">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">${Math.floor(Math.random() * 8 + 10)}ms</span>`;
-            document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE'; // Added dynamic cell type
+            document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE';
             document.getElementById('net-cell-dbm').innerText = `-${Math.floor(Math.random() * 12 + 82)}dBm`;
 
             satState.active.alt += satState.active.altDelta;
@@ -1157,86 +1374,96 @@
         // ==========================================
         let crystalChart = null;
         function initChart() {
-            if (crystalChart) return; // Prevent re-initialization
+            if (crystalChart) {
+                crystalChart.destroy(); // 銷毀舊圖表實例，防止重複渲染
+                crystalChart = null;
+            }
             const ctx = document.getElementById('crystalChart').getContext('2d');
-            crystalChart = new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['能源效率', '數據精度', '結構穩定', '負碳協議', '響應速度'],
-                    datasets: [{
-                        label: 'ONYX Protocol',
-                        data: [96, 99, 92, 88, 95],
-                        backgroundColor: 'rgba(0, 240, 255, 0.15)',
-                        borderColor: '#00f0ff',
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#00f0ff',
-                        borderWidth: 1.5
-                    }, {
-                        label: 'Standard Edge',
-                        data: [45, 75, 55, 30, 70],
-                        backgroundColor: 'transparent',
-                        borderColor: 'rgba(212, 175, 55, 0.4)',
-                        borderWidth: 1,
-                        borderDash: [4, 4],
-                        pointRadius: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(255,255,255,0.05)' },
-                            grid: { color: 'rgba(255,255,255,0.03)' },
-                            pointLabels: { color: '#888', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 },
-                            ticks: { display: false, backdropColor: 'transparent' }
-                        }
+            if (ctx) { // 確保 Canvas 元素存在
+                crystalChart = new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['能源效率', '數據精度', '結構穩定', '負碳協議', '響應速度'],
+                        datasets: [{
+                            label: 'ONYX Protocol',
+                            data: [96, 99, 92, 88, 95],
+                            backgroundColor: 'rgba(0, 240, 255, 0.15)',
+                            borderColor: '#00f0ff',
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: '#00f0ff',
+                            borderWidth: 1.5
+                        }, {
+                            label: 'Standard Edge',
+                            data: [45, 75, 55, 30, 70],
+                            backgroundColor: 'transparent',
+                            borderColor: 'rgba(212, 175, 55, 0.4)',
+                            borderWidth: 1,
+                            borderDash: [4, 4],
+                            pointRadius: 0
+                        }]
                     },
-                    plugins: { 
-                        legend: { 
-                            position: 'bottom',
-                            labels: { color: '#aaa', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 } 
-                        } 
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(255,255,255,0.05)' },
+                                grid: { color: 'rgba(255,255,255,0.03)' },
+                                pointLabels: { color: '#888', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 },
+                                ticks: { display: false, backdropColor: 'transparent' }
+                            }
+                        },
+                        plugins: { 
+                            legend: { 
+                                position: 'bottom',
+                                labels: { color: '#aaa', font: { family: 'JetBrains Mono', size: 10 }, padding: 20 } 
+                            } 
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         let energyChart = null;
         function initEnergyChart() {
-            if (energyChart) return; // Prevent re-initialization
+            if (energyChart) {
+                energyChart.destroy(); // 銷毀舊圖表實例，防止重複渲染
+                energyChart = null;
+            }
             const ctx = document.getElementById('energyChart').getContext('2d');
-            energyChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['地熱基載', '高山太陽能'],
-                    datasets: [{
-                        data: [2.5, 0.5],
-                        backgroundColor: ['rgba(249, 115, 22, 0.8)', 'rgba(250, 204, 21, 0.8)'],
-                        borderColor: '#05060a',
-                        borderWidth: 3,
-                        hoverOffset: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '78%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            titleFont: { family: 'JetBrains Mono', size: 11 },
-                            bodyFont: { family: 'JetBrains Mono', size: 11 },
-                            padding: 12,
-                            cornerRadius: 8,
-                            callbacks: {
-                                label: function(context) { return ' ' + context.label + ': ' + context.raw + ' MW'; }
+            if (ctx) { // 確保 Canvas 元素存在
+                energyChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['地熱基載', '高山太陽能'],
+                        datasets: [{
+                            data: [2.5, 0.5],
+                            backgroundColor: ['rgba(249, 115, 22, 0.8)', 'rgba(250, 204, 21, 0.8)'],
+                            borderColor: '#05060a',
+                            borderWidth: 3,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '78%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                titleFont: { family: 'JetBrains Mono', size: 11 },
+                                bodyFont: { family: 'JetBrains Mono', size: 11 },
+                                padding: 12,
+                                cornerRadius: 8,
+                                callbacks: {
+                                    label: function(context) { return ' ' + context.label + ': ' + context.raw + ' MW'; }
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         // ==========================================
@@ -1284,7 +1511,6 @@
                 `;
                 container.appendChild(card);
             });
-            // 由於分頁切換，這裡不需要自動觸發 GSAP，會在 switchTab 時處理
         }
 
         function openArticleModal(id) {
@@ -1330,93 +1556,81 @@
         }
 
         // ==========================================
-        // ✨ AI 聊天終端邏輯 - 修復點擊無反應問題
+        // ✨ AI 文章摘要生成
         // ==========================================
-        function toggleAIChat() {
-            const chat = document.getElementById('ai-chat-window');
-            if (chat.classList.contains('hidden')) {
-                chat.classList.remove('hidden');
-                chat.classList.add('flex');
-                // 為了確保 transition 正常觸發，需要強制瀏覽器重新計算樣式
-                void chat.offsetWidth; 
-                setTimeout(() => { // 稍作延遲，確保 display:flex 已應用
-                    chat.classList.remove('scale-95', 'opacity-0');
-                    chat.classList.add('scale-100', 'opacity-100');
-                    document.getElementById('ai-chat-input').focus();
-                }, 10); // 微小的延遲確保 class 改變被識別
-            } else {
-                chat.classList.remove('scale-100', 'opacity-100');
-                chat.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    chat.classList.remove('flex');
-                    chat.classList.add('hidden');
-                }, 300); // 確保與 CSS transition 時間一致
-            }
+        async function generateAISummary() {
+            const btn = document.getElementById('ai-summary-btn');
+            const container = document.getElementById('ai-summary-container');
+            const articleText = document.getElementById('modal-body').innerText;
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ✨ 神經鏈結分析中...`;
+            btn.disabled = true;
+
+            const prompt = `請以繁體中文，為以下這篇文章產生 3 到 4 點的精簡重點摘要。使用列表格式，語氣須保持冷靜、專業且具有科技感：\n\n${articleText}`;
+            // AI 摘要不需要串流，所以 isStreaming 設定為 false
+            const aiResponse = await callGemini(prompt, undefined, false);
+
+            container.innerHTML = `
+                <div class="font-tech text-cyan-400 mb-3 text-[10px] tracking-widest uppercase flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse"></span> ONYX AI CORE // INTELLIGENCE EXTRACTED
+                </div>
+                ${aiResponse.replace(/\n/g, '<br>')}
+            `;
+            container.classList.remove('hidden');
+
+            btn.innerHTML = `<i class="fa-solid fa-check text-green-400"></i> ✨ AI 摘要完成`;
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> ✨ AI 洞察摘要`;
+                btn.disabled = false;
+            }, 3000);
         }
 
-        async function sendAIChatMessage() {
-            const input = document.getElementById('ai-chat-input');
-            const message = input.value.trim();
-            if (!message) return;
+        // ==========================================
+        // ✨ AI 節點即時戰略分析
+        // ==========================================
+        async function generateNodeAIAnalysis() {
+            const btn = document.getElementById('ai-node-btn');
+            // 從頁面獲取真實數據
+            const temp = document.getElementById('env-temp').innerText;
+            const weather = document.getElementById('env-weather').innerText;
+            const vph = document.getElementById('traffic-vph').innerText;
+            const sat = document.getElementById('sat-active-name').innerText;
 
-            const container = document.getElementById('ai-chat-messages');
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> ✨ 分析演算中...`;
+            btn.disabled = true;
 
-            // 顯示使用者對話
-            const userMsg = document.createElement('div');
-            userMsg.className = "flex flex-col gap-1 items-end";
-            userMsg.innerHTML = `
-                <span class="text-[9px] font-tech text-gray-500 tracking-widest uppercase">GUEST_USER</span>
-                <div class="bg-white/10 border border-white/10 text-white px-4 py-3 rounded-2xl rounded-tr-none leading-[1.8] tracking-wide text-[13px]">
-                    ${message}
+            const prompt = `當前位於極端環境的「ONYX Sector Zero 節點」接收到以下即時數據：
+- 當前天氣狀態：${weather}
+- 環境溫度：${temp}
+- 鄰近公路即時車流：${vph}
+- 當前通訊衛星鏈結：${sat}
+
+請根據上述數據，以「ONYX AI 中央核心」的角色，用繁體中文寫出一段大約 60 字的「節點系統營運評估與戰略建議」。語氣要極度冷靜、專業、具備深科技感。`;
+
+            // AI 分析不需要串流，所以 isStreaming 設定為 false
+            const analysisResult = await callGemini(prompt, undefined, false);
+
+            const lc = document.getElementById('log-container');
+            const log = document.createElement('div');
+            log.className = "border-l-[3px] border-luxury-gold bg-luxury-gold/5 p-5 my-3 animate-[fadeIn_0.5s_ease-out] rounded-r-lg shadow-[inset_0_0_20px_rgba(212,175,55,0.02)]";
+            log.innerHTML = `
+                <div class="text-luxury-gold font-tech font-bold tracking-widest mb-3 text-[10px] flex items-center gap-2">
+                    <i class="fa-solid fa-sparkles"></i> ONYX AI STRATEGIC ANALYSIS [${new Date().toLocaleTimeString()}]
                 </div>
+                <div class="text-gray-200 text-[13px] leading-[2.2] tracking-wide font-light">${analysisResult.replace(/\n/g, '<br>')}</div>
             `;
-            container.appendChild(userMsg);
-            input.value = '';
-            container.scrollTop = container.scrollHeight;
-
-            // 顯示載入中
-            const loadingId = 'loading-' + Date.now();
-            const loadingMsg = document.createElement('div');
-            loadingMsg.id = loadingId;
-            loadingMsg.className = "flex flex-col gap-1 items-start";
-            loadingMsg.innerHTML = `
-                <span class="text-[9px] font-tech text-cyan-500 tracking-widest">SYSTEM_PROCESSING</span>
-                <div class="bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] flex items-center gap-3">
-                    <i class="fa-solid fa-circle-notch fa-spin"></i> 正在調用神經節點...
-                </div>
-            `;
-            container.appendChild(loadingMsg);
-            container.scrollTop = container.scrollHeight;
-
-            const sysPrompt = `你是 ONYX DEEP TECH STUDIO 的『中央神經核心 AI』。你的語氣應專業、俐落且具備科技感。一律使用繁體中文。
-背景：專注於極端環境韌性節點、RTK、負碳運算。核心技術為晶體生長演算法。`;
             
-            const aiResponse = await callGemini(message, sysPrompt);
+            lc.prepend(log);
 
-            document.getElementById(loadingId).remove();
-            
-            const aiMsg = document.createElement('div');
-            aiMsg.className = "flex flex-col gap-1 items-start";
-            aiMsg.innerHTML = `
-                <span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI CORE</span>
-                <div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
-                    ${aiResponse.replace(/\n/g, '<br>')}
-                </div>
-            `;
-            container.appendChild(aiMsg);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function toggleMobileMenu(show) {
-            const menu = document.getElementById('mobile-nav');
-            if (show) menu.classList.remove('translate-x-full');
-            else menu.classList.add('translate-x-full');
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> ✨ 演算完成`;
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> ✨ AI 節點環境分析`;
+                btn.disabled = false;
+            }, 3000);
         }
 
         window.onload = () => {
-            initChart(); // Initializing charts on load (can be optimized to init on tab switch for performance)
-            initEnergyChart();
-            initThreeJS(); // Three.js should run regardless of tab
+            initThreeJS();
             loadArticles();
             
             fetchTelemetry(); setInterval(fetchTelemetry, 300000); 
@@ -1425,9 +1639,10 @@
             updateEnergyDynamics(); setInterval(updateEnergyDynamics, 1500); 
             setInterval(addLog, 3000); for(let i=0; i<3; i++) addLog(); // Initial logs
             
-            // 首次加載觸發 Home 頁面的 GSAP 動畫
+            // 首次加載時啟動 Home 頁面，並觸發其內部 GSAP 動畫
             switchTab('home'); 
         };
     </script>
 </body>
 </html>
+```
