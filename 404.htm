@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>404 - DATA STRATA LOST | ONYX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #05060a; color: #00f0ff; font-family: monospace; overflow: hidden; }
+        .glitch { animation: glitch 1s linear infinite; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center h-screen">
+    <h1 class="text-9xl font-bold glitch">404</h1>
+    <p class="mt-4 text-xl tracking-[0.5em] uppercase">Sector Not Found / 數據層丟失</p>
+    <a href="/" class="mt-10 px-6 py-2 border border-cyan-500 hover:bg-cyan-500/20 transition">返回核心節點 RETURN_TO_ORIGIN</a>
+</body>
+</html>
