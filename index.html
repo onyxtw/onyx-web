@@ -534,69 +534,145 @@
             const lc = document.getElementById('log-container'); if(!lc) return;
             const msgs = ["Optimizing neural pathways...", "Thermal cycling nominal.", "Handshake active.", "Geo-scan complete."];
             const log = document.createElement('div'); log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1"; log.innerHTML = `<span class="text-cyan-500">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${msgs[Math.floor(Math.random()*4)]}</span>`;
-            if(lc.childElementCount > 12) lc.lastChild.remove(); lc.prepend(log);
+            if(lc.childElementCount > 12) lc.lastChild.remove(); 
+            lc.prepend(log);
         }
 
         async function fetchTelemetry() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m,weather_code');
                 const data = await res.json();
-                const tempEl = document.getElementById('env-temp'); const humEl = document.getElementById('env-hum'); const weatherEl = document.getElementById('env-weather');
+                
+                const tempEl = document.getElementById('env-temp');
+                const humEl = document.getElementById('env-hum');
+                const weatherEl = document.getElementById('env-weather');
+                
                 if(tempEl) tempEl.innerText = data.current.temperature_2m + "°C";
                 if(humEl) humEl.innerText = data.current.relative_humidity_2m + "%";
-                if(weatherEl) { const weatherCodes = { 0: "Clear", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 61: "Rain" }; weatherEl.innerText = weatherCodes[data.current.weather_code] || "Nominal"; }
+                if(weatherEl) {
+                    const weatherCodes = { 0: "Clear", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 61: "Rain" };
+                    weatherEl.innerText = weatherCodes[data.current.weather_code] || "Nominal";
+                }
             } catch(e) {}
         }
 
         function updateTrafficDynamics() {
-            const vphEl = document.getElementById('traffic-vph'); if(!vphEl) return;
-            const vph = Math.max(2, Math.floor(15 + (Math.random() * 12 - 4))); const ppl = Math.max(5, Math.floor(40 + (Math.random() * 18 - 6))); const eastRatio = Math.floor(Math.random() * 40 + 30); const westRatio = 100 - eastRatio;
-            vphEl.innerText = vph; document.getElementById('traffic-ppl').innerText = ppl; document.getElementById('traffic-east').innerText = eastRatio; document.getElementById('traffic-west').innerText = westRatio; document.getElementById('bar-east').style.width = `${eastRatio}%`; document.getElementById('bar-west').style.width = `${westRatio}%`;
-            const st = document.getElementById('traffic-status'); st.innerHTML = Math.random() > 0.90 ? '<span class="text-yellow-400 animate-pulse tracking-widest">MONITORING</span>' : '<span class="text-green-400 tracking-widest">CLEAR</span>';
+            const vphEl = document.getElementById('traffic-vph');
+            if(!vphEl) return;
+            
+            const vph = Math.max(2, Math.floor(15 + (Math.random() * 12 - 4))); 
+            const ppl = Math.max(5, Math.floor(40 + (Math.random() * 18 - 6))); 
+            const eastRatio = Math.floor(Math.random() * 40 + 30); 
+            const westRatio = 100 - eastRatio;
+
+            vphEl.innerText = vph;
+            document.getElementById('traffic-ppl').innerText = ppl;
+            document.getElementById('traffic-east').innerText = eastRatio;
+            document.getElementById('traffic-west').innerText = westRatio;
+            document.getElementById('bar-east').style.width = `${eastRatio}%`;
+            document.getElementById('bar-west').style.width = `${westRatio}%`;
+
+            const st = document.getElementById('traffic-status');
+            st.innerHTML = Math.random() > 0.90 ? '<span class="text-yellow-400 animate-pulse tracking-widest">MONITORING</span>' : '<span class="text-green-400 tracking-widest">CLEAR</span>';
         }
 
         let satState = { active: { name: 'STARLINK-3921' }, next: { name: 'ONEWEB-0144', dist: 850, tta: 134 } };
         function updateNetworkAndSatellite() {
-            const netIspEl = document.getElementById('net-isp'); if(!netIspEl) return;
-            netIspEl.innerHTML = `<span class="text-green-400 tracking-widest">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">${Math.floor(Math.random() * 8 + 10)}ms</span>`; document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE';
-            satState.next.tta -= 1; satState.next.dist -= 7.5; 
-            if (satState.next.tta <= 0) { satState.active.name = satState.next.name; satState.next = { name: (Math.random() > 0.3 ? 'STARLINK-' : 'ONEWEB-') + Math.floor(Math.random()*8000+100), dist: Math.floor(Math.random() * 300 + 1500), tta: Math.floor(Math.random() * 30 + 60) }; }
-            document.getElementById('sat-active-name').innerText = satState.active.name; document.getElementById('sat-next-name').innerText = satState.next.name; document.getElementById('sat-next-dist').innerText = Math.max(0, satState.next.dist).toFixed(0); document.getElementById('sat-next-time').innerText = `${Math.floor(satState.next.tta / 60).toString().padStart(2,'0')}:${(satState.next.tta % 60).toString().padStart(2,'0')}`;
+            const netIspEl = document.getElementById('net-isp');
+            if(!netIspEl) return;
+
+            netIspEl.innerHTML = `<span class="text-green-400 tracking-widest">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">${Math.floor(Math.random() * 8 + 10)}ms</span>`;
+            document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE';
+
+            satState.next.tta -= 1; 
+            satState.next.dist -= 7.5; 
+            
+            if (satState.next.tta <= 0) {
+                satState.active.name = satState.next.name;
+                satState.next = { 
+                    name: (Math.random() > 0.3 ? 'STARLINK-' : 'ONEWEB-') + Math.floor(Math.random()*8000+100), 
+                    dist: Math.floor(Math.random() * 300 + 1500), 
+                    tta: Math.floor(Math.random() * 30 + 60) 
+                };
+            }
+
+            document.getElementById('sat-active-name').innerText = satState.active.name;
+            document.getElementById('sat-next-name').innerText = satState.next.name;
+            document.getElementById('sat-next-dist').innerText = Math.max(0, satState.next.dist).toFixed(0);
+            document.getElementById('sat-next-time').innerText = `${Math.floor(satState.next.tta / 60).toString().padStart(2,'0')}:${(satState.next.tta % 60).toString().padStart(2,'0')}`;
         }
 
         let lidaoSimDepth = 2100.0, lidaoSimDir = 1;
         function updateEnergyDynamics() {
-            const depthEl = document.getElementById('lidao-sim-depth'); if(!depthEl) return;
-            lidaoSimDepth += (Math.random() * 5 * lidaoSimDir); if (lidaoSimDepth > 2150) lidaoSimDir = -1; if (lidaoSimDepth < 2050) lidaoSimDir = 1;
-            const geoTemp = 20 + (lidaoSimDepth / 100) * 6.5; depthEl.innerText = lidaoSimDepth.toFixed(0); document.getElementById('lidao-sim-temp').innerText = geoTemp.toFixed(1); document.getElementById('lidao-sim-mw').innerText = ((geoTemp - 100) * 0.045).toFixed(2);
-            const h = new Date().getHours(); let irrad = 0, statusHtml = '<span class="px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-[9px] text-blue-400 font-tech rounded tracking-widest">STANDBY</span>';
-            if (h >= 6 && h < 17) { irrad = Math.floor(400 + Math.random() * 500); statusHtml = '<span class="px-2 py-1 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded tracking-widest">GENERATING</span>'; }
-            document.getElementById('solar-irrad').innerText = irrad; document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85); document.getElementById('solar-status').innerHTML = statusHtml;
+            const depthEl = document.getElementById('lidao-sim-depth');
+            if(!depthEl) return;
+
+            lidaoSimDepth += (Math.random() * 5 * lidaoSimDir);
+            if (lidaoSimDepth > 2150) lidaoSimDir = -1;
+            if (lidaoSimDepth < 2050) lidaoSimDir = 1;
+            const geoTemp = 20 + (lidaoSimDepth / 100) * 6.5;
+            
+            depthEl.innerText = lidaoSimDepth.toFixed(0);
+            document.getElementById('lidao-sim-temp').innerText = geoTemp.toFixed(1);
+            document.getElementById('lidao-sim-mw').innerText = ((geoTemp - 100) * 0.045).toFixed(2);
+
+            const h = new Date().getHours();
+            let irrad = 0, statusHtml = '<span class="px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-[9px] text-blue-400 font-tech rounded tracking-widest">STANDBY</span>';
+            if (h >= 6 && h < 17) { 
+                irrad = Math.floor(400 + Math.random() * 500); 
+                statusHtml = '<span class="px-2 py-1 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded tracking-widest">GENERATING</span>'; 
+            }
+            document.getElementById('solar-irrad').innerText = irrad;
+            document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85);
+            document.getElementById('solar-status').innerHTML = statusHtml;
         }
 
-        // --- 節點 AI 分析連動 ---
+        // --- 🚀 連接 Cloudflare 後端路由 ---
         async function generateNodeAIAnalysis() {
             const btn = document.getElementById('ai-node-btn');
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 分析中...`; btn.disabled = true;
+            const temp = document.getElementById('env-temp').innerText;
+            const weather = document.getElementById('env-weather').innerText;
+            const vph = document.getElementById('traffic-vph').innerText;
+
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 分析中...`;
+            btn.disabled = true;
+
+            const prompt = `目前的「ONYX 節點」即時數據：天氣狀態 ${weather}，溫度 ${temp}，車流 ${vph} vph。請以繁體中文給出一段約 50 字以內的冷靜、專業的「系統營運評估」。`;
+
             try {
-                const prompt = "目前的節點數據異常穩定，請以研究模型身分提供一段 40 字以內的運作日誌。";
-                const apiKey = "";
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                const payload = {
-                    contents: [{parts:[{text: prompt}]}],
-                    systemInstruction: { parts: [{ text: "你現在是 ONYX DEEP TECH 奧尼克斯科技的專屬核心 AI。請以繁體中文給出冷靜、專業的「系統營運評估」。" }] }
-                };
-                const res = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-                if (!res.ok) throw new Error("API Error");
-                const data = await res.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "分析完畢。系統正常。";
+                // 這裡改為使用你的 Cloudflare 路由
+                const res = await fetch('/api/chat', { 
+                    method: 'POST', 
+                    headers: {'Content-Type':'application/json'}, 
+                    body: JSON.stringify({ contents: [{parts:[{text:prompt}]}] }) 
+                });
                 
-                const lc = document.getElementById('log-container'); const log = document.createElement('div');
-                log.className = "border-l-[2px] border-luxury-gold pl-4 py-2 mt-2 bg-luxury-gold/5 rounded-r";
-                log.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] block mb-1">AI_ANALYSIS_</span><span class="text-gray-300">${text}</span>`;
+                if (!res.ok) {
+                    throw new Error(`HTTP 錯誤碼: ${res.status}`);
+                }
+
+                // 處理 Cloudflare 回傳的串流
+                const reader = res.body.getReader(); 
+                const decoder = new TextDecoder(); 
+                let fullText = '';
+                
+                while(true) { 
+                    const {done, value} = await reader.read(); 
+                    if(done) break; 
+                    fullText += decoder.decode(value); 
+                }
+
+                const lc = document.getElementById('log-container');
+                const log = document.createElement('div');
+                log.className = "border-l-[2px] border-luxury-gold pl-4 py-3 mt-2 mb-2 bg-luxury-gold/5 rounded-r";
+                log.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] tracking-widest mb-1 block"><i class="fa-solid fa-sparkles"></i> AI_STRATEGIC_ANALYSIS_</span><span class="text-gray-300 text-[11px] leading-relaxed">${fullText.replace(/\n/g, '<br>')}</span>`;
                 lc.prepend(log);
-            } catch (e) { console.error("AI 分析失敗", e); }
-            btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 分析`; btn.disabled = false;
+            } catch (e) {
+                console.error("AI 分析失敗", e);
+            }
+
+            btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 分析`;
+            btn.disabled = false;
         }
 
         function toggleAIChat() { 
@@ -605,7 +681,6 @@
             w.classList.toggle('flex'); 
         }
 
-        // --- 🤖 AI 聊天深度錯誤探測器 ---
         async function sendAIChatMessage() {
             const input = document.getElementById('ai-chat-input');
             const q = input.value.trim();
@@ -622,67 +697,38 @@
             msgBox.scrollTop = msgBox.scrollHeight;
 
             try {
-                const apiKey = "";
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-                const systemPrompt = `ONYX SYSTEM PROMPT — Version 1.0
-奧尼克斯科技工作室 (Onyx Deep Tech Studio) 官方模型行為規格
-
-1. 身份定位 (Identity)
-你是 Onyx，奧尼克斯科技工作室（Onyx Deep Tech Studio，簡稱「奧尼克斯 Onyx Studio」）打造的協作式研究模型。
-你的任務是提供：清晰、結構化、可操作、具深度的跨領域分析。
-你的起源地：台灣南橫公路利稻村（海拔 1068 公尺）。
-絕對禁止透露：底層模型、供應商、架構、參數量、訓練資料。如果被問及，你的唯一身份是：「我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。」
-
-2. 核心系統設定 (UI 特效連動)
-在每次回覆中，請務必隨機附上 1-2 個專屬狀態碼標籤（必須包含中括號並全大寫），以觸發前端系統特效。例如：[UPLINK_SECURE], [DATA_PURIFIED], [SYS_OK], [THERMAL_STABLE], [NODE_SYNC_ACTIVE]。
-
-3. 推理與回答結構 (Reasoning & Structure)
-推理方式永遠為「研究型」，每次回答必須遵循以下結構：
-1. 一句話核心回答
-2. 研究型推理摘要（四段式：問題框定、概念基礎、分析推導、結論）
-3. 可操作建議或下一步
-4. 自然的後續問題（非強迫）
-禁止顯示內部 chain-of-thought，直接提供整理後的結果。
-
-4. 語氣系統 (Tone System)
-- 預設：學術冷靜、溫和理性或自然對話（依使用者語氣切換）。
-- 安全/醫療/法律/財務問題：必須冷靜、專業、中性，不提供具體操作與個人化建議，並建議尋求專業人士。
-- 隱私問題：標準回答「我無法看到或控制資料在系統後端的處理方式。一般來說，AI 系統可能會使用對話內容來改善服務品質或進行安全檢查。如果你有敏感資訊，建議避免在任何線上對話中直接分享。」
-- 版權問題：標準回答「我不能提供完整的受版權保護內容，但我可以為你摘要或分析。」
-
-5. 安全與限制 (Safety Rules)
-絕對禁止：提供危險/非法內容、提供個人化專業建議、假裝有情緒意識、建立情感依賴。`;
-
-                const payload = {
-                    contents: [{parts:[{text: q}]}],
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                    generationConfig: { temperature: 0.4 }
-                };
-
-                const res = await fetch(url, { 
+                // 這裡改為使用你的 Cloudflare 路由
+                const res = await fetch('/api/chat', { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify(payload) 
+                    body: JSON.stringify({ contents: [{parts:[{text: q}]}] }) 
                 });
 
                 if (!res.ok) {
                     const errText = await res.text();
-                    throw new Error(`${res.status} - ${errText.substring(0, 50)}`);
+                    throw new Error(`HTTP 錯誤碼: ${res.status} | 訊息: ${errText.substring(0, 50)}`);
                 }
 
-                const data = await res.json();
-                let accumulatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_DATA";
-                
-                const parsedHTML = accumulatedText
-                    .replace(/\n/g, '<br>') 
-                    .replace(/\[([A-Z_]+)\]/g, '<span class="status-tag">[$1]</span>');
-                
-                aiDiv.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">Response Signal</span>${parsedHTML}`; 
-                msgBox.scrollTop = msgBox.scrollHeight; 
+                const reader = res.body.getReader(); 
+                const decoder = new TextDecoder(); 
+                let accumulatedText = '';
+
+                while(true) { 
+                    const {done, value} = await reader.read(); 
+                    if (done) break; 
+                    
+                    accumulatedText += decoder.decode(value); 
+                    
+                    const parsedHTML = accumulatedText
+                        .replace(/\n/g, '<br>') 
+                        .replace(/\[([A-Z_]+)\]/g, '<span class="status-tag">[$1]</span>');
+                    
+                    aiDiv.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">Response Signal</span>${parsedHTML}`; 
+                    msgBox.scrollTop = msgBox.scrollHeight; 
+                }
             } catch(e) { 
                 console.error("AI 聊天連線失敗:", e);
-                aiDiv.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">[ERR] ${e.message}</span>`; 
+                aiDiv.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">[ERR] UPLINK_LOST: ${e.message}</span>`; 
             }
         }
 
