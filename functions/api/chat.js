@@ -48,9 +48,9 @@ export async function onRequestPost({ request, env }) {
       generationConfig: { temperature: 0.4 }
     };
 
-    // 🚀 使用穩定的 Gemini 2 . 0 Flash
+    // 🚀 使用全球佈署最廣泛、最不可能出錯的 gemini-1.5-flash
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini 2 . 0 flash:streamGenerateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?key=${API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,11 +59,12 @@ export async function onRequestPost({ request, env }) {
     );
 
     if (!response.ok) {
-      const errData = await response.text();
-      return new Response(JSON.stringify({ error: `Gemini API Error: ${errData}` }), { status: 502, headers: corsHeaders });
+      // 乾淨地捕捉並回傳 Google 的錯誤訊息
+      const errData = await response.json();
+      const exactReason = errData.error?.message || JSON.stringify(errData);
+      return new Response(JSON.stringify({ error: `Google API 拒絕存取: ${exactReason}` }), { status: 502, headers: corsHeaders });
     }
 
-    // 將 Google 回傳的原始串流直接轉發給前端
     return new Response(response.body, {
       headers: {
         ...corsHeaders,
@@ -76,7 +77,6 @@ export async function onRequestPost({ request, env }) {
   }
 }
 
-// 處理 CORS 預檢請求
 export async function onRequestOptions() {
   return new Response(null, {
     headers: {
