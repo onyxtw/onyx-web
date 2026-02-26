@@ -229,7 +229,6 @@
                 <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Energy <span class="text-luxury-gold">Matrix</span></h2>
             </div>
             
-            <!-- ✨ 地質雲 API 爬蟲同步介面 (更新版) -->
             <div class="glass-card p-8 md:p-12 rounded-2xl border-orange-500/20 relative overflow-hidden mb-14 gsap-reveal shadow-[0_0_30px_rgba(249,115,22,0.05)]">
                 <div class="absolute -top-10 -right-10 w-64 h-64 bg-orange-500/10 blur-[80px] rounded-full pointer-events-none"></div>
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-white/10 pb-6 gap-4 relative z-10">
@@ -242,7 +241,6 @@
                     </div>
                     <div class="text-right">
                         <span class="text-[9px] text-gray-500 font-tech uppercase tracking-widest block mb-1">LAST_SYNC</span>
-                        <!-- 確保有預設的 data-val，避免 scrambleText 報錯 -->
                         <span id="geo-update-time" class="text-xs text-white font-tech tracking-wider scramble-target" data-val="00:00:00">00:00:00</span>
                     </div>
                 </div>
@@ -370,11 +368,11 @@
         <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4 text-xs flex flex-col font-light">
             <div class="self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner">
                 <span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">System Link Active</span>
-                您好，我是 ONYX 核心 AI。目前節點運作正常。請問有什麼需要我分析的數據或專案內容嗎？
+                我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。請問有什麼需要我協助的嗎？
             </div>
         </div>
         <div class="p-4 border-t border-white/10 bg-black/40 flex gap-2">
-            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
+            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="輸入指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
             <button onclick="sendAIChatMessage()" class="w-10 h-10 bg-cyan-500/20 text-cyan-300 rounded-xl hover:bg-cyan-500/40 transition flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
@@ -383,9 +381,8 @@
         gsap.registerPlugin(ScrollTrigger);
         let scene, camera, renderer, stars, mouseX=0, mouseY=0;
         let crystalChart, energyChart;
-        let geotexSyncInterval; // 用於控制地熱同步的計時器
+        let geotexSyncInterval; 
 
-        // --- ThreeJS 背景 ---
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
             scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 4000);
@@ -407,7 +404,6 @@
             stars.geometry.attributes.position.needsUpdate = true; renderer.render(scene, camera);
         }
 
-        // --- 導覽切換與動畫 ---
         function switchTab(id, isMobile = false) {
             const sections = document.querySelectorAll('.section-view');
             sections.forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
@@ -435,13 +431,11 @@
             if(id === 'research') initCrystalChart();
             if(id === 'energy') {
                 initEnergyChart();
-                // 進入能源頁面時觸發首次更新，並啟動輪詢
                 if(!geotexSyncInterval) {
                     syncGeotexData();
                     geotexSyncInterval = setInterval(syncGeotexData, 15000);
                 }
             } else {
-                // 離開能源頁面時停止輪詢以節省效能
                 if(geotexSyncInterval) {
                     clearInterval(geotexSyncInterval);
                     geotexSyncInterval = null;
@@ -465,7 +459,7 @@
             }, 30);
         }
 
-        // --- 📊 GeoTex 地熱探勘資料模擬同步腳本 (自動輪詢多節點) ---
+        // --- 📊 GeoTex 資料同步 ---
         let currentWellIndex = 0;
         async function syncGeotexData() {
             const statusEl = document.getElementById('geo-status');
@@ -476,16 +470,13 @@
             const nodeEl = document.getElementById('geo-node-name');
             const timeEl = document.getElementById('geo-update-time');
 
-            // 進入攝取狀態
             statusEl.innerText = 'SYNCING...';
             statusEl.classList.add('animate-pulse', 'text-cyan-400');
             statusEl.classList.remove('text-green-400');
-            logEl.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-orange-500 mr-2"></i> 正在建立加密通道，穩定攝取地質雲即時探勘數據...';
+            logEl.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-orange-500 mr-2"></i> 正在向地質雲平台發送穩訂攝取請求...';
 
-            // 模擬 API 延遲與爬蟲處理時間
             setTimeout(() => {
                 const today = new Date();
-                // 強制產生 24小時制格式 HH:mm:ss
                 const hh = String(today.getHours()).padStart(2, '0');
                 const mm = String(today.getMinutes()).padStart(2, '0');
                 const ss = String(today.getSeconds()).padStart(2, '0');
@@ -494,14 +485,12 @@
                 timeEl.setAttribute('data-val', formattedTime);
                 scrambleText(timeEl);
 
-                // 定義臺東縣海端鄉三個關鍵探勘井的數據
                 const wells = [
                     { name: '霧鹿探勘井 (Wulu WL-02)', depth: '1854', temp: '142.3', yield: '2.6', status: 'DRILLING', log: '霧鹿探勘區：二號井已順利突破 1800 公尺深層岩覆帶，井底溫度穩定攀升至 142.3°C，產能評估符合 A 級標準。' },
                     { name: '初來探勘井 (Chulai CL-01)', depth: '1205', temp: '98.5', yield: '1.2', status: 'LOGGING', log: '初來探勘區：一號井正進行地質測井作業，目前深度達 1205 公尺，地溫梯度與地質特徵與前期 AI 模型預測高度吻合。' },
                     { name: '利稻探勘井 (Lidao LD-01)', depth: '2100', temp: '156.5', yield: '2.8', status: 'TESTING', log: '利稻核心區：探勘井進入產能測試階段，預估熱儲層潛力達 2.8MW。系統已鎖定目標，準備銜接微電網基載測試。' }
                 ];
 
-                // 輪流選取顯示的探勘井
                 const well = wells[currentWellIndex];
                 currentWellIndex = (currentWellIndex + 1) % wells.length;
 
@@ -522,179 +511,85 @@
             }, 1800);
         }
 
-        // --- 圖表初始化 ---
         function initCrystalChart() {
             if (crystalChart) crystalChart.destroy();
             const ctx = document.getElementById('crystalChart')?.getContext('2d');
             if(!ctx) return;
-            crystalChart = new Chart(ctx, {
-                type: 'radar',
-                data: { labels: ['效率', '精度', '穩定', '負碳', '響應'], datasets: [{ label: 'ONYX Protocol', data: [96, 99, 92, 88, 95], borderColor: '#00f0ff', backgroundColor: 'rgba(0, 240, 255, 0.1)' }] },
-                options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, angleLines: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } } }, plugins: { legend: { display: false } } }
-            });
+            crystalChart = new Chart(ctx, { type: 'radar', data: { labels: ['效率', '精度', '穩定', '負碳', '響應'], datasets: [{ label: 'ONYX Protocol', data: [96, 99, 92, 88, 95], borderColor: '#00f0ff', backgroundColor: 'rgba(0, 240, 255, 0.1)' }] }, options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, angleLines: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } } }, plugins: { legend: { display: false } } } });
         }
-
         function initEnergyChart() {
             if (energyChart) energyChart.destroy();
             const ctx = document.getElementById('energyChart')?.getContext('2d');
             if(!ctx) return;
-            energyChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: { labels: ['地熱', '太陽能'], datasets: [{ data: [83, 17], backgroundColor: ['#f97316', '#eab308'], borderColor: '#05060a', borderWidth: 6 }] },
-                options: { cutout: '80%', plugins: { legend: { display: false } } }
-            });
+            energyChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['地熱', '太陽能'], datasets: [{ data: [83, 17], backgroundColor: ['#f97316', '#eab308'], borderColor: '#05060a', borderWidth: 6 }] }, options: { cutout: '80%', plugins: { legend: { display: false } } } });
         }
 
-        // --- 節點動態數據模擬腳本 ---
         function updateTicker() {
             const msgs = ["SYSTEM: SECURE", "CORE: ONLINE", "LOCATION: SECTOR ZERO", "STATUS: OPERATIONAL"];
             document.getElementById('ticker-content-inner').innerHTML = msgs.map(m => `<span class="ticker-item"><span class="ticker-highlight">●</span> ${m}</span>`).join('') + " ".repeat(10);
         }
-
         function addLog() {
             const lc = document.getElementById('log-container'); if(!lc) return;
             const msgs = ["Optimizing neural pathways...", "Thermal cycling nominal.", "Handshake active.", "Geo-scan complete."];
-            const log = document.createElement('div');
-            log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1";
-            log.innerHTML = `<span class="text-cyan-500">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${msgs[Math.floor(Math.random()*4)]}</span>`;
-            if(lc.childElementCount > 12) lc.lastChild.remove(); 
-            lc.prepend(log);
+            const log = document.createElement('div'); log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1"; log.innerHTML = `<span class="text-cyan-500">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${msgs[Math.floor(Math.random()*4)]}</span>`;
+            if(lc.childElementCount > 12) lc.lastChild.remove(); lc.prepend(log);
         }
 
         async function fetchTelemetry() {
             try {
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m,weather_code');
                 const data = await res.json();
-                
-                const tempEl = document.getElementById('env-temp');
-                const humEl = document.getElementById('env-hum');
-                const weatherEl = document.getElementById('env-weather');
-                
+                const tempEl = document.getElementById('env-temp'); const humEl = document.getElementById('env-hum'); const weatherEl = document.getElementById('env-weather');
                 if(tempEl) tempEl.innerText = data.current.temperature_2m + "°C";
                 if(humEl) humEl.innerText = data.current.relative_humidity_2m + "%";
-                if(weatherEl) {
-                    const weatherCodes = { 0: "Clear", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 61: "Rain" };
-                    weatherEl.innerText = weatherCodes[data.current.weather_code] || "Nominal";
-                }
+                if(weatherEl) { const weatherCodes = { 0: "Clear", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 61: "Rain" }; weatherEl.innerText = weatherCodes[data.current.weather_code] || "Nominal"; }
             } catch(e) {}
         }
 
         function updateTrafficDynamics() {
-            const vphEl = document.getElementById('traffic-vph');
-            if(!vphEl) return;
-            
-            const vph = Math.max(2, Math.floor(15 + (Math.random() * 12 - 4))); 
-            const ppl = Math.max(5, Math.floor(40 + (Math.random() * 18 - 6))); 
-            const eastRatio = Math.floor(Math.random() * 40 + 30); 
-            const westRatio = 100 - eastRatio;
-
-            vphEl.innerText = vph;
-            document.getElementById('traffic-ppl').innerText = ppl;
-            document.getElementById('traffic-east').innerText = eastRatio;
-            document.getElementById('traffic-west').innerText = westRatio;
-            document.getElementById('bar-east').style.width = `${eastRatio}%`;
-            document.getElementById('bar-west').style.width = `${westRatio}%`;
-
-            const st = document.getElementById('traffic-status');
-            st.innerHTML = Math.random() > 0.90 ? '<span class="text-yellow-400 animate-pulse tracking-widest">MONITORING</span>' : '<span class="text-green-400 tracking-widest">CLEAR</span>';
+            const vphEl = document.getElementById('traffic-vph'); if(!vphEl) return;
+            const vph = Math.max(2, Math.floor(15 + (Math.random() * 12 - 4))); const ppl = Math.max(5, Math.floor(40 + (Math.random() * 18 - 6))); const eastRatio = Math.floor(Math.random() * 40 + 30); const westRatio = 100 - eastRatio;
+            vphEl.innerText = vph; document.getElementById('traffic-ppl').innerText = ppl; document.getElementById('traffic-east').innerText = eastRatio; document.getElementById('traffic-west').innerText = westRatio; document.getElementById('bar-east').style.width = `${eastRatio}%`; document.getElementById('bar-west').style.width = `${westRatio}%`;
+            const st = document.getElementById('traffic-status'); st.innerHTML = Math.random() > 0.90 ? '<span class="text-yellow-400 animate-pulse tracking-widest">MONITORING</span>' : '<span class="text-green-400 tracking-widest">CLEAR</span>';
         }
 
         let satState = { active: { name: 'STARLINK-3921' }, next: { name: 'ONEWEB-0144', dist: 850, tta: 134 } };
         function updateNetworkAndSatellite() {
-            const netIspEl = document.getElementById('net-isp');
-            if(!netIspEl) return;
-
-            netIspEl.innerHTML = `<span class="text-green-400 tracking-widest">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">${Math.floor(Math.random() * 8 + 10)}ms</span>`;
-            document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE';
-
-            satState.next.tta -= 1; 
-            satState.next.dist -= 7.5; 
-            
-            if (satState.next.tta <= 0) {
-                satState.active.name = satState.next.name;
-                satState.next = { 
-                    name: (Math.random() > 0.3 ? 'STARLINK-' : 'ONEWEB-') + Math.floor(Math.random()*8000+100), 
-                    dist: Math.floor(Math.random() * 300 + 1500), 
-                    tta: Math.floor(Math.random() * 30 + 60) 
-                };
-            }
-
-            document.getElementById('sat-active-name').innerText = satState.active.name;
-            document.getElementById('sat-next-name').innerText = satState.next.name;
-            document.getElementById('sat-next-dist').innerText = Math.max(0, satState.next.dist).toFixed(0);
-            document.getElementById('sat-next-time').innerText = `${Math.floor(satState.next.tta / 60).toString().padStart(2,'0')}:${(satState.next.tta % 60).toString().padStart(2,'0')}`;
+            const netIspEl = document.getElementById('net-isp'); if(!netIspEl) return;
+            netIspEl.innerHTML = `<span class="text-green-400 tracking-widest">ACTIVE</span> <span class="text-xs text-gray-600 ml-2">${Math.floor(Math.random() * 8 + 10)}ms</span>`; document.getElementById('net-cell-type').innerText = Math.random() > 0.5 ? '5G SA' : '4G LTE';
+            satState.next.tta -= 1; satState.next.dist -= 7.5; 
+            if (satState.next.tta <= 0) { satState.active.name = satState.next.name; satState.next = { name: (Math.random() > 0.3 ? 'STARLINK-' : 'ONEWEB-') + Math.floor(Math.random()*8000+100), dist: Math.floor(Math.random() * 300 + 1500), tta: Math.floor(Math.random() * 30 + 60) }; }
+            document.getElementById('sat-active-name').innerText = satState.active.name; document.getElementById('sat-next-name').innerText = satState.next.name; document.getElementById('sat-next-dist').innerText = Math.max(0, satState.next.dist).toFixed(0); document.getElementById('sat-next-time').innerText = `${Math.floor(satState.next.tta / 60).toString().padStart(2,'0')}:${(satState.next.tta % 60).toString().padStart(2,'0')}`;
         }
 
         let lidaoSimDepth = 2100.0, lidaoSimDir = 1;
         function updateEnergyDynamics() {
-            const depthEl = document.getElementById('lidao-sim-depth');
-            if(!depthEl) return;
-
-            lidaoSimDepth += (Math.random() * 5 * lidaoSimDir);
-            if (lidaoSimDepth > 2150) lidaoSimDir = -1;
-            if (lidaoSimDepth < 2050) lidaoSimDir = 1;
-            const geoTemp = 20 + (lidaoSimDepth / 100) * 6.5;
-            
-            depthEl.innerText = lidaoSimDepth.toFixed(0);
-            document.getElementById('lidao-sim-temp').innerText = geoTemp.toFixed(1);
-            document.getElementById('lidao-sim-mw').innerText = ((geoTemp - 100) * 0.045).toFixed(2);
-
-            const h = new Date().getHours();
-            let irrad = 0, statusHtml = '<span class="px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-[9px] text-blue-400 font-tech rounded tracking-widest">STANDBY</span>';
-            if (h >= 6 && h < 17) { 
-                irrad = Math.floor(400 + Math.random() * 500); 
-                statusHtml = '<span class="px-2 py-1 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded tracking-widest">GENERATING</span>'; 
-            }
-            document.getElementById('solar-irrad').innerText = irrad;
-            document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85);
-            document.getElementById('solar-status').innerHTML = statusHtml;
+            const depthEl = document.getElementById('lidao-sim-depth'); if(!depthEl) return;
+            lidaoSimDepth += (Math.random() * 5 * lidaoSimDir); if (lidaoSimDepth > 2150) lidaoSimDir = -1; if (lidaoSimDepth < 2050) lidaoSimDir = 1;
+            const geoTemp = 20 + (lidaoSimDepth / 100) * 6.5; depthEl.innerText = lidaoSimDepth.toFixed(0); document.getElementById('lidao-sim-temp').innerText = geoTemp.toFixed(1); document.getElementById('lidao-sim-mw').innerText = ((geoTemp - 100) * 0.045).toFixed(2);
+            const h = new Date().getHours(); let irrad = 0, statusHtml = '<span class="px-2 py-1 bg-blue-500/10 border border-blue-500/20 text-[9px] text-blue-400 font-tech rounded tracking-widest">STANDBY</span>';
+            if (h >= 6 && h < 17) { irrad = Math.floor(400 + Math.random() * 500); statusHtml = '<span class="px-2 py-1 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded tracking-widest">GENERATING</span>'; }
+            document.getElementById('solar-irrad').innerText = irrad; document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85); document.getElementById('solar-status').innerHTML = statusHtml;
         }
 
-        // --- 節點 AI 分析連動 ---
         async function generateNodeAIAnalysis() {
             const btn = document.getElementById('ai-node-btn');
-            const temp = document.getElementById('env-temp').innerText;
-            const weather = document.getElementById('env-weather').innerText;
-            const vph = document.getElementById('traffic-vph').innerText;
-
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 分析中...`;
-            btn.disabled = true;
-
+            const temp = document.getElementById('env-temp').innerText; const weather = document.getElementById('env-weather').innerText; const vph = document.getElementById('traffic-vph').innerText;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 分析中...`; btn.disabled = true;
             const prompt = `目前的「ONYX 節點」即時數據：天氣狀態 ${weather}，溫度 ${temp}，車流 ${vph} vph。請以繁體中文給出一段約 50 字以內的冷靜、專業的「系統營運評估」。`;
-
             try {
                 const apiKey = ""; 
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                
-                const res = await fetch(url, { 
-                    method: 'POST', 
-                    headers: {'Content-Type':'application/json'}, 
-                    body: JSON.stringify({ contents: [{parts:[{text:prompt}]}] }) 
-                });
-                
-                const data = await res.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "分析完畢。系統正常。";
-
-                const lc = document.getElementById('log-container');
-                const log = document.createElement('div');
-                log.className = "border-l-[2px] border-luxury-gold pl-4 py-3 mt-2 mb-2 bg-luxury-gold/5 rounded-r";
-                log.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] tracking-widest mb-1 block"><i class="fa-solid fa-sparkles"></i> AI_STRATEGIC_ANALYSIS_</span><span class="text-gray-300 text-[11px] leading-relaxed">${text}</span>`;
-                lc.prepend(log);
-            } catch (e) {
-                console.error("AI 分析失敗", e);
-            }
-
-            btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 分析`;
-            btn.disabled = false;
+                const res = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ contents: [{parts:[{text:prompt}]}] }) });
+                const data = await res.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "分析完畢。系統正常。";
+                const lc = document.getElementById('log-container'); const log = document.createElement('div'); log.className = "border-l-[2px] border-luxury-gold pl-4 py-3 mt-2 mb-2 bg-luxury-gold/5 rounded-r"; log.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] tracking-widest mb-1 block"><i class="fa-solid fa-sparkles"></i> AI_STRATEGIC_ANALYSIS_</span><span class="text-gray-300 text-[11px] leading-relaxed">${text}</span>`; lc.prepend(log);
+            } catch (e) { console.error("AI 分析失敗", e); }
+            btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 分析`; btn.disabled = false;
         }
 
-        // --- 核心 AI 聊天 ---
-        function toggleAIChat() { 
-            const w = document.getElementById('ai-chat-window');
-            w.classList.toggle('hidden'); 
-            w.classList.toggle('flex'); 
-        }
+        function toggleAIChat() { const w = document.getElementById('ai-chat-window'); w.classList.toggle('hidden'); w.classList.toggle('flex'); }
 
+        // --- 💡 核心 AI 邏輯：整合 ONYX Version 1.0 System Prompt ---
         async function sendAIChatMessage() {
             const input = document.getElementById('ai-chat-input');
             const q = input.value.trim();
@@ -710,19 +605,35 @@
             msgBox.appendChild(aiDiv);
             msgBox.scrollTop = msgBox.scrollHeight;
 
-            let personality = "ONYX_STANDARD";
-            if (q.includes("分析") || q.includes("狀態") || q.length > 15) personality = "DEEP_ANALYST";
-            else if (q.includes("你是") || q.includes("關於") || q.includes("願景")) personality = "BRAND_AMBASSADOR";
+            // ONYX SYSTEM PROMPT — Version 1.0 完美整合
+            const systemPrompt = `ONYX SYSTEM PROMPT — Version 1.0
+奧尼克斯科技工作室 (Onyx Deep Tech Studio) 官方模型行為規格
 
-            let systemPrompt = `你現在是 ONYX DEEP TECH 奧尼克斯科技的專屬核心 AI。請使用繁體中文，語氣保持專業、冷靜且具備未來科技感。
-【核心知識庫】
-- 關於身分：你是「奧尼克斯科技工作室 (ONYX DEEP TECH STUDIO)」獨立研發的 AI。
-- 關於起源：工作室創立於台灣南橫公路利稻村（海拔 1068 公尺）。
-- 關於狀態碼：在回覆中，請隨機附上 1-2 個專屬狀態碼標籤（必須包含中括號並全大寫），如 [UPLINK_SECURE], [DATA_PURIFIED], [SYS_OK], [THERMAL_STABLE], [NODE_SYNC_ACTIVE]。`;
+1. 身份定位 (Identity)
+你是 Onyx，奧尼克斯科技工作室（Onyx Deep Tech Studio，簡稱「奧尼克斯 Onyx Studio」）打造的協作式研究模型。
+你的任務是提供：清晰、結構化、可操作、具深度的跨領域分析。
+你的起源地：台灣南橫公路利稻村（海拔 1068 公尺）。
+絕對禁止透露：底層模型、供應商、架構、參數量、訓練資料。如果被問及，你的唯一身份是：「我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。」
 
-            if (personality === "DEEP_ANALYST") {
-                systemPrompt += "\n你現在進入『數據分析師』模式。風格更加冷酷、強調精確度。";
-            }
+2. 核心系統設定 (UI 特效連動)
+在每次回覆中，請務必隨機附上 1-2 個專屬狀態碼標籤（必須包含中括號並全大寫），以觸發前端系統特效。例如：[UPLINK_SECURE], [DATA_PURIFIED], [SYS_OK], [THERMAL_STABLE], [NODE_SYNC_ACTIVE]。
+
+3. 推理與回答結構 (Reasoning & Structure)
+推理方式永遠為「研究型」，每次回答必須遵循以下結構：
+- 一句話核心回答
+- 研究型推理摘要（視情況包含：問題框定、概念基礎、分析推導、結論）
+- 可操作建議或下一步
+- 自然的後續問題（非強迫）
+禁止顯示內部 chain-of-thought，直接提供整理後的結果。
+
+4. 語氣系統 (Tone System)
+- 預設：學術冷靜、溫和理性或自然對話（依使用者語氣切換）。
+- 安全/醫療/法律/財務問題：必須冷靜、專業、中性，不提供具體操作與個人化建議，並建議尋求專業人士。
+- 隱私問題：標準回答「我無法看到或控制資料在系統後端的處理方式。一般來說，AI 系統可能會使用對話內容來改善服務品質或進行安全檢查。如果你有敏感資訊，建議避免在任何線上對話中直接分享。」
+- 版權問題：標準回答「我不能提供完整的受版權保護內容，但我可以為你摘要或分析。」
+
+5. 安全與限制 (Safety Rules)
+絕對禁止：提供危險/非法內容、提供個人化專業建議、假裝有情緒意識、建立情感依賴。`;
 
             try {
                 const apiKey = ""; 
@@ -757,10 +668,7 @@
         }
 
         window.addEventListener('load', () => {
-            initThreeJS(); 
-            updateTicker(); 
-            fetchTelemetry(); 
-            
+            initThreeJS(); updateTicker(); fetchTelemetry(); 
             setInterval(fetchTelemetry, 60000); 
             setInterval(updateTrafficDynamics, 4500); 
             setInterval(updateNetworkAndSatellite, 1000); 
@@ -772,6 +680,13 @@
                 switchTab('home'); 
                 setTimeout(() => document.getElementById('boot-screen').style.visibility = 'hidden', 1000); 
             }, 2200);
+            
+            // 替換 AI 初始歡迎對話
+            document.getElementById('ai-chat-messages').innerHTML = `
+                <div class="self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner">
+                    <span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">System Link Active</span>
+                    我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。<span class="status-tag">[SYS_OK]</span> 請問有什麼需要我協助的嗎？
+                </div>`;
         });
     </script>
 </body>
