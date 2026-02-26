@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Sitemap: https://onyx.tw/sitemap.xml
+
+# 阻擋不需要的爬蟲，保護算力
+User-agent: GPTBot
+Disallow: /
