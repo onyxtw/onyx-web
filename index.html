@@ -117,20 +117,24 @@
                             <h3 class="text-xl text-white font-fashion italic">ONYX Strategic Display</h3>
                             <p class="text-gray-400 text-sm font-light leading-relaxed">歡迎蒞臨 ONYX 深科技生態系。我們致力於在極端環境中打造高韌性節點。</p>
                         </div>
-                        <div class="w-full md:w-80 bg-black/40 border border-dashed border-gray-700/50 rounded-lg flex flex-col items-center justify-center cursor-pointer transition hover:border-cyan-500/30">
-                            <i class="fa-solid fa-rectangle-ad text-gray-600 text-2xl mb-2"></i><p class="text-[9px] font-tech text-gray-600 uppercase">Strategic Partner</p>
+                        
+                        <!-- ✨ 修改點：廣告區塊加入點擊連動，開啟 GeoTex 網站 -->
+                        <div class="w-full md:w-80 bg-black/40 border border-dashed border-gray-700/50 rounded-lg flex flex-col items-center justify-center cursor-pointer transition hover:border-cyan-500/50 hover:bg-cyan-500/5 group/ad" onclick="window.open('https://geotex.geologycloud.tw/main', '_blank')">
+                            <i class="fa-solid fa-earth-asia text-gray-500 text-2xl mb-2 group-hover/ad:text-cyan-400 transition"></i>
+                            <p class="text-[10px] font-tech text-gray-500 uppercase group-hover/ad:text-cyan-300 transition tracking-widest">GeoTex 戰略合作平台</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. Insights -->
+        <!-- 2. Insights 焦點訊息 -->
         <section id="insights" class="section-view">
             <div class="border-l-[3px] border-cyan-400 pl-8 mb-14">
                 <h2 class="text-4xl font-fashion text-white italic gsap-reveal">Insights</h2>
                 <p class="text-gray-400 mt-4 gsap-reveal">深度技術報告與營運日誌。</p>
             </div>
+            <!-- ✨ 修改點：文章將動態渲染於此 -->
             <div id="articles-container" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
         </section>
 
@@ -359,12 +363,33 @@
     <div id="news-ticker-bar"><div class="ticker-content" id="ticker-content-inner"></div></div>
     <footer><div class="max-w-[1440px] mx-auto"><p class="footer-text">奧尼克斯科技工作室 版權所有 © ONYX DEEP TECH STUDIO.</p><p class="footer-text footer-tax-id">統一編號 Tax ID：00466122</p></div></footer>
 
+    <!-- ✨ 修改點：補回文章閱讀彈出視窗 (Modal) -->
+    <div id="article-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-400">
+        <div class="absolute inset-0 bg-[#05060a]/90 backdrop-blur-md" onclick="closeArticleModal()"></div>
+        <div class="relative w-full max-w-4xl max-h-[90vh] bg-[#0b0c15] border border-white/10 rounded-xl overflow-hidden flex flex-col transform translate-y-8 transition-all duration-500 shadow-2xl" id="article-modal-content">
+            <div class="flex justify-between items-center p-8 border-b border-white/5 bg-white/[0.01]">
+                <div class="flex items-center gap-4">
+                    <span id="modal-category" class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 text-[9px] text-cyan-400 font-tech rounded-md uppercase tracking-widest"></span>
+                    <span id="modal-date" class="text-[10px] text-gray-500 font-tech tracking-widest"></span>
+                </div>
+                <button onclick="closeArticleModal()" class="text-gray-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-8 md:p-14 overflow-y-auto custom-scrollbar flex-1 bg-gradient-to-b from-transparent to-black/20">
+                <h2 id="modal-title" class="text-3xl md:text-4xl font-fashion text-white leading-snug tracking-wide mb-10"></h2>
+                <div id="modal-body" class="text-gray-300 font-light text-[15px] leading-[2.2] space-y-6 text-justify tracking-wide"></div>
+            </div>
+            <div class="p-6 border-t border-white/5 bg-[#07080d] text-center">
+                <p class="font-tech text-[9px] text-gray-600 tracking-[0.3em] uppercase">END OF FILE // ONYX DEEP TECH STUDIO</p>
+            </div>
+        </div>
+    </div>
+
     <!-- AI 聊天終端 -->
     <button onclick="toggleAIChat()" class="fixed bottom-28 right-8 z-[150] w-14 h-14 bg-[#05060a]/90 border border-cyan-500/40 rounded-2xl flex items-center justify-center hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all p-2 group overflow-hidden">
         <img src="IMG_4889.jpeg" alt="AI" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform">
     </button>
     <div id="ai-chat-window" class="fixed bottom-44 right-8 z-[150] w-[360px] h-[520px] bg-[#05060a]/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl hidden flex-col transform transition-all shadow-2xl overflow-hidden">
-        <div class="p-5 border-b border-white/10 flex justify-between items-center bg-cyan-500/5"><span class="font-tech text-xs text-cyan-400 uppercase tracking-widest">ONYX AI CORE v7.0</span><button onclick="toggleAIChat()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button></div>
+        <div class="p-5 border-b border-white/10 flex justify-between items-center bg-cyan-500/5"><span class="font-tech text-xs text-cyan-400 uppercase tracking-widest">ONYX AI CORE v1.0</span><button onclick="toggleAIChat()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button></div>
         <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4 text-xs flex flex-col font-light">
             <div class="self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner">
                 <span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">System Link Active</span>
@@ -372,7 +397,7 @@
             </div>
         </div>
         <div class="p-4 border-t border-white/10 bg-black/40 flex gap-2">
-            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
+            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="輸入指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
             <button onclick="sendAIChatMessage()" class="w-10 h-10 bg-cyan-500/20 text-cyan-300 rounded-xl hover:bg-cyan-500/40 transition flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
@@ -457,6 +482,79 @@
                 element.innerText = final.split('').map((l, i) => i < iterations ? final[i] : '!<>-_\\/[]{}—=+*^'[Math.floor(Math.random()*15)]).join('');
                 if(iterations >= final.length) clearInterval(interval); iterations += 1/3;
             }, 30);
+        }
+
+        // --- ✨ 修改點：文章資料預設庫與 Modal 邏輯 ---
+        let globalArticles = [
+            { id: "art-1", category: "RESEARCH", date: "2026-03-01", title: "逆熵運算在利稻節點的實踐", summary: "探討如何在極端氣候下，透過晶體生長演算法降低無謂的算力損耗，達成能源最佳化配置。", content: "<p>我們拒絕盲目的暴力運算。ONYX 的核心技術「晶體生長演算法」採用逆熵架構，模擬自然界礦物的結構化過程...</p><br><p>透過在模型訓練初期便建立強大的邏輯骨架，我們成功將無謂的算力損耗降低了 68%。這在南橫利稻這類電力資源寶貴的極端環境中，是實現「數位韌性」的關鍵突破。</p>" },
+            { id: "art-2", category: "INSIGHTS", date: "2026-02-15", title: "數據主權的隱形守門人", summary: "在邊緣運算時代，資料不出本地成為企業核心考量。解析 ONYX 節點的安全隔離架構。", content: "<p>未來的資料不應該全部送上雲端，真正的安全來自於邊緣端（Edge）的即時過濾與提純。</p><br><p>ONYX 節點架構確保核心資料在本地端即完成運算，這不僅大幅降低了延遲，更是為各行各業建立了一道堅不可摧的資料主權護城河。</p>" },
+            { id: "art-3", category: "UPDATE", date: "2026-01-20", title: "Sector Zero 地熱模組聯網公告", summary: "整合霧鹿地熱探勘數據，利稻微電網 2.0 正式投入實地測試。", content: "<p>根據最新的地熱探勘動態，我們已成功將 Wulu WL-02 探勘井的即時數據與我們的能源分配矩陣進行同步。</p><br><p>搭配高山光儲陣列，Sector Zero 節點已經具備了 100% 綠電自給的雛形，這是邁向「負碳運算」願景的重大里程碑。</p>" }
+        ];
+
+        async function loadArticles() {
+            const container = document.getElementById('articles-container');
+            try {
+                const res = await fetch('articles.json');
+                if (res.ok) {
+                    const data = await res.json();
+                    if(data && data.length > 0) globalArticles = data;
+                }
+            } catch(e) {
+                console.warn("未找到 articles.json，載入系統備用預設文章。");
+            }
+            renderArticles();
+        }
+
+        function renderArticles() {
+            const container = document.getElementById('articles-container');
+            if(!container) return;
+            container.innerHTML = globalArticles.map(a => `
+                <div class="glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/20 group cursor-pointer hover:bg-white/[0.04] transition duration-500" onclick="openArticleModal('${a.id}')">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[9px] font-tech text-cyan-400 tracking-[0.15em] border border-cyan-500/20 px-2 py-1 bg-cyan-500/10 rounded-md">${a.category}</span>
+                        <span class="text-[10px] font-tech text-gray-500 tracking-wider">${a.date}</span>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-fashion text-white mb-4 group-hover:text-cyan-300 transition duration-500 leading-snug">${a.title}</h3>
+                    <p class="text-gray-400 text-[13px] leading-[1.8] font-light mb-8 flex-1 tracking-wide">${a.summary}</p>
+                    <div class="mt-auto border-t border-white/5 pt-5 flex items-center justify-between text-gray-500 group-hover:text-white transition duration-500">
+                        <span class="font-tech text-[9px] tracking-[0.2em] uppercase">Read Report</span>
+                        <i class="fa-solid fa-arrow-right-long transform group-hover:translate-x-2 transition duration-500 text-sm"></i>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openArticleModal(id) {
+            const article = globalArticles.find(a => a.id === id);
+            if (!article) return;
+            
+            document.getElementById('modal-category').innerText = article.category;
+            document.getElementById('modal-date').innerText = article.date;
+            document.getElementById('modal-title').innerText = article.title;
+            document.getElementById('modal-body').innerHTML = article.content;
+            
+            const modal = document.getElementById('article-modal');
+            const content = document.getElementById('article-modal-content');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('translate-y-8');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('article-modal');
+            const content = document.getElementById('article-modal-content');
+            modal.classList.add('opacity-0');
+            content.classList.add('translate-y-8');
+            setTimeout(() => { 
+                modal.classList.add('hidden'); 
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }, 400);
         }
 
         // --- 📊 GeoTex 資料同步 ---
@@ -627,7 +725,6 @@
             document.getElementById('solar-status').innerHTML = statusHtml;
         }
 
-        // --- 🚀 連接 Cloudflare 後端路由 ---
         async function generateNodeAIAnalysis() {
             const btn = document.getElementById('ai-node-btn');
             const temp = document.getElementById('env-temp').innerText;
@@ -640,7 +737,6 @@
             const prompt = `目前的「ONYX 節點」即時數據：天氣狀態 ${weather}，溫度 ${temp}，車流 ${vph} vph。請以繁體中文給出一段約 50 字以內的冷靜、專業的「系統營運評估」。`;
 
             try {
-                // 這裡改為使用你的 Cloudflare 路由
                 const res = await fetch('/api/chat', { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
@@ -648,10 +744,14 @@
                 });
                 
                 if (!res.ok) {
-                    throw new Error(`HTTP 錯誤碼: ${res.status}`);
+                    let errText = await res.text();
+                    try {
+                        const errJson = JSON.parse(errText);
+                        errText = errJson.error || errText;
+                    } catch(e){}
+                    throw new Error(`連線遭拒 [${res.status}]: ${errText}`);
                 }
 
-                // 處理 Cloudflare 回傳的串流
                 const reader = res.body.getReader(); 
                 const decoder = new TextDecoder(); 
                 let fullText = '';
@@ -697,7 +797,6 @@
             msgBox.scrollTop = msgBox.scrollHeight;
 
             try {
-                // 這裡改為使用你的 Cloudflare 路由
                 const res = await fetch('/api/chat', { 
                     method: 'POST', 
                     headers: {'Content-Type':'application/json'}, 
@@ -705,8 +804,12 @@
                 });
 
                 if (!res.ok) {
-                    const errText = await res.text();
-                    throw new Error(`HTTP 錯誤碼: ${res.status} | 訊息: ${errText.substring(0, 50)}`);
+                    let errText = await res.text();
+                    try {
+                        const errJson = JSON.parse(errText);
+                        errText = errJson.error || errText;
+                    } catch(e){}
+                    throw new Error(`${errText}`);
                 }
 
                 const reader = res.body.getReader(); 
@@ -728,7 +831,7 @@
                 }
             } catch(e) { 
                 console.error("AI 聊天連線失敗:", e);
-                aiDiv.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">[ERR] UPLINK_LOST: ${e.message}</span>`; 
+                aiDiv.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">[ERR] ${e.message}</span>`; 
             }
         }
 
@@ -736,6 +839,7 @@
             initThreeJS(); 
             updateTicker(); 
             fetchTelemetry(); 
+            loadArticles(); // ✨ 初始化載入並渲染文章
             
             setInterval(fetchTelemetry, 60000); 
             setInterval(updateTrafficDynamics, 4500); 
