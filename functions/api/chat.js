@@ -48,9 +48,9 @@ export async function onRequestPost({ request, env }) {
       generationConfig: { temperature: 0.4 }
     };
 
-    // 🚀 使用穩定的 gemini-3.1-pro-preview
+    // 🚀 使用穩定的 Gemini 2 . 0 Flash
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:streamGenerateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini 2 . 0 flash:streamGenerateContent?key=${API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
