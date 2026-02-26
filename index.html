@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +7,7 @@
     
     <link rel="icon" type="image/jpeg" href="IMG_4889.jpeg">
     <link rel="apple-touch-icon" href="IMG_4889.jpeg">
+    <link rel="manifest" href="manifest.json">
     <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資與負碳運算技術。">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -55,7 +55,6 @@
 </head>
 
 <body>
-    <!-- 啟動動畫 -->
     <div id="boot-screen">
         <div class="text-center flex flex-col items-center">
             <img src="IMG_4879.png" alt="ONYX" class="h-16 md:h-20 w-auto object-contain mb-2">
@@ -68,7 +67,6 @@
     <div id="canvas-container"></div>
     <div class="grid-texture"></div>
 
-    <!-- Header -->
     <header class="fixed top-0 w-full z-50 glass-card rounded-none border-x-0 border-t-0 h-24 flex items-center justify-between px-6 md:px-14">
         <div class="flex items-center group cursor-pointer" onclick="switchTab('home')">
             <img src="IMG_4879.png" alt="ONYX" class="h-14 md:h-18 w-auto object-contain transition-all duration-700 group-hover:scale-105">
@@ -85,7 +83,6 @@
     </header>
 
     <main class="pt-36 pb-32 px-6 md:px-14 max-w-[1440px] mx-auto flex-grow w-full">
-        <!-- 1. Home -->
         <section id="home" class="section-view active">
             <div class="flex flex-col justify-center min-h-[60vh] max-w-5xl space-y-16 pt-10 relative z-10">
                 <div class="border-l-[3px] border-luxury-gold pl-8 gsap-reveal">
@@ -107,7 +104,6 @@
             </div>
         </section>
 
-        <!-- 2. Insights -->
         <section id="insights" class="section-view">
             <div class="border-l-[3px] border-cyan-400 pl-8 mb-14">
                 <h2 class="text-4xl font-fashion text-white italic gsap-reveal">Insights</h2>
@@ -116,7 +112,6 @@
             <div id="articles-container" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
         </section>
 
-        <!-- 3. Research -->
         <section id="research" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
                 <div class="space-y-10">
@@ -131,7 +126,6 @@
             </div>
         </section>
 
-        <!-- 4. Node (FieldOps) -->
         <section id="fieldops" class="section-view">
             <div class="glass-card p-14 rounded-2xl border-cyan-500/10 gsap-reveal">
                 <h2 class="text-4xl font-fashion text-white italic mb-10">Sector Zero <span class="text-cyan-400">Node</span></h2>
@@ -144,7 +138,6 @@
             </div>
         </section>
 
-        <!-- 5. About -->
         <section id="about" class="section-view">
             <div class="max-w-3xl space-y-8">
                 <h2 class="text-4xl font-fashion text-white italic border-l-4 border-white pl-6 gsap-reveal">About ONYX</h2>
@@ -157,7 +150,6 @@
     <div id="news-ticker-bar"><div class="ticker-content" id="ticker-content-inner"></div></div>
     <footer><div class="max-w-[1440px] mx-auto"><p class="footer-text">奧尼克斯科技工作室 版權所有 © ONYX DEEP TECH STUDIO.</p><p class="footer-text footer-tax-id">統一編號 Tax ID：00466122</p></div></footer>
 
-    <!-- AI -->
     <button onclick="toggleAIChat()" class="fixed bottom-28 right-8 z-[150] w-14 h-14 bg-[#05060a]/90 border border-cyan-500/40 rounded-2xl flex items-center justify-center hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all p-2">
         <img src="IMG_4889.jpeg" alt="AI" class="w-full h-full object-contain">
     </button>
@@ -165,8 +157,8 @@
         <div class="p-5 border-b border-white/10 flex justify-between bg-cyan-500/5"><span class="font-tech text-xs text-cyan-400 uppercase">ONYX AI CORE</span><button onclick="toggleAIChat()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div>
         <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4 text-xs flex flex-col"></div>
         <div class="p-4 border-t border-white/10 bg-black/40 flex gap-2">
-            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none" placeholder="指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
-            <button onclick="sendAIChatMessage()" class="w-10 h-10 bg-cyan-500/20 text-cyan-300 rounded-xl"><i class="fa-solid fa-paper-plane"></i></button>
+            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
+            <button onclick="sendAIChatMessage()" class="w-10 h-10 bg-cyan-500/20 text-cyan-300 rounded-xl hover:bg-cyan-500/40 transition"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
@@ -203,7 +195,6 @@
             if(target) {
                 target.style.display='block'; void target.offsetWidth; target.classList.add('active'); target.style.opacity='1';
                 gsap.fromTo(target.querySelectorAll('.gsap-reveal'), { y: 40, opacity: 0, visibility: 'hidden' }, { y: 0, opacity: 1, visibility: 'visible', duration: 1.2, ease: "expo.out", stagger: 0.15 });
-                if(id==='research') initChart();
                 target.querySelectorAll('.scramble-target').forEach(el => scrambleText(el));
             }
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -238,16 +229,69 @@
             try {
                 const res = await fetch('articles.json'); const articles = await res.json();
                 const container = document.getElementById('articles-container');
-                container.innerHTML = articles.map(a => `<div class="glass-card p-6 rounded-xl cursor-pointer" onclick="alert('${a.title}')"><h3 class="text-white font-fashion mb-2">${a.title}</h3><p class="text-gray-400 text-xs">${a.summary}</p></div>`).join('');
+                container.innerHTML = articles.map(a => `<div class="glass-card p-6 rounded-xl cursor-pointer hover:border-cyan-500/50"><h3 class="text-white font-fashion mb-2">${a.title}</h3><p class="text-gray-400 text-xs">${a.summary}</p></div>`).join('');
             } catch(e) {}
         }
+        
+        // --- AI 串流對話邏輯 ---
         function toggleAIChat() { const w = document.getElementById('ai-chat-window'); w.classList.toggle('hidden'); w.classList.toggle('flex'); }
         async function sendAIChatMessage() {
-            const input = document.getElementById('ai-chat-input'); const q = input.value.trim(); if(!q) return;
+            const input = document.getElementById('ai-chat-input');
+            const q = input.value.trim();
+            if (!q) return;
+
             const msgBox = document.getElementById('ai-chat-messages');
-            msgBox.innerHTML += `<div class="self-end bg-white/5 p-2 rounded-lg">${q}</div>`; input.value = '';
-            msgBox.innerHTML += `<div class="self-start bg-cyan-500/10 p-2 rounded-lg">Processing...</div>`;
+            msgBox.innerHTML += `<div class="self-end bg-white/5 border border-white/10 p-3 rounded-xl max-w-[85%] break-words">${q}</div>`;
+            input.value = '';
+
+            const aiDiv = document.createElement('div');
+            aiDiv.className = "self-start bg-cyan-500/10 border border-cyan-500/20 p-3 rounded-xl max-w-[85%] break-words text-gray-300 leading-relaxed";
+            aiDiv.innerHTML = '<span class="animate-pulse text-cyan-500 font-tech text-[10px]">PROCESSING_</span>';
+            msgBox.appendChild(aiDiv);
             msgBox.scrollTop = msgBox.scrollHeight;
+
+            let personality = "ONYX_STANDARD";
+            let targetModel = "gemini-1.5-flash"; 
+
+            if (q.includes("分析") || q.includes("狀態") || q.length > 15) {
+                personality = "DEEP_ANALYST"; 
+                targetModel = "gemini-1.5-pro"; 
+            } else if (q.includes("你是") || q.includes("關於") || q.includes("願景")) {
+                personality = "BRAND_AMBASSADOR";
+            }
+
+            try {
+                const res = await fetch('/api/chat', { 
+                    method: 'POST', 
+                    headers: {'Content-Type':'application/json'}, 
+                    body: JSON.stringify({ 
+                        contents: [{parts:[{text: q}]}],
+                        personality: personality,
+                        targetModel: targetModel
+                    }) 
+                });
+
+                const reader = res.body.getReader(); 
+                const decoder = new TextDecoder(); 
+                let accumulatedText = '';
+
+                while(true) { 
+                    const {done, value} = await reader.read(); 
+                    if (done) break; 
+                    
+                    accumulatedText += decoder.decode(value); 
+                    
+                    // 核心：掃描並替換狀態碼標籤
+                    const parsedHTML = accumulatedText
+                        .replace(/\n/g, '<br>') 
+                        .replace(/\[([A-Z_]+)\]/g, '<span class="inline-block mx-1 my-1 text-cyan-400 font-tech text-[10px] bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/40 shadow-[0_0_8px_rgba(0,240,255,0.4)] tracking-wider">[$1]</span>');
+                    
+                    aiDiv.innerHTML = parsedHTML; 
+                    msgBox.scrollTop = msgBox.scrollHeight; 
+                }
+            } catch(e) { 
+                aiDiv.innerHTML = '<span class="text-red-400 font-tech text-[10px]">[UPLINK_FAILED] System Offline.</span>'; 
+            }
         }
 
         window.addEventListener('load', () => {
