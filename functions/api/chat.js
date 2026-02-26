@@ -48,8 +48,9 @@ export async function onRequestPost({ request, env }) {
       generationConfig: { temperature: 0.4 }
     };
 
+    // 🚀 使用穩定的 gemini-3.1-pro-preview
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:streamGenerateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:streamGenerateContent?key=${API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -62,7 +63,7 @@ export async function onRequestPost({ request, env }) {
       return new Response(JSON.stringify({ error: `Gemini API Error: ${errData}` }), { status: 502, headers: corsHeaders });
     }
 
-    // 將 Google 回傳的原始串流直接轉發給前端，避免中介處理錯誤
+    // 將 Google 回傳的原始串流直接轉發給前端
     return new Response(response.body, {
       headers: {
         ...corsHeaders,
@@ -85,3 +86,5 @@ export async function onRequestOptions() {
     }
   });
 }
+
+
