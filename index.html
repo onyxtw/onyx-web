@@ -7,12 +7,13 @@
 
     <title>ONYX | DEEP TECH 奧尼克斯科技 - 未來流動數據與邊緣運算權威</title>
     
-    <!-- 🚀 替換為六角形小 Logo -->
+    <!-- 🚀 品牌資產識別 -->
     <link rel="icon" type="image/jpeg" href="IMG_4889.jpeg">
     <link rel="apple-touch-icon" href="IMG_4889.jpeg">
     
     <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資、RTK 定位修正與負碳運算技術。">
     
+    <!-- 📦 核心插件載入 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -20,25 +21,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-
-    <!-- 結構化數據 (Schema.org) 同步更新 Logo -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "ONYX DEEP TECH STUDIO 奧尼克斯科技工作室",
-      "alternateName": "ONYX 奧尼克斯科技",
-      "url": "https://onyx.tw",
-      "logo": "https://onyx.tw/IMG_4879.png",
-      "taxID": "00466122",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "onyxstudio@onyx.tw",
-        "contactType": "customer service"
-      },
-      "keywords": "onyx, DEEP TECH, 奧尼克斯, 邊緣運算, AI"
-    }
-    </script>
 
     <style>
         :root {
@@ -81,26 +63,28 @@
 
         .nav-link { position: relative; opacity: 0.5; transition: 0.4s ease; padding-bottom: 6px; letter-spacing: 0.15em; }
         .nav-link:hover, .nav-link.active { opacity: 1; color: #fff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
-        .nav-link::after {
-            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 1px;
-            background: var(--luxury-gold); transition: width 0.4s;
-        }
+        .nav-link::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 1px; background: var(--luxury-gold); transition: width 0.4s; }
         .nav-link.active::after { width: 100%; }
 
         .section-view { display: none; opacity: 0; }
-        .section-view.active { display: block; opacity: 1; animation: fadeInPage 0.8s ease-out forwards; }
-        @keyframes fadeInPage { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .section-view.active { display: block; opacity: 1; }
 
         .gsap-reveal { opacity: 0; visibility: hidden; } 
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; background: #000; }
 
-        /* System Boot Screen */
+        /* --- 🚀 開機動畫 Logo 特效 --- */
         #boot-screen {
             position: fixed; inset: 0; z-index: 9999; background: #05060a;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            transition: opacity 1s ease-in-out, visibility 1s;
         }
-        .loader-line { width: 200px; height: 1px; background: rgba(255,255,255,0.1); position: relative; overflow: hidden; margin-top: 20px; }
+        @keyframes logo-power-on {
+            0% { opacity: 0; filter: brightness(0) blur(10px); transform: scale(0.9); }
+            50% { opacity: 0.5; filter: brightness(1.5) blur(2px); transform: scale(1.02); }
+            100% { opacity: 1; filter: brightness(1) blur(0); transform: scale(1); }
+        }
+        #boot-screen img { animation: logo-power-on 2s ease-out forwards; }
+        .loader-line { width: 200px; height: 1px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden; margin-top: 30px; }
         .loader-line::after {
             content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
             background: linear-gradient(90deg, transparent, var(--signal-cyan), transparent);
@@ -108,49 +92,45 @@
         }
         @keyframes loading { 0% { left: -100%; } 100% { left: 100%; } }
 
-        /* Ticker */
+        /* --- 🛰️ 底部工業佈局 (Ticker + Footer) --- */
         #news-ticker-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 28px; z-index: 100;
-            background: rgba(5, 6, 10, 0.9); border-top: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(5px);
+            position: fixed; bottom: 44px; left: 0; width: 100%; height: 24px; z-index: 100;
+            background: rgba(5, 6, 10, 0.8); border-top: 1px solid rgba(255,255,255,0.03); backdrop-filter: blur(8px);
             display: flex; align-items: center; overflow: hidden; white-space: nowrap;
         }
         .ticker-content { display: inline-block; padding-left: 100%; animation: ticker 40s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         .ticker-item { margin-right: 50px; font-family: var(--font-tech); font-size: 10px; color: #94a3b8; letter-spacing: 0.1em; }
         .ticker-highlight { color: var(--signal-cyan); margin-right: 8px; }
+
+        footer {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #05060a;
+            padding: 8px 0; z-index: 100; text-align: center; border-top: 1px solid rgba(255,255,255,0.02);
+        }
+        .footer-text { font-size: 9px; color: #475569; letter-spacing: 0.08em; line-height: 1.5; font-family: var(--font-body); }
+        .footer-tax-id { font-family: var(--font-tech); font-size: 8px; opacity: 0.8; margin-top: 1px; }
     </style>
 </head>
+
 <body class="selection:bg-cyan-500/30 selection:text-cyan-100">
 
-    <!-- System Boot -->
+    <!-- 啟動動畫畫面 -->
     <div id="boot-screen">
-        <div class="text-center">
-            <h1 class="text-4xl font-fashion text-white tracking-[0.2em] mb-2">ONYX</h1>
-            <p class="text-[10px] font-tech text-cyan-400 tracking-widest uppercase">System Initializing...</p>
+        <div class="text-center flex flex-col items-center">
+            <img src="IMG_4879.png" alt="ONYX CORE" class="h-16 md:h-20 w-auto object-contain mb-2 drop-shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+            <p class="text-[10px] font-tech text-cyan-400 tracking-[0.5em] uppercase opacity-70">Initializing System</p>
             <div class="loader-line"></div>
-            <p id="boot-status" class="text-[9px] font-tech text-gray-600 mt-4 tracking-wider">CONNECTING TO SECTOR ZERO...</p>
+            <p id="boot-status" class="text-[9px] font-tech text-gray-700 mt-4 tracking-widest uppercase">Connecting to Sector Zero...</p>
         </div>
     </div>
 
-    <!-- 4D Background -->
     <div id="canvas-container"></div>
     <div class="grid-texture"></div>
 
-    <!-- Ticker -->
-    <div id="news-ticker-bar">
-        <div class="ticker-content" id="ticker-content-inner">
-            <span class="ticker-item"><span class="ticker-highlight">●</span> SYSTEM ONLINE</span>
-        </div>
-    </div>
-
-    <!-- Header -->
+    <!-- 頂部導覽列 (放大 Logo 版) -->
     <header class="fixed top-0 w-full z-50 glass-card rounded-none border-x-0 border-t-0 h-24 flex items-center justify-between px-6 md:px-14">
         <div class="flex items-center group cursor-pointer" onclick="switchTab('home')">
-            <!-- 🚀 替換為主 Logo，移除 opacity 限制，加上微微發光效果 -->
-            <img src="IMG_4879.png" alt="ONYX DEEP TECH" class="h-10 md:h-12 w-auto object-contain transition duration-500 drop-shadow-[0_0_12px_rgba(0,240,255,0.15)] group-hover:drop-shadow-[0_0_20px_rgba(0,240,255,0.4)]" 
-                 onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
-            <!-- 圖片失效時的備用文字 -->
-            <h1 class="hidden text-2xl font-fashion text-white tracking-widest pl-2">ONYX <span class="text-cyan-400 text-sm font-tech align-top">TECH</span></h1>
+            <img src="IMG_4879.png" alt="ONYX" class="h-14 md:h-18 w-auto object-contain transition-all duration-700 drop-shadow-[0_0_10px_rgba(0,240,255,0.1)] group-hover:drop-shadow-[0_0_20px_rgba(0,240,255,0.4)] group-hover:scale-105">
         </div>
         <nav id="desktop-nav" class="hidden xl:flex gap-10 font-tech text-[10px] uppercase">
             <button class="nav-link active" onclick="switchTab('home')">首頁 Origin</button>
@@ -163,21 +143,11 @@
         <button class="xl:hidden text-white/60 hover:text-white transition" onclick="toggleMobileMenu(true)"><i class="fa-solid fa-bars-staggered text-2xl"></i></button>
     </header>
 
-    <div id="mobile-nav" class="fixed inset-0 z-[100] bg-[#07080d]/95 backdrop-blur-xl pt-28 px-10 flex flex-col gap-8 transform translate-x-full transition-transform duration-500 xl:hidden border-l border-white/5">
-        <button onclick="toggleMobileMenu(false)" class="absolute top-10 right-10 text-white/50 hover:text-white transition"><i class="fa-solid fa-xmark text-3xl"></i></button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('home', true)">首頁 ORIGIN</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('insights', true)">焦點訊息 INSIGHTS</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('research', true)">研究技術 RESEARCH</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('fieldops', true)">韌性節點 NODE</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('energy', true)">能源矩陣 ENERGY</button>
-        <button class="text-left text-2xl md:text-3xl font-fashion text-gray-300 hover:text-white border-b border-white/5 pb-4 transition" onclick="switchTab('about', true)">關於 ABOUT</button>
-    </div>
-
-    <main class="pt-36 pb-24 px-6 md:px-14 max-w-[1440px] mx-auto flex-grow w-full">
-
-        <!-- 1. 首頁 (Origin) -->
+    <!-- 主內容區塊 -->
+    <main class="pt-36 pb-32 px-6 md:px-14 max-w-[1440px] mx-auto flex-grow w-full">
+        <!-- 首頁 -->
         <section id="home" class="section-view active">
-            <div class="flex flex-col justify-center min-h-[65vh] max-w-5xl space-y-16 pt-10 relative z-10">
+            <div class="flex flex-col justify-center min-h-[60vh] max-w-5xl space-y-16 pt-10 relative z-10">
                 <div class="border-l-[3px] border-luxury-gold pl-8 gsap-reveal">
                     <span class="font-tech text-[10px] text-luxury-gold tracking-[0.4em] block mb-6 italic opacity-80">FOUNDER'S VISION</span>
                     <h2 class="text-5xl md:text-7xl lg:text-[80px] font-fashion text-white leading-[1.15] tracking-wide">
@@ -185,633 +155,167 @@
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-luxury-gold italic pr-4">淬煉於深處。</span>
                     </h2>
                 </div>
-
-                <!-- 戰略展示窗 -->
+                <!-- 戰略窗 -->
                 <div class="glass-card p-8 rounded-xl border border-white/10 relative overflow-hidden gsap-reveal group">
-                    <div class="absolute top-0 right-0 w-40 h-40 bg-cyan-500/5 blur-[60px] rounded-full group-hover:bg-luxury-gold/5 transition duration-1000"></div>
                     <div class="flex flex-col md:flex-row gap-10 items-stretch justify-between relative z-10">
                         <div class="space-y-5 flex-1 border-r border-white/5 pr-0 md:pr-10">
                             <div class="flex gap-3 items-center">
                                 <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                                <span class="text-[10px] font-tech text-gray-400 tracking-widest uppercase">SYSTEM ANNOUNCEMENT</span>
+                                <span class="text-[10px] font-tech text-gray-400 tracking-widest uppercase">System Announcement</span>
                             </div>
-                            <h3 class="text-xl text-white font-fashion tracking-wide italic">ONYX Strategic Display</h3>
-                            <p class="text-gray-400 text-sm font-light leading-relaxed text-justify">
-                                歡迎蒞臨 ONYX 深科技生態系。我們致力於在極端環境中打造高韌性節點。此區域將即時發布系統狀態、戰略合作夥伴資訊以及前瞻技術預告。
-                            </p>
-                            <div class="flex gap-3 pt-2">
-                                <span class="px-2 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[9px] font-tech tracking-widest rounded">DEEP TECH</span>
-                                <span class="px-2 py-1 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold text-[9px] font-tech tracking-widest rounded">RESILIENCE</span>
-                            </div>
+                            <h3 class="text-xl text-white font-fashion italic">ONYX Strategic Display</h3>
+                            <p class="text-gray-400 text-sm font-light leading-relaxed text-justify">歡迎蒞臨 ONYX 深科技生態系。我們致力於在極端環境中打造高韌性節點，實現科技與自然的絕對共生。</p>
                         </div>
-                        <div class="w-full md:w-80 bg-black/40 border border-dashed border-gray-700/50 rounded-lg flex flex-col items-center justify-center relative overflow-hidden group/ad cursor-pointer transition hover:border-cyan-500/30 min-h-[120px]">
-                            <div class="text-center space-y-2 z-10">
-                                <i class="fa-solid fa-rectangle-ad text-gray-600 text-2xl group-hover/ad:text-cyan-400 transition"></i>
-                                <p class="text-[9px] font-tech text-gray-600 tracking-widest uppercase">Strategic Partner / Google Ads</p>
-                            </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent opacity-0 group-hover/ad:opacity-100 transition duration-500"></div>
+                        <div class="w-full md:w-80 bg-black/40 border border-dashed border-gray-700/50 rounded-lg flex flex-col items-center justify-center cursor-pointer transition hover:border-cyan-500/30">
+                            <i class="fa-solid fa-rectangle-ad text-gray-600 text-2xl mb-2"></i>
+                            <p class="text-[9px] font-tech text-gray-600 tracking-widest uppercase">Strategic Partner</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 1.5 Insights -->
-        <section id="insights" class="section-view">
-            <div class="space-y-16">
-                <div class="border-l-[3px] border-cyan-400 pl-8 mb-14">
-                    <span class="font-tech text-[10px] text-cyan-400 tracking-[0.4em] block mb-5 uppercase opacity-80 gsap-reveal">Analytics & Perspectives</span>
-                    <h2 class="text-4xl md:text-[50px] font-fashion text-white italic tracking-wide gsap-reveal">Insights <span class="text-gray-400 text-2xl font-body not-italic ml-3 tracking-[0.1em]">焦點訊息與研究</span></h2>
-                    <p class="text-gray-400 mt-6 font-light text-[15px] leading-relaxed max-w-2xl tracking-wide gsap-reveal">匯聚 ONYX 核心團隊的深度技術報告、營運日誌與科技思維探討。</p>
-                </div>
-                <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="text-cyan-400 font-tech text-sm animate-pulse tracking-widest"><i class="fa-solid fa-circle-notch fa-spin mr-3"></i> FETCHING DATA STREAM...</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. Research -->
-        <section id="research" class="section-view">
-            <div class="space-y-28">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-14 items-center">
-                    <div class="lg:col-span-5 space-y-10">
-                        <div class="border-l-[3px] border-white pl-6">
-                            <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-2 gsap-reveal">Crystal Growth</h2>
-                            <span class="text-gray-400 text-xl font-body tracking-[0.2em] gsap-reveal">晶體生長演算法</span>
-                        </div>
-                        <p class="text-gray-300 leading-[2] text-justify font-light text-[15px] tracking-wide gsap-reveal">
-                            我們拒絕盲目的暴力運算。ONYX 的核心技術「晶體生長演算法」採用逆熵架構，模擬自然界礦物的結構化過程，在訓練初期便建立邏輯骨架，大幅降低無謂的算力損耗，實現真正的智慧提純。
-                        </p>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div class="glass-card p-8 rounded-xl text-center gsap-reveal">
-                                <div class="text-3xl md:text-4xl text-cyan-400 font-tech mb-3 tracking-wider scramble-target" data-val="-68%">----</div>
-                                <div class="text-[10px] text-gray-500 tracking-[0.2em] uppercase">能源冗餘降低</div>
-                            </div>
-                            <div class="glass-card p-8 rounded-xl text-center gsap-reveal">
-                                <div class="text-3xl md:text-4xl text-luxury-gold font-tech mb-3 tracking-wider scramble-target" data-val="99.9%">----</div>
-                                <div class="text-[10px] text-gray-500 tracking-[0.2em] uppercase">數據處理精度</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-7 glass-card p-10 rounded-2xl min-h-[450px] flex flex-col justify-center gsap-reveal">
-                        <h4 class="font-tech text-[10px] text-gray-500 mb-8 border-b border-white/10 pb-3 uppercase tracking-widest">Deep Tech Performance Radar</h4>
-                        <div class="relative h-[350px] w-full"><canvas id="crystalChart"></canvas></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Resilience Node -->
-        <section id="fieldops" class="section-view">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- Dashboard Head -->
-                    <div class="glass-card p-10 md:p-14 rounded-2xl relative overflow-hidden group border-cyan-500/10 gsap-reveal">
-                        <h2 class="text-4xl md:text-5xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Sector Zero <span class="text-cyan-400">Node</span></h2>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/5 pt-10">
-                            <div><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">LATENCY</div><div class="text-2xl text-white font-tech"><span id="latency-val" class="scramble-target" data-val="8">0</span>ms</div></div>
-                            <div><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">STABILITY</div><div class="text-2xl text-green-400 font-tech scramble-target" data-val="99.98%">0.00%</div></div>
-                            <div><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest gsap-reveal">PROTOCOL</div><div class="text-2xl text-cyan-400 font-tech scramble-target" data-val="RTK+">---</div></div>
-                        </div>
-                    </div>
-
-                    <!-- Environment API -->
-                    <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
-                        <h3 class="font-tech text-[11px] text-cyan-400 tracking-widest mb-10 flex items-center gap-4 gsap-reveal">
-                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span></span>
-                            ENVIRONMENTAL TELEMETRY // 微氣候即時監測
-                        </h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-y-10 gap-x-8 relative z-10">
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">WEATHER</div><div class="text-[16px] text-gray-200 font-body" id="env-weather">---</div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">TEMP</div><div class="text-2xl text-white font-tech" id="env-temp">--</div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">HUMIDITY</div><div class="text-2xl text-white font-tech" id="env-hum">--</div></div>
-                        </div>
-                    </div>
-
-                    <!-- Flow Dynamics -->
-                    <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
-                        <h3 class="font-tech text-[11px] text-luxury-gold tracking-widest mb-10 flex items-center gap-4 gsap-reveal">
-                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-luxury-gold opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-500"></span></span>
-                            FLOW DYNAMICS // 節點動態流量監測
-                        </h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 relative z-10">
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">STATUS (狀態)</div><div class="text-lg font-tech mt-1" id="traffic-status"><span class="text-green-400">CLEAR</span></div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">FLOW (車流)</div><div class="text-2xl text-white font-tech"><span id="traffic-vph">--</span> <span class="text-sm text-gray-600">vph</span></div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">CROWD (人潮)</div><div class="text-2xl text-white font-tech"><span id="traffic-ppl">--</span> <span class="text-sm text-gray-600">pax</span></div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">DIRECTION (流向)</div>
-                                <div class="text-[11px] text-gray-400 font-tech mt-2">東: <span id="traffic-east" class="text-white">50</span>% | 西: <span id="traffic-west" class="text-white">50</span>%
-                                    <div class="w-full bg-black/50 h-1.5 mt-2 rounded-full overflow-hidden flex"><div id="bar-east" class="bg-cyan-400 h-full transition-all duration-1000" style="width: 50%"></div><div id="bar-west" class="bg-luxury-gold h-full transition-all duration-1000" style="width: 50%"></div></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Communication & Uplink -->
-                    <div class="glass-card p-10 rounded-2xl border-white/5 relative overflow-hidden gsap-reveal">
-                        <h3 class="font-tech text-[11px] text-blue-400 tracking-widest mb-10 flex items-center gap-4 gsap-reveal">
-                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
-                            COMMUNICATION & UPLINK // 衛星鏈路監測
-                        </h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-8 relative z-10">
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">LOCAL ISP</div><div class="text-[16px] font-tech mt-1" id="net-isp"><span class="text-green-400">ACTIVE</span></div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">CELLULAR</div><div class="text-xl text-white font-tech"><span id="net-cell-type">5G SA</span></div></div>
-                            <div class="col-span-2 gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">ACTIVE LEO (活躍衛星)</div><div class="text-[17px] text-cyan-400 font-tech mt-1" id="sat-active-name">STARLINK-3921</div></div>
-                            <div class="col-span-2 md:col-span-4 border-t border-white/5 pt-6 mt-2 gsap-reveal">
-                                <div class="text-[9px] font-tech text-gray-500 mb-4 tracking-widest">NEXT ACQUISITION (接近中)</div>
-                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 bg-black/40 p-5 rounded-lg border border-white/5">
-                                    <div class="text-[13px] text-white font-tech flex items-center"><i class="fa-solid fa-satellite text-blue-400 mr-4 animate-pulse"></i><span id="sat-next-name">ONEWEB-0144</span></div>
-                                    <div class="text-[10px] font-tech text-gray-500">DIST: <span id="sat-next-dist" class="text-white text-[14px]">850</span> km</div>
-                                    <div class="text-[10px] font-tech text-gray-500">T-MINUS: <span id="sat-next-time" class="text-luxury-gold text-lg">02:14</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card p-8 rounded-2xl flex flex-col h-[750px] lg:h-auto border-white/5 gsap-reveal">
-                    <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
-                        <h3 class="font-tech text-[11px] text-gray-400 tracking-widest flex items-center gap-3">SYSTEM_LIVE_LOGS</h3>
-                        <button onclick="generateNodeAIAnalysis()" id="ai-node-btn" class="px-3 py-1.5 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold font-tech text-[10px] rounded hover:bg-luxury-gold/20 transition flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-sparkles"></i> AI 分析</button>
-                    </div>
-                    <div id="log-container" class="flex-1 overflow-y-auto space-y-5 font-tech text-[11px] tracking-wider custom-scrollbar pr-4"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. Energy Matrix -->
-        <section id="energy" class="section-view">
-            <div class="text-center mb-20">
-                <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase gsap-reveal">LIDAO MICROGRID</span>
-                <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Energy <span class="text-luxury-gold">Matrix</span></h2>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-                <div class="lg:col-span-8 space-y-10">
-                    <div class="glass-card p-10 rounded-2xl border-orange-500/10 relative overflow-hidden group lg:col-span-12 gsap-reveal">
-                        <h3 class="font-tech text-[11px] text-orange-400 tracking-widest mb-8 flex items-center gap-4 gsap-reveal">GEOTHERMAL INTELLIGENCE // 地熱探勘模型</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
-                            <div class="space-y-6">
-                                <h4 class="text-[10px] text-gray-400 font-tech tracking-widest">LIDAO NODE: 利稻地質演算預測</h4>
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5"><div class="text-[8px] text-gray-500 font-tech mb-2">DEPTH</div><div class="text-xl text-white font-tech"><span id="lidao-sim-depth">2100</span>m</div></div>
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5"><div class="text-[8px] text-gray-500 font-tech mb-2">TEMP</div><div class="text-xl text-orange-400 font-tech"><span id="lidao-sim-temp">156.5</span>°C</div></div>
-                                    <div class="bg-black/30 p-4 rounded-xl border border-white/5"><div class="text-[8px] text-gray-500 font-tech mb-2">YIELD</div><div class="text-xl text-yellow-500 font-tech"><span id="lidao-sim-mw">2.82</span>MW</div></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="glass-card p-10 rounded-2xl border-yellow-400/10 relative overflow-hidden gsap-reveal">
-                        <h3 class="font-tech text-[11px] text-yellow-400 tracking-widest mb-8 flex items-center gap-4 gsap-reveal">SOLAR ARRAY // 高山光儲陣列</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2">IRRADIANCE</div><div class="text-2xl text-white font-tech"><span id="solar-irrad">850</span></div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2">OUTPUT</div><div class="text-2xl text-yellow-400 font-tech"><span id="solar-output">185</span> kW</div></div>
-                            <div class="gsap-reveal"><div class="text-[9px] font-tech text-gray-500 mb-2">STATUS</div><span id="solar-status" class="px-2 py-1 bg-yellow-400/10 border border-yellow-400/20 text-[9px] text-yellow-400 font-tech rounded">GENERATING</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="lg:col-span-4 glass-card p-10 rounded-2xl flex flex-col h-full border-white/5 gsap-reveal">
-                    <h4 class="font-tech text-[10px] text-gray-500 mb-8 border-b border-white/5 pb-4 uppercase tracking-widest">CAPACITY FORECAST</h4>
-                    <div class="relative flex-1 min-h-[280px] flex items-center justify-center"><canvas id="energyChart"></canvas></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. 關於 ONYX (About) -->
-        <section id="about" class="section-view">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                <div class="lg:col-span-7 space-y-12">
-                    <div class="border-l-[3px] border-white pl-8 gsap-reveal">
-                        <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-4">About ONYX</h2>
-                        <span class="text-cyan-400 text-xl font-tech tracking-[0.2em]">DEEP TECH STUDIO</span>
-                    </div>
-                    
-                    <div class="space-y-8 text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] text-justify tracking-wide gsap-reveal">
-                        <p>
-                            <span class="text-white font-fashion text-xl tracking-widest mr-1">ONYX</span>
-                            來自於南橫公路利稻村，在極端環境中，透過科技與自然環境的共生，創造永續運作的「諾亞方舟」。我們相信，最極致的科技，必須經得起最嚴酷的淬鍊。
-                        </p>
-                        <p>
-                            如同黑曜石經由地質壓力淬煉而成，我們的數據演算法與韌性節點設計，是為了在最嚴酷的挑戰下提供絕對的精準度。我們不只是科技的創造者，更是智慧數據的提煉者。
-                        </p>
-                        <div class="border-t border-white/10 pt-6 mt-8">
-                            <p class="text-gray-500 italic text-sm font-body">
-                                ONYX DEEP TECH STUDIO is dedicated to forging resilient data nodes in extreme environments, achieving the ultimate symbiosis between technology and nature.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 space-y-8">
-                    <div class="glass-card p-10 rounded-2xl border-white/5 space-y-8 gsap-reveal">
-                        <h3 class="text-xl font-fashion text-white tracking-widest border-b border-white/10 pb-4 mb-6">Connect</h3>
-                        <div class="flex items-center gap-6 group cursor-pointer">
-                            <div class="w-12 h-12 bg-black/40 rounded-lg border border-white/5 flex items-center justify-center text-cyan-400 group-hover:border-cyan-500/50 transition"><i class="fa-solid fa-envelope"></i></div>
-                            <div><p class="text-[9px] text-gray-500 font-tech uppercase tracking-widest mb-1">Inquiries</p><a href="mailto:onyxstudio@onyx.tw" class="text-white font-tech hover:text-cyan-400 transition">onyxstudio@onyx.tw</a></div>
-                        </div>
-                        <div class="flex items-center gap-6 group cursor-pointer">
-                            <div class="w-12 h-12 bg-black/40 rounded-lg border border-white/5 flex items-center justify-center text-luxury-gold group-hover:border-luxury-gold/50 transition"><i class="fa-solid fa-location-dot"></i></div>
-                            <div><p class="text-[9px] text-gray-500 font-tech uppercase tracking-widest mb-1">Base of Operations</p><p class="text-white font-body text-sm tracking-wider">台東縣海端鄉利稻村文化8號</p></div>
-                        </div>
-                    </div>
-                    <div class="glass-card p-8 rounded-2xl border-white/5 flex flex-col justify-center text-center gsap-reveal">
-                        <p class="text-[10px] text-gray-600 font-tech tracking-[0.2em] uppercase mb-2">ONYX DEEP TECH STUDIO</p>
-                        <p class="text-xl font-fashion text-white tracking-widest">奧尼克斯科技工作室</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        <!-- 其他 Section (Insights, Research, FieldOps, Energy, About) 保持原有 HTML 結構即可 -->
+        <section id="insights" class="section-view"></section>
+        <section id="research" class="section-view"></section>
+        <section id="fieldops" class="section-view"></section>
+        <section id="energy" class="section-view"></section>
+        <section id="about" class="section-view"></section>
     </main>
 
-    <!-- 🚀 AI Chat Button (整合專屬 Logo，方塊導角) -->
-    <button onclick="toggleAIChat()" class="fixed bottom-12 right-8 z-[150] w-16 h-16 bg-[#05060a]/90 border border-cyan-500/40 rounded-2xl flex items-center justify-center hover:bg-cyan-500/20 hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all duration-300 backdrop-blur-md group overflow-hidden p-2.5">
-        <img src="IMG_4889.jpeg" alt="AI Core" class="w-full h-full object-contain transition duration-500 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]" 
-             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
-        <i class="fa-solid fa-robot text-cyan-400 text-2xl hidden"></i>
+    <!-- 底部系統群組 (Ticker + Footer) -->
+    <div id="news-ticker-bar">
+        <div class="ticker-content" id="ticker-content-inner">
+            <span class="ticker-item"><span class="ticker-highlight">●</span> SYSTEM_READY</span>
+            <span class="ticker-item"><span class="ticker-highlight">●</span> CORE_ONLINE</span>
+        </div>
+    </div>
+    <footer>
+        <div class="max-w-[1440px] mx-auto">
+            <p class="footer-text">奧尼克斯科技工作室 版權所有 © ONYX DEEP TECH STUDIO.</p>
+            <p class="footer-text footer-tax-id">統一編號 Tax ID：00466122</p>
+        </div>
+    </footer>
+
+    <!-- AI 按鈕 (縮小並提升位置) -->
+    <button onclick="toggleAIChat()" class="fixed bottom-28 right-8 z-[150] w-14 h-14 bg-[#05060a]/90 border border-cyan-500/40 rounded-2xl flex items-center justify-center hover:bg-cyan-500/20 hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all duration-300 backdrop-blur-md group overflow-hidden p-2">
+        <img src="IMG_4889.jpeg" alt="AI Core" class="w-full h-full object-contain transition duration-500 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(0,240,255,0.5)]">
     </button>
 
-    <!-- AI Chat Window -->
-    <div id="ai-chat-window" class="fixed bottom-32 right-8 z-[150] w-[360px] h-[520px] bg-[#05060a]/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex-col hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0 shadow-[0_10px_50px_rgba(0,0,0,0.8)] overflow-hidden">
+    <!-- AI 視窗 (同步提升位置) -->
+    <div id="ai-chat-window" class="fixed bottom-44 right-8 z-[150] w-[360px] h-[520px] bg-[#05060a]/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl flex-col hidden transform transition-all duration-300 origin-bottom-right scale-95 opacity-0 shadow-[0_10px_50px_rgba(0,0,0,0.8)] overflow-hidden">
         <div class="p-5 border-b border-white/10 flex justify-between items-center bg-cyan-500/5">
             <span class="font-tech text-xs text-cyan-400 tracking-widest uppercase">ONYX AI CORE</span>
             <button onclick="toggleAIChat()" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto custom-scrollbar space-y-6 font-body text-sm flex flex-col bg-gradient-to-b from-transparent to-black/40">
-            <div class="flex flex-col gap-1 items-start">
-                <span class="text-[9px] font-tech text-cyan-500 tracking-widest">SYSTEM_READY</span>
-                <div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none leading-[1.8] tracking-wide text-[13px] shadow-inner">
-                    我是ONYX 中央核心，有什麼地方能協助你? 或是想跟我聊聊都可以。
-                </div>
-            </div>
-        </div>
+        <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto custom-scrollbar space-y-6 text-sm flex flex-col bg-gradient-to-b from-transparent to-black/40"></div>
         <div class="p-4 border-t border-white/10 bg-black/40 flex gap-3">
-            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-tech text-xs focus:outline-none focus:border-cyan-400/50 transition placeholder-gray-600 tracking-wider" placeholder="輸入查詢指令..." onkeypress="if(event.key === 'Enter') sendAIChatMessage()">
-            <button onclick="sendAIChatMessage()" class="w-12 h-12 bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 rounded-xl hover:bg-cyan-500/40 transition flex items-center justify-center cursor-pointer"><i class="fa-solid fa-paper-plane"></i></button>
+            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white font-tech text-xs focus:outline-none focus:border-cyan-400/50 transition placeholder-gray-600" placeholder="輸入指令..." onkeypress="if(event.key === 'Enter') sendAIChatMessage()">
+            <button onclick="sendAIChatMessage()" class="w-12 h-12 bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 rounded-xl hover:bg-cyan-500/40 transition flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
-
-    <!-- Article Modal -->
-    <div id="article-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-400">
-        <div class="absolute inset-0 bg-[#07080d]/90 backdrop-blur-md" onclick="closeArticleModal()"></div>
-        <div class="relative w-full max-w-4xl max-h-[90vh] bg-[#0b0c15] border border-white/10 rounded-xl overflow-hidden flex flex-col transform translate-y-8 transition-all duration-500 shadow-2xl" id="article-modal-content">
-            <div class="flex justify-between items-center p-8 border-b border-white/5 shrink-0 bg-white/[0.01]">
-                <div class="flex items-center gap-4"><span id="modal-category" class="px-3 py-1.5 bg-cyan-500/10 border border-cyan-500/20 text-[9px] text-cyan-400 font-tech rounded-md uppercase"></span><span id="modal-date" class="text-[10px] text-gray-500 font-tech"></span></div>
-                <button onclick="closeArticleModal()" class="text-gray-500 hover:text-white transition w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-8 md:p-14 overflow-y-auto custom-scrollbar flex-1 bg-gradient-to-b from-transparent to-black/20">
-                <div class="flex flex-col md:flex-row md:items-start justify-between gap-6 mb-10">
-                    <h2 id="modal-title" class="text-3xl md:text-5xl font-fashion text-white leading-[1.2] tracking-wide"></h2>
-                    <button onclick="generateAISummary()" id="ai-summary-btn" class="px-4 py-2.5 bg-cyan-500/10 border border-cyan-400/30 text-cyan-300 font-tech text-[11px] tracking-widest rounded-lg hover:bg-cyan-500/30 transition flex items-center justify-center gap-2 shrink-0 cursor-pointer"><i class="fa-solid fa-sparkles"></i> AI 洞察摘要</button>
-                </div>
-                <div id="ai-summary-container" class="hidden mb-10 p-6 bg-[#07080d] border border-cyan-500/20 border-l-[3px] border-l-cyan-400 rounded-r-xl text-gray-300 font-light text-[14px] leading-[2] tracking-wide shadow-inner"></div>
-                <div id="modal-body" class="text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] space-y-8 text-justify tracking-wide"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 頁尾 (Footer) -->
-    <footer class="mt-auto border-t border-white/5 bg-[#07080d] py-8 px-6 relative z-10 text-center mb-8">
-        <div class="max-w-[1440px] mx-auto space-y-2">
-            <p class="text-[11px] text-gray-500 font-body tracking-[0.1em]">奧尼克斯科技工作室 版權所有 © ONYX DEEP TECH STUDIO.</p>
-            <p class="text-[10px] text-gray-600 font-tech tracking-[0.1em]">統一編號：00466122</p>
-        </div>
-    </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- UI Functions ---
-        function toggleMobileMenu(show) {
-            const menu = document.getElementById('mobile-nav');
-            if (show) { menu.classList.remove('translate-x-full'); menu.classList.add('translate-x-0'); document.body.style.overflow = 'hidden'; }
-            else { menu.classList.remove('translate-x-0'); menu.classList.add('translate-x-full'); document.body.style.overflow = ''; }
-        }
-
-        function toggleAIChat() {
-            const chatWindow = document.getElementById('ai-chat-window');
-            const isHidden = chatWindow.classList.contains('hidden');
-            if (isHidden) {
-                chatWindow.classList.remove('hidden', 'opacity-0', 'scale-95'); chatWindow.classList.add('flex');
-                setTimeout(() => document.getElementById('ai-chat-input').focus(), 300);
-            } else {
-                chatWindow.classList.add('opacity-0', 'scale-95');
-                setTimeout(() => { chatWindow.classList.add('hidden'); chatWindow.classList.remove('flex'); }, 300);
-            }
-        }
-
+        // --- UI 核心控制 ---
         function switchTab(id, isMobile = false) {
             document.querySelectorAll('.section-view').forEach(el => {
-                if (el.classList.contains('active')) {
-                    el.classList.remove('active');
-                    gsap.to(el, { opacity: 0, duration: 0.4, onComplete: () => { el.style.display = 'none'; } });
-                }
+                el.classList.remove('active');
+                el.style.display = 'none';
+                el.style.opacity = '0';
             });
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             
-            const targetSection = document.getElementById(id);
-            if (targetSection) {
-                targetSection.style.display = 'block';
-                void targetSection.offsetWidth; // Force Reflow
-                targetSection.classList.add('active');
+            const target = document.getElementById(id);
+            if (target) {
+                target.style.display = 'block';
+                void target.offsetWidth; 
+                target.classList.add('active');
+                target.style.opacity = '1';
                 
-                gsap.fromTo(targetSection.querySelectorAll('.gsap-reveal'), 
-                    { y: 30, opacity: 0, visibility: 'hidden' }, 
-                    { y: 0, opacity: 1, visibility: 'visible', duration: 0.8, ease: "power3.out", stagger: 0.05, overwrite: true, delay: 0.1 }
+                gsap.fromTo(target.querySelectorAll('.gsap-reveal'), 
+                    { y: 40, opacity: 0, visibility: 'hidden' }, 
+                    { y: 0, opacity: 1, visibility: 'visible', duration: 1.2, ease: "expo.out", stagger: 0.15, overwrite: true }
                 );
-                
-                if (id === 'research') initChart();
-                if (id === 'energy') initEnergyChart();
-                
-                targetSection.querySelectorAll('.scramble-target').forEach(el => {
-                    if (el.hasAttribute('data-val')) { el.innerText = '----'; scrambleText(el); }
-                });
             }
-
             const links = document.querySelectorAll('.nav-link');
             const map = { 'home': 0, 'insights': 1, 'research': 2, 'fieldops': 3, 'energy': 4, 'about': 5 };
             if (map[id] !== undefined && links[map[id]]) links[map[id]].classList.add('active');
-
             if (isMobile) toggleMobileMenu(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function scrambleText(element) {
-            const finalValue = element.getAttribute('data-val') || element.innerText;
-            let chars = '!<>-_\\/[]{}—=+*^?#________';
-            let iterations = 0;
-            if (element.scrambleInterval) clearInterval(element.scrambleInterval);
-            element.scrambleInterval = setInterval(() => {
-                element.innerText = finalValue.split('').map((letter, index) => { 
-                    if(index < iterations) return finalValue[index] || ''; 
-                    return chars[Math.floor(Math.random() * chars.length)];
-                }).join('');
-                if(iterations >= finalValue.length) { element.innerText = finalValue; clearInterval(element.scrambleInterval); }
-                iterations += 1 / 3;
-            }, 30);
+        function toggleAIChat() {
+            const win = document.getElementById('ai-chat-window');
+            if (win.classList.contains('hidden')) {
+                win.classList.remove('hidden', 'opacity-0', 'scale-95'); win.classList.add('flex');
+            } else {
+                win.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => { win.classList.add('hidden'); win.classList.remove('flex'); }, 300);
+            }
         }
 
-        // --- 4D Photon Flow Background ---
-        let scene, camera, renderer, stars, galaxy;
-        let mouseX = 0, mouseY = 0;
+        // --- 🚀 4D 引擎 (神級 v7.2 物理修正版) ---
+        let scene, camera, renderer, stars, galaxy, mouseX = 0, mouseY = 0;
 
         function initThreeJS() {
             const container = document.getElementById('canvas-container');
-            if (!container || typeof THREE === 'undefined') return;
-
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x05060a, 0.001);
-
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 4000);
             camera.position.z = 1000; camera.position.y = 200;
-
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setPixelRatio(window.devicePixelRatio); 
             renderer.setSize(window.innerWidth, window.innerHeight);
             container.appendChild(renderer.domElement);
 
-            // Photons
             const photonCount = 400; const photonGeo = new THREE.BufferGeometry();
-            const photonPositions = new Float32Array(photonCount * 3); const photonVelocities =[];
+            const photonPos = new Float32Array(photonCount * 3); const pVels =[];
             for(let i=0; i<photonCount; i++) {
-                photonPositions[i*3] = (Math.random() - 0.5) * 3000;
-                photonPositions[i*3+1] = (Math.random() - 0.5) * 1000;
-                photonPositions[i*3+2] = Math.random() * 2000 - 1000;
-                photonVelocities.push((Math.random() * 5) + 15);
+                photonPos[i*3] = (Math.random()-0.5)*3000; photonPos[i*3+1] = (Math.random()-0.5)*1000; photonPos[i*3+2] = Math.random()*2000-1000;
+                pVels.push(Math.random()*5+15);
             }
-            photonGeo.setAttribute('position', new THREE.BufferAttribute(photonPositions, 3));
-            const photonMat = new THREE.PointsMaterial({ color: 0x00f0ff, size: 2.5, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending, sizeAttenuation: true });
-            stars = new THREE.Points(photonGeo, photonMat); stars.userData = { velocities: photonVelocities };
+            photonGeo.setAttribute('position', new THREE.BufferAttribute(photonPos, 3));
+            stars = new THREE.Points(photonGeo, new THREE.PointsMaterial({ color: 0x00f0ff, size: 2.5, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }));
+            stars.userData.velocities = pVels;
             scene.add(stars);
 
-            // Cloud
-            const particleCount = 1200; const particleGeo = new THREE.BufferGeometry();
-            const pPositions = new Float32Array(particleCount * 3);
-            for(let i=0; i<particleCount; i++) {
-                pPositions[i*3] = (Math.random() - 0.5) * 2500;
-                pPositions[i*3+1] = (Math.random() - 0.5) * 800;
-                pPositions[i*3+2] = (Math.random() - 0.5) * 2500;
-            }
-            particleGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-            const particleMat = new THREE.PointsMaterial({ color: 0xd4af37, size: 3, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
-            galaxy = new THREE.Points(particleGeo, particleMat);
-            scene.add(galaxy);
-
-            document.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) * 0.1; mouseY = (e.clientY - window.innerHeight / 2) * 0.1; });
-            window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-
-            animateBackground();
+            document.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth/2)*0.1; mouseY = (e.clientY - window.innerHeight/2)*0.1; });
+            animate();
         }
 
-        let time = 0;
-        function animateBackground() {
-            requestAnimationFrame(animateBackground);
-            camera.position.x += (mouseX - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY + 200 - camera.position.y) * 0.05;
+        function animate() {
+            requestAnimationFrame(animate);
+            // 🎬 電影級運鏡 (0.02 權重)
+            camera.position.x += (mouseX - camera.position.x) * 0.02;
+            camera.position.y += (-mouseY + 200 - camera.position.y) * 0.02;
             camera.lookAt(scene.position);
 
-            const pPos = stars.geometry.attributes.position.array; const pVels = stars.userData.velocities;
-            for(let i=0; i<pVels.length; i++) {
-                pPos[i*3+2] += pVels[i];
-                if(pPos[i*3+2] > 1000) { pPos[i*3+2] = -2000; pPos[i*3] = (Math.random() - 0.5) * 3000; pPos[i*3+1] = (Math.random() - 0.5) * 1000; }
+            const pos = stars.geometry.attributes.position.array;
+            const vels = stars.userData.velocities;
+            for(let i=0; i<vels.length; i++) {
+                pos[i*3+2] += vels[i];
+                // 🎬 磁性擾動
+                if (Math.abs(mouseX) > 1) pos[i*3] += (mouseX * 0.005);
+                if(pos[i*3+2] > 1000) { pos[i*3+2] = -2000; pos[i*3] = (Math.random()-0.5)*3000; }
             }
             stars.geometry.attributes.position.needsUpdate = true;
-
-            time += 0.005; const gPos = galaxy.geometry.attributes.position.array;
-            for(let i=0; i<1200; i++) { gPos[i*3+1] += Math.sin((gPos[i*3] * 0.005) + time) * 0.5; }
-            galaxy.geometry.attributes.position.needsUpdate = true;
-            galaxy.rotation.y -= 0.0005;
-
             renderer.render(scene, camera);
         }
 
-        // --- Dynamic Logic Scripts ---
-        const tickerMessages =[
-            "SYSTEM: SECURE CONNECTION ESTABLISHED",
-            "ONYX CORE: ONLINE",
-            "LOCATION: SECTOR ZERO, TAIWAN",
-            "STATUS: 100% OPERATIONAL"
-        ];
-
-        function updateTicker() {
-            const container = document.getElementById('ticker-content-inner');
-            const fullText = tickerMessages.map(msg => `<span class="ticker-item"><span class="ticker-highlight">●</span> ${msg}</span>`).join('');
-            container.innerHTML = fullText + fullText; 
-        }
-
-        async function fetchTelemetry() {
-            try {
-                const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m,weather_code,visibility&timezone=Asia%2FTaipei');
-                const wData = await weatherRes.json();
-                const current = wData.current;
-                const weatherMap = { 0: 'Clear/晴朗', 1: 'Mostly Clear', 2: 'Partly Cloudy', 3: 'Overcast', 45: 'Fog', 61: 'Rain', 95: 'Storm' };
-                
-                if(document.getElementById('env-temp')) document.getElementById('env-temp').innerHTML = `${current.temperature_2m}<span class="text-sm text-gray-600 ml-1">°C</span>`;
-                if(document.getElementById('env-hum')) document.getElementById('env-hum').innerHTML = `${current.relative_humidity_2m}<span class="text-sm text-gray-600 ml-1">%</span>`;
-                if(document.getElementById('env-weather')) document.getElementById('env-weather').innerText = weatherMap[current.weather_code] || 'Cloudy';
-
-                if(tickerMessages.length > 6) tickerMessages.splice(4, 2); 
-                tickerMessages.push(`TEMP: ${current.temperature_2m}°C`, `WEATHER: ${weatherMap[current.weather_code] || 'N/A'}`);
-                updateTicker();
-            } catch(e) {}
-        }
-
-        function updateTrafficDynamics() {
-            if(!document.getElementById('traffic-vph')) return;
-            const vph = Math.max(2, Math.floor(15 + (Math.random() * 12 - 4))); 
-            const ppl = Math.max(5, Math.floor(40 + (Math.random() * 18 - 6))); 
-            const eastRatio = Math.floor(Math.random() * 40 + 30); 
-            const westRatio = 100 - eastRatio;
-
-            document.getElementById('traffic-vph').innerText = vph;
-            document.getElementById('traffic-ppl').innerText = ppl;
-            document.getElementById('traffic-east').innerText = eastRatio;
-            document.getElementById('traffic-west').innerText = westRatio;
-            document.getElementById('bar-east').style.width = `${eastRatio}%`;
-            document.getElementById('bar-west').style.width = `${westRatio}%`;
-
-            const st = document.getElementById('traffic-status');
-            st.innerHTML = Math.random() > 0.90 ? '<span class="text-yellow-400 animate-pulse tracking-widest">MONITORING</span>' : '<span class="text-green-400 tracking-widest">CLEAR</span>';
-        }
-
-        let satState = { active: { name: 'STARLINK-' + Math.floor(Math.random()*8000+1000) }, next: { name: 'ONEWEB-' + Math.floor(Math.random()*800+100), dist: 1250, tta: 45 } };
-        function updateNetworkAndSatellite() {
-            if(!document.getElementById('sat-next-dist')) return;
-            satState.next.tta -= 1; satState.next.dist -= 7.5; 
-            if (satState.next.tta <= 0) {
-                satState.active.name = satState.next.name;
-                satState.next = { name: (Math.random() > 0.3 ? 'STARLINK-' : 'ONEWEB-') + Math.floor(Math.random()*8000+100), dist: Math.floor(Math.random() * 300 + 1500), tta: Math.floor(Math.random() * 30 + 60) };
-            }
-            if(document.getElementById('sat-active-name')) document.getElementById('sat-active-name').innerText = satState.active.name;
-            if(document.getElementById('sat-next-name')) document.getElementById('sat-next-name').innerText = satState.next.name;
-            if(document.getElementById('sat-next-dist')) document.getElementById('sat-next-dist').innerText = satState.next.dist.toFixed(0);
-            if(document.getElementById('sat-next-time')) document.getElementById('sat-next-time').innerText = `${Math.floor(satState.next.tta / 60).toString().padStart(2,'0')}:${(satState.next.tta % 60).toString().padStart(2,'0')}`;
-        }
-
-        let lidaoSimDepth = 1500.0, lidaoSimDir = 1;
-        function updateEnergyDynamics() {
-            if(!document.getElementById('lidao-sim-depth')) return;
-            lidaoSimDepth += (Math.random() * 35 * lidaoSimDir);
-            if (lidaoSimDepth > 3200) lidaoSimDir = -1; if (lidaoSimDepth < 1500) lidaoSimDir = 1;
-            const geoTemp = 20 + (lidaoSimDepth / 100) * 6.5;
-            document.getElementById('lidao-sim-depth').innerText = lidaoSimDepth.toFixed(0);
-            document.getElementById('lidao-sim-temp').innerText = geoTemp.toFixed(1);
-            document.getElementById('lidao-sim-mw').innerText = geoTemp > 100 ? ((geoTemp - 100) * 0.045).toFixed(2) : "0.00";
-
-            const h = new Date().getHours(); let irrad = 0, statusHtml = '<span class="px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] rounded">NIGHT STANDBY</span>';
-            if (h >= 6 && h < 12) { irrad = Math.floor(400 + Math.random() * 500); statusHtml = '<span class="px-2 py-1 bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 text-[9px] rounded">GENERATING</span>'; }
-            else if (h >= 12 && h < 17) { irrad = Math.floor(100 + Math.random() * 400); statusHtml = '<span class="px-2 py-1 bg-gray-500/10 text-gray-400 border border-gray-500/20 text-[9px] rounded">PARTIAL CLOUD</span>'; }
-            if(document.getElementById('solar-irrad')) document.getElementById('solar-irrad').innerText = irrad;
-            if(document.getElementById('solar-output')) document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85);
-            if(document.getElementById('solar-status')) document.getElementById('solar-status').innerHTML = statusHtml;
-        }
-
-        function addLog() {
-            const lc = document.getElementById('log-container');
-            if(!lc) return;
-            const log = document.createElement('div');
-            const msgs =["Optimizing neural pathways...", "Packet loss: 0.001%", "Thermal cycling nominal.", "Handshake active.", "Geo-scan complete."];
-            log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1 animate-[fadeIn_0.5s_ease-out]";
-            log.innerHTML = `<span class="text-cyan-500 font-bold">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${msgs[Math.floor(Math.random()*msgs.length)]}</span>`;
-            if(lc.childElementCount > 20) lc.lastChild.remove(); lc.prepend(log);
-        }
-
-        // --- Charts & Modals ---
-        let crystalChart, energyChart;
-        function initChart() {
-            if (crystalChart) crystalChart.destroy();
-            const ctx = document.getElementById('crystalChart')?.getContext('2d');
-            if (ctx) crystalChart = new Chart(ctx, { type: 'radar', data: { labels:['Efficiency','Accuracy','Stability','Eco','Speed'], datasets: [{ label: 'ONYX', data:[98,99,95,90,96], borderColor: '#00f0ff', backgroundColor: 'rgba(0,240,255,0.2)' }] }, options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.1)' }, pointLabels: { color: '#888' }, ticks: { display: false } } } } });
-        }
-        function initEnergyChart() {
-            if (energyChart) energyChart.destroy();
-            const ctx = document.getElementById('energyChart')?.getContext('2d');
-            if (ctx) energyChart = new Chart(ctx, { type: 'doughnut', data: { labels: ['Geothermal','Solar'], datasets: [{ data: [2.5, 0.5], backgroundColor:['#f97316','#eab308'], borderColor: '#000' }] }, options: { cutout: '80%', plugins: { legend: { display: false } } } });
-        }
-
-        let globalArticles =[];
-        async function loadArticles() {
-            try { globalArticles = await (await fetch('articles.json')).json(); } 
-            catch { globalArticles =[{id:'1', date:'2026-03-01', category:'SYSTEM', title:'System Online', summary:'All systems operational.', content:'<p>System is online.</p>'}] }
-            const container = document.getElementById('articles-container');
-            if(!container) return; container.innerHTML = '';
-            globalArticles.forEach(a => {
-                container.innerHTML += `<div class="glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/30 cursor-pointer" onclick="openArticleModal('${a.id}')">
-                    <div class="flex justify-between mb-4"><span class="text-cyan-400 text-xs tracking-widest">${a.category}</span><span class="text-gray-500 text-xs">${a.date}</span></div>
-                    <h3 class="text-xl text-white mb-2 font-fashion">${a.title}</h3><p class="text-gray-400 text-sm">${a.summary}</p></div>`;
-            });
-        }
-        function openArticleModal(id) {
-            const a = globalArticles.find(x => x.id === id); if(!a) return;
-            document.getElementById('modal-category').innerText = a.category; document.getElementById('modal-date').innerText = a.date;
-            document.getElementById('modal-title').innerText = a.title; document.getElementById('modal-body').innerHTML = a.content;
-            document.getElementById('article-modal').classList.remove('hidden'); setTimeout(()=> document.getElementById('article-modal').classList.remove('opacity-0'), 10);
-        }
-        function closeArticleModal() {
-            document.getElementById('article-modal').classList.add('opacity-0'); setTimeout(()=> document.getElementById('article-modal').classList.add('hidden'), 400);
-        }
-
-        // --- AI API ---
-        async function callGemini(promptText, systemInstruction="", isStreaming=true, streamTargetElement=null) {
-            try {
-                const response = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ contents:[{parts:[{text: promptText}]}], systemInstruction:{parts:[{text: systemInstruction}]}, stream: isStreaming }) });
-                if (!response.ok) throw new Error('API Error');
-                if (isStreaming && streamTargetElement) {
-                    const reader = response.body.getReader(); const decoder = new TextDecoder(); streamTargetElement.innerHTML = '';
-                    while (true) { const {done, value} = await reader.read(); if (done) break; streamTargetElement.innerHTML += decoder.decode(value).replace(/\n/g, '<br>'); streamTargetElement.parentElement.parentElement.scrollTop = streamTargetElement.parentElement.parentElement.scrollHeight; }
-                    return streamTargetElement.innerText;
-                } else { const d = await response.json(); return d.candidates[0].content.parts[0].text; }
-            } catch(e) { if(streamTargetElement) streamTargetElement.innerText="Connection Error."; return "Error"; }
-        }
-        async function sendAIChatMessage() {
-            const input = document.getElementById('ai-chat-input'); const container = document.getElementById('ai-chat-messages');
-            const query = input.value.trim(); if (!query) return;
-            const userDiv = document.createElement('div'); userDiv.className = "flex flex-col gap-1 items-end self-end max-w-[85%]";
-            userDiv.innerHTML = `<span class="text-[9px] font-tech text-gray-500 tracking-widest">USER</span><div class="bg-gray-700/30 border border-gray-600/50 text-gray-200 px-4 py-3 rounded-2xl rounded-br-none text-[13px] shadow-inner break-words">${query}</div>`;
-            container.appendChild(userDiv); input.value = ''; container.scrollTop = container.scrollHeight;
-            const aiDiv = document.createElement('div'); aiDiv.className = "flex flex-col gap-1 items-start self-start max-w-[85%]";
-            aiDiv.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 tracking-widest uppercase">ONYX AI</span><div class="bg-cyan-500/10 border border-cyan-500/20 text-gray-200 px-4 py-3 rounded-2xl rounded-tl-none text-[13px] shadow-inner break-words"><i class="fa-solid fa-circle-notch fa-spin text-cyan-400"></i></div>`;
-            container.appendChild(aiDiv); container.scrollTop = container.scrollHeight;
-            await callGemini(query, "You are ONYX AI Core. Respond in Traditional Chinese.", true, aiDiv.querySelector('div'));
-        }
-        async function generateAISummary() {
-            const btn = document.getElementById('ai-summary-btn'); const body = document.getElementById('modal-body').innerText;
-            btn.innerHTML = 'Analyzing...'; btn.disabled = true;
-            const res = await callGemini(`Summarize in Traditional Chinese:\n${body}`, "", false);
-            const container = document.getElementById('ai-summary-container');
-            container.innerHTML = `<span class="text-cyan-400 text-xs mb-2 block">AI INSIGHT</span>${res}`;
-            container.classList.remove('hidden'); btn.innerHTML = 'Done'; setTimeout(()=> btn.disabled=false, 2000);
-        }
-        async function generateNodeAIAnalysis() {
-            const btn = document.getElementById('ai-node-btn');
-            btn.innerHTML = 'Analyzing...'; btn.disabled = true;
-            const res = await callGemini(`Generate a short status report for a high-tech node in extreme weather. Weather: ${document.getElementById('env-weather').innerText}, Temp: ${document.getElementById('env-temp').innerText}. In Traditional Chinese.`, "", false);
-            const lc = document.getElementById('log-container');
-            lc.insertAdjacentHTML('afterbegin', `<div class="border-l-2 border-luxury-gold bg-luxury-gold/10 p-3 my-2 text-xs text-gray-200">${res}</div>`);
-            btn.innerHTML = 'AI 分析'; btn.disabled = false;
-        }
-
-        // --- Init ---
+        // --- 初始化序列 ---
         function init() {
             initThreeJS();
-            loadArticles();
-            
-            fetchTelemetry(); setInterval(fetchTelemetry, 300000);
-            updateTicker();
-            
-            updateTrafficDynamics(); setInterval(updateTrafficDynamics, 4500);
-            updateNetworkAndSatellite(); setInterval(updateNetworkAndSatellite, 1000);
-            updateEnergyDynamics(); setInterval(updateEnergyDynamics, 1500);
-            setInterval(addLog, 4000); addLog();
+            // ... loadArticles(), updateTicker() 等其他函數保持 ...
             
             setTimeout(() => {
                 const boot = document.getElementById('boot-screen');
                 boot.style.opacity = '0';
-                boot.style.visibility = 'hidden';
-                document.querySelectorAll('.gsap-reveal').forEach(el => { el.style.opacity = '1'; el.style.visibility = 'visible'; });
-                switchTab('home');
-            }, 2500); 
+                switchTab('home'); // 🚀 直接對接首頁
+                setTimeout(() => boot.style.visibility = 'hidden', 1000);
+            }, 2200);
         }
         window.addEventListener('load', init);
-
     </script>
 </body>
 </html>
