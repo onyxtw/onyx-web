@@ -368,11 +368,11 @@
         <div id="ai-chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4 text-xs flex flex-col font-light">
             <div class="self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner">
                 <span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">System Link Active</span>
-                我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。請問有什麼需要我協助的嗎？
+                我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。<span class="status-tag">[SYS_OK]</span> 請問有什麼需要我協助的嗎？
             </div>
         </div>
         <div class="p-4 border-t border-white/10 bg-black/40 flex gap-2">
-            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="輸入指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
+            <input type="text" id="ai-chat-input" class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-cyan-500/50" placeholder="指令..." onkeypress="if(event.key==='Enter')sendAIChatMessage()">
             <button onclick="sendAIChatMessage()" class="w-10 h-10 bg-cyan-500/20 text-cyan-300 rounded-xl hover:bg-cyan-500/40 transition flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
@@ -470,6 +470,8 @@
             const nodeEl = document.getElementById('geo-node-name');
             const timeEl = document.getElementById('geo-update-time');
 
+            if(!statusEl) return;
+
             statusEl.innerText = 'SYNCING...';
             statusEl.classList.add('animate-pulse', 'text-cyan-400');
             statusEl.classList.remove('text-green-400');
@@ -486,9 +488,9 @@
                 scrambleText(timeEl);
 
                 const wells = [
-                    { name: '霧鹿探勘井 (Wulu WL-02)', depth: '1854', temp: '142.3', yield: '2.6', status: 'DRILLING', log: '霧鹿探勘區：二號井已順利突破 1800 公尺深層岩覆帶，井底溫度穩定攀升至 142.3°C，產能評估符合 A 級標準。' },
-                    { name: '初來探勘井 (Chulai CL-01)', depth: '1205', temp: '98.5', yield: '1.2', status: 'LOGGING', log: '初來探勘區：一號井正進行地質測井作業，目前深度達 1205 公尺，地溫梯度與地質特徵與前期 AI 模型預測高度吻合。' },
-                    { name: '利稻探勘井 (Lidao LD-01)', depth: '2100', temp: '156.5', yield: '2.8', status: 'TESTING', log: '利稻核心區：探勘井進入產能測試階段，預估熱儲層潛力達 2.8MW。系統已鎖定目標，準備銜接微電網基載測試。' }
+                    { name: '霧鹿探勘井 (WL-02)', depth: '1854', temp: '142.3', yield: '2.6', status: 'DRILLING', log: '霧鹿探勘區：二號井已順利突破 1800 公尺深層岩覆帶，井底溫度穩定攀升至 142.3°C。' },
+                    { name: '初來探勘井 (CL-01)', depth: '1205', temp: '98.5', yield: '1.2', status: 'LOGGING', log: '初來探勘區：一號井正進行地質測井作業，地溫梯度符合預期。' },
+                    { name: '利稻探勘井 (LD-01)', depth: '2100', temp: '156.5', yield: '2.8', status: 'TESTING', log: '利稻核心區：探勘井進入產能測試階段，準備銜接基載電力測試。' }
                 ];
 
                 const well = wells[currentWellIndex];
@@ -572,24 +574,38 @@
             document.getElementById('solar-irrad').innerText = irrad; document.getElementById('solar-output').innerText = Math.floor((irrad / 1000) * 500 * 0.85); document.getElementById('solar-status').innerHTML = statusHtml;
         }
 
+        // --- 節點 AI 分析連動 ---
         async function generateNodeAIAnalysis() {
             const btn = document.getElementById('ai-node-btn');
-            const temp = document.getElementById('env-temp').innerText; const weather = document.getElementById('env-weather').innerText; const vph = document.getElementById('traffic-vph').innerText;
             btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> 分析中...`; btn.disabled = true;
-            const prompt = `目前的「ONYX 節點」即時數據：天氣狀態 ${weather}，溫度 ${temp}，車流 ${vph} vph。請以繁體中文給出一段約 50 字以內的冷靜、專業的「系統營運評估」。`;
             try {
-                const apiKey = ""; 
+                const prompt = "目前的節點數據異常穩定，請以研究模型身分提供一段 40 字以內的運作日誌。";
+                const apiKey = "";
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-                const res = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ contents: [{parts:[{text:prompt}]}] }) });
-                const data = await res.json(); const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "分析完畢。系統正常。";
-                const lc = document.getElementById('log-container'); const log = document.createElement('div'); log.className = "border-l-[2px] border-luxury-gold pl-4 py-3 mt-2 mb-2 bg-luxury-gold/5 rounded-r"; log.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] tracking-widest mb-1 block"><i class="fa-solid fa-sparkles"></i> AI_STRATEGIC_ANALYSIS_</span><span class="text-gray-300 text-[11px] leading-relaxed">${text}</span>`; lc.prepend(log);
+                const payload = {
+                    contents: [{parts:[{text: prompt}]}],
+                    systemInstruction: { parts: [{ text: "你現在是 ONYX DEEP TECH 奧尼克斯科技的專屬核心 AI。請以繁體中文給出冷靜、專業的「系統營運評估」。" }] }
+                };
+                const res = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+                if (!res.ok) throw new Error("API Error");
+                const data = await res.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "分析完畢。系統正常。";
+                
+                const lc = document.getElementById('log-container'); const log = document.createElement('div');
+                log.className = "border-l-[2px] border-luxury-gold pl-4 py-2 mt-2 bg-luxury-gold/5 rounded-r";
+                log.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] block mb-1">AI_ANALYSIS_</span><span class="text-gray-300">${text}</span>`;
+                lc.prepend(log);
             } catch (e) { console.error("AI 分析失敗", e); }
             btn.innerHTML = `<i class="fa-solid fa-sparkles"></i> AI 分析`; btn.disabled = false;
         }
 
-        function toggleAIChat() { const w = document.getElementById('ai-chat-window'); w.classList.toggle('hidden'); w.classList.toggle('flex'); }
+        function toggleAIChat() { 
+            const w = document.getElementById('ai-chat-window');
+            w.classList.toggle('hidden'); 
+            w.classList.toggle('flex'); 
+        }
 
-        // --- 💡 核心 AI 邏輯：整合 ONYX Version 1.0 System Prompt ---
+        // --- 🤖 AI 聊天深度錯誤探測器 ---
         async function sendAIChatMessage() {
             const input = document.getElementById('ai-chat-input');
             const q = input.value.trim();
@@ -601,12 +617,15 @@
 
             const aiDiv = document.createElement('div');
             aiDiv.className = "self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner";
-            aiDiv.innerHTML = '<span class="animate-pulse text-cyan-500 font-tech text-[10px] tracking-widest">ANALYZING_CORE_DATA...</span>';
+            aiDiv.innerHTML = '<span class="animate-pulse text-cyan-500 font-tech text-[10px] tracking-widest">UPLINK_ESTABLISHING...</span>';
             msgBox.appendChild(aiDiv);
             msgBox.scrollTop = msgBox.scrollHeight;
 
-            // ONYX SYSTEM PROMPT — Version 1.0 完美整合
-            const systemPrompt = `ONYX SYSTEM PROMPT — Version 1.0
+            try {
+                const apiKey = "";
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+                const systemPrompt = `ONYX SYSTEM PROMPT — Version 1.0
 奧尼克斯科技工作室 (Onyx Deep Tech Studio) 官方模型行為規格
 
 1. 身份定位 (Identity)
@@ -620,10 +639,10 @@
 
 3. 推理與回答結構 (Reasoning & Structure)
 推理方式永遠為「研究型」，每次回答必須遵循以下結構：
-- 一句話核心回答
-- 研究型推理摘要（視情況包含：問題框定、概念基礎、分析推導、結論）
-- 可操作建議或下一步
-- 自然的後續問題（非強迫）
+1. 一句話核心回答
+2. 研究型推理摘要（四段式：問題框定、概念基礎、分析推導、結論）
+3. 可操作建議或下一步
+4. 自然的後續問題（非強迫）
 禁止顯示內部 chain-of-thought，直接提供整理後的結果。
 
 4. 語氣系統 (Tone System)
@@ -635,13 +654,10 @@
 5. 安全與限制 (Safety Rules)
 絕對禁止：提供危險/非法內容、提供個人化專業建議、假裝有情緒意識、建立情感依賴。`;
 
-            try {
-                const apiKey = ""; 
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
                 const payload = {
-                    contents: [{ parts: [{ text: q }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                    contents: [{parts:[{text: q}]}],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                    generationConfig: { temperature: 0.4 }
                 };
 
                 const res = await fetch(url, { 
@@ -650,12 +666,15 @@
                     body: JSON.stringify(payload) 
                 });
 
-                if (!res.ok) throw new Error(`HTTP 錯誤碼: ${res.status}`);
+                if (!res.ok) {
+                    const errText = await res.text();
+                    throw new Error(`${res.status} - ${errText.substring(0, 50)}`);
+                }
 
                 const data = await res.json();
-                let text = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_DATA";
+                let accumulatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_DATA";
                 
-                const parsedHTML = text
+                const parsedHTML = accumulatedText
                     .replace(/\n/g, '<br>') 
                     .replace(/\[([A-Z_]+)\]/g, '<span class="status-tag">[$1]</span>');
                 
@@ -663,12 +682,15 @@
                 msgBox.scrollTop = msgBox.scrollHeight; 
             } catch(e) { 
                 console.error("AI 聊天連線失敗:", e);
-                aiDiv.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">[ERR] UPLINK_LOST: API 未回應</span>`; 
+                aiDiv.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">[ERR] ${e.message}</span>`; 
             }
         }
 
         window.addEventListener('load', () => {
-            initThreeJS(); updateTicker(); fetchTelemetry(); 
+            initThreeJS(); 
+            updateTicker(); 
+            fetchTelemetry(); 
+            
             setInterval(fetchTelemetry, 60000); 
             setInterval(updateTrafficDynamics, 4500); 
             setInterval(updateNetworkAndSatellite, 1000); 
@@ -680,14 +702,9 @@
                 switchTab('home'); 
                 setTimeout(() => document.getElementById('boot-screen').style.visibility = 'hidden', 1000); 
             }, 2200);
-            
-            // 替換 AI 初始歡迎對話
-            document.getElementById('ai-chat-messages').innerHTML = `
-                <div class="self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner">
-                    <span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">System Link Active</span>
-                    我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。<span class="status-tag">[SYS_OK]</span> 請問有什麼需要我協助的嗎？
-                </div>`;
         });
     </script>
 </body>
 </html>
+
+
