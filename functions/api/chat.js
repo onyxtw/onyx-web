@@ -48,9 +48,9 @@ export async function onRequestPost({ request, env }) {
       generationConfig: { temperature: 0.4 }
     };
 
-    // 🚀 使用全球佈署最廣泛、最不可能出錯的 gemini-1.5-flash
+    // 🚀 使用全球佈署最廣泛、最不可能出錯的 gemini-31-pro-preview
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:streamGenerateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:streamGenerateContent?key=${API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
