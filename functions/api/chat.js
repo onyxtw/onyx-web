@@ -1,3 +1,246 @@
-"/* ==================================================================\n * ［第一區：模型API環境配置與金鑰設定］\n * 若需要更換連接到其他的 API Endpoint 或是模型庫位置，直接於此操作設定。\n * ================================================================== */\nconst AI_SETTINGS = {\n    // <--- 【設定模型 API 位置】 (原本為 '/api/chat')\n    // 若填寫自有後端位置 (例如：/api/chat) 可以直接使用原本的形式發包，不需要其他認證\n    // 若需相容直達 Google 或其他有模型選擇的站台服務，可提供帶尾椎服務網址，或依照下方規則自動辨識生成 url \n    API_URL: \"/api/chat\",                    \n    \n    // <--- 【設定模型名稱】 (填寫特定的基礎架構與模型版本代碼如：gemini-1.5-flash)\n    MODEL_NAME: \"\",                          \n\n    // <--- 【設定您的 API 金鑰】\n    API_KEY: \"\",                             \n};\n\n\n/* ==================================================================\n * ［第二區：對話預設開頭文字、系統設定與提示指令］\n * 所有的情境初始裝載或待機等互動回饋預設皆抽取統一在此維護。\n * ================================================================== */\nconst AI_CONTENT = {\n    // 模型人設與整體回應約束背景提示\n    SYSTEM_PROMPT: \"你是一位專屬 ONYX DEEP TECH 的 AI 協作研究模型，專注於提供冷靜、結構化、可操作的分析，回答請一律使用流暢的繁體中文。\",\n    \n    // 開啟聊天畫面會主動掛載歡迎的第一句話語 (與介面樣式 tag HTML 標籤)\n    WELCOME_MESSAGE: \"我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。<span class=\\\"status-tag\\\">[SYS_OK]</span> 請問有什麼需要我協助的嗎？\",\n    WELCOME_SUBTITLE: \"System Link Active\",\n    \n    // 連線發布時之提示以及伺服回傳等待時的訊息\n    UPLINK_STATUS: \"UPLINK_ESTABLISHING...\",\n    RESPONSE_STATUS: \"Response Signal\",\n\n    // API連線失敗取代防錯備用內容 \n    ERROR_TEXT: \"[ERR] 連線中斷或回應解析失敗，無法從中獲取最新資料。\",\n\n    // 針對節點模塊之快速發問行為整合定義詞彙指令 \n    NODE_ANALYSIS_PROMPT_PREFIX: \"目前的「ONYX 節點」即時數據：天氣狀態 \",\n    NODE_ANALYSIS_PROMPT_SUFFIX: \"。請以繁體中文給出一段約 50 字以內的冷靜、專業的「系統營運評估」。\",\n    NODE_ANALYSING_TEXT: \"<i class=\\\"fa-solid fa-circle-notch fa-spin\\\"></i> 分析中...\",\n    NODE_IDLE_TEXT: \"<i class=\\\"fa-solid fa-sparkles\\\"></i> AI 分析\"\n};\n\n\n/* ==================================================================\n * ［第三區：網頁對象之 DOM 選取器與元件掛載運作邏輯初始化設定］\n * ================================================================== */\ndocument.addEventListener(\"DOMContentLoaded\", () => {\n    // 選取與 AI 有關的所有原定互動網頁對應 DOM\n    const chatWindow   = document.getElementById(\"ai-chat-window\");\n    const toggleBtn    = document.getElementById(\"ai-chat-trigger-btn\");\n    const closeBtn     = document.getElementById(\"ai-chat-close-btn\");\n    const sendBtn      = document.getElementById(\"ai-chat-send-btn\");\n    const chatInput    = document.getElementById(\"ai-chat-input\");\n    const msgContainer = document.getElementById(\"ai-chat-messages\");\n    const nodeAiBtn    = document.getElementById(\"ai-node-btn\");\n\n    // 全局參數輔助用來檢核視窗是不是初次展開以加入打招呼氣泡框用\n    let hasInitializedChat = false;\n\n    // 事件綁定：介面展開/收起邏輯掛載\n    if (toggleBtn) toggleBtn.addEventListener(\"click\", toggleChatVisibility);\n    if (closeBtn) closeBtn.addEventListener(\"click\", toggleChatVisibility);\n\n    // 事件綁定：底層問候聊天室之問與答傳送觸發\n    if (sendBtn) sendBtn.addEventListener(\"click\", submitChatMessage);\n    if (chatInput) {\n        chatInput.addEventListener(\"keypress\", (e) => {\n            if (e.key === 'Enter') submitChatMessage();\n        });\n    }\n\n    // 事件綁定：啟動特例 AI 計算觸發元件（實施對網頁內容做快速截斷分析操作功能）\n    if (nodeAiBtn) nodeAiBtn.addEventListener(\"click\", submitNodeEnvironmentAnalysis);\n\n\n    /* ==================================================================\n     * ［第四區：畫面視覺邏輯對應之應用交互核心與互動發信事件處理函式］\n     * ================================================================== */\n    \n    // 切換網頁版型，若尚未載入招呼語在此動態放入 UI。確保前端原始碼極為整潔\n    function toggleChatVisibility() {\n        if (!chatWindow) return;\n        chatWindow.classList.toggle('hidden');\n        chatWindow.classList.toggle('flex');\n        \n        if (!hasInitializedChat && !chatWindow.classList.contains('hidden')) {\n            if(msgContainer) msgContainer.innerHTML = '';\n            generateAiBubbleElement(AI_CONTENT.WELCOME_SUBTITLE, AI_CONTENT.WELCOME_MESSAGE, false);\n            hasInitializedChat = true;\n        }\n    }\n\n    // 將訊息整理送去串流 API 連線端拿取反饋的控制者函式\n    async function submitChatMessage() {\n        const rawQuery = chatInput.value.trim();\n        if (!rawQuery) return;\n\n        // 創造 User 用戶本人之氣泡傳訊元素 DOM 外皮\n        const userBubbleWrapper = document.createElement('div');\n        userBubbleWrapper.className = \"self-end bg-white/5 border border-white/10 p-4 rounded-xl max-w-[85%] break-words text-gray-200\";\n        userBubbleWrapper.textContent = rawQuery;\n        msgContainer.appendChild(userBubbleWrapper);\n        chatInput.value = ''; // 收工後清除打字欄\n        msgContainer.scrollTop = msgContainer.scrollHeight;\n\n        // 於底部創造尚未載出結果的虛擬站台待命訊息格（取得這塊回寫位址參照控制權)\n        const { aiTextUIContainer } = generateAiBubbleElement(\n            \"UPLINK\", \n            `<span class=\"animate-pulse font-tech tracking-widest text-cyan-500\">${AI_CONTENT.UPLINK_STATUS}</span>`, \n            true\n        );\n\n        try {\n            // 掛載底層發動流連線取內容方法 (回調使用 HTML 安全取代字元做裝備渲染以產生即時性對應反饋感)\n            await postStreamAIRequest(rawQuery, (updatedStreamString) => {\n                const replacedStyledHTML = updatedStreamString\n                    .replace(/\\n/g, '<br>') \n                    .replace(/\\[([A-Z_]+)\\]/g, '<span class=\"status-tag\">[$1]</span>');\n                aiTextUIContainer.innerHTML = `<span class=\"text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest\">${AI_CONTENT.RESPONSE_STATUS}</span>${replacedStyledHTML}`;\n                msgContainer.scrollTop = msgContainer.scrollHeight;\n            });\n        } catch (requestError) {\n            console.error(\"取得AI常規模型交流對答處理遭遇非預期打擊狀態:\", requestError);\n            aiTextUIContainer.innerHTML = `<span class=\"text-red-400 font-tech text-[10px] uppercase\">${AI_CONTENT.ERROR_TEXT}<br>${requestError.message}</span>`;\n            msgContainer.scrollTop = msgContainer.scrollHeight;\n        }\n    }\n\n    // 從環境上捕捉原始站台數據再拋轉回伺服發出解讀摘要請求之動作區 \n    async function submitNodeEnvironmentAnalysis() {\n        if (!nodeAiBtn) return;\n\n        // 從舊版程式抽取實體的DOM節點抓法不變\n        const vWeather = document.getElementById('env-weather') ? document.getElementById('env-weather').innerText : '';\n        const vTemp    = document.getElementById('env-temp')    ? document.getElementById('env-temp').innerText : '';\n        const vFlow    = document.getElementById('traffic-vph') ? document.getElementById('traffic-vph').innerText : '';\n\n        nodeAiBtn.innerHTML = AI_CONTENT.NODE_ANALYSING_TEXT;\n        nodeAiBtn.disabled  = true;\n\n        const assembledFinalPrompt = `${AI_CONTENT.SYSTEM_PROMPT}\\n${AI_CONTENT.NODE_ANALYSIS_PROMPT_PREFIX}${vWeather}，溫度 ${vTemp}，車流 ${vFlow} vph${AI_CONTENT.NODE_ANALYSIS_PROMPT_SUFFIX}`;\n        \n        try {\n            // 建立環境 log 之空等待資料庫對象準備給予資料進行取代動作\n            const visualLogsFrame = document.getElementById('log-container');\n            const specificLogOuterBody = document.createElement('div');\n            specificLogOuterBody.className = \"border-l-[2px] border-luxury-gold pl-4 py-3 mt-2 mb-2 bg-luxury-gold/5 rounded-r\";\n            \n            const headTitle = document.createElement('span');\n            headTitle.className = \"text-luxury-gold font-bold text-[9px] tracking-widest mb-1 block\";\n            headTitle.innerHTML = '<i class=\"fa-solid fa-sparkles\"></i> AI_STRATEGIC_ANALYSIS_';\n            \n            const textContentTargetNode = document.createElement('span');\n            textContentTargetNode.className = \"text-gray-300 text-[11px] leading-relaxed\";\n            \n            specificLogOuterBody.appendChild(headTitle);\n            specificLogOuterBody.appendChild(textContentTargetNode);\n            if (visualLogsFrame) visualLogsFrame.prepend(specificLogOuterBody);\n\n            // 送去跟上述完全共同一套方法調用進行發布作業拿回分析文字\n            await postStreamAIRequest(assembledFinalPrompt, (updatedStreamString) => {\n                textContentTargetNode.innerHTML = updatedStreamString.replace(/\\n/g, '<br>');\n            });\n\n        } catch (requestError) {\n            console.error(\"分析任務獲取處理過程中被干擾：\", requestError);\n        } finally {\n            // 強迫執行收工歸位防止被持續鎖定\n            nodeAiBtn.innerHTML = AI_CONTENT.NODE_IDLE_TEXT;\n            nodeAiBtn.disabled  = false;\n        }\n    }\n\n\n    /* ==================================================================\n     * ［第五區：基礎公用封裝元件生成函式區］\n     * 將 fetch 架構與氣泡生成之防禦處理提取為單一共用工具函數避免高度耦合\n     * ================================================================== */\n    \n    // 生成視窗氣泡框的方法（參數中為確保流對付會額外支援提供 DOM pointer) \n    function generateAiBubbleElement(captionSubtext, sourceInjectHtml, dynamicBindingMode = false) {\n        const containerLevelNode = document.createElement('div');\n        containerLevelNode.className = \"self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner\";\n        \n        if (!dynamicBindingMode) {\n            containerLevelNode.innerHTML = `<span class=\"text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest\">${captionSubtext}</span>${sourceInjectHtml}`;\n            msgContainer.appendChild(containerLevelNode);\n            msgContainer.scrollTop = msgContainer.scrollHeight;\n            return null;\n        } else {\n            containerLevelNode.innerHTML = sourceInjectHtml;\n            msgContainer.appendChild(containerLevelNode);\n            msgContainer.scrollTop = msgContainer.scrollHeight;\n            return { aiTextUIContainer: containerLevelNode }; // 指標返還提供替換作用\n        }\n    }\n\n    // 中央彈性伺服器通訊對接模塊（相容對串接 stream Reader 資料與拋錯誤邏輯整合使用標準的 Google/Custom Backend 取出形式相容包）\n    async function postStreamAIRequest(inputDemandQuery, eventCallbackWithStr) {\n        // 初始化端點連接點檢查看是否有補入名稱。 (為了支援最基本且能兼容原來代碼使用的自有 Google API Endpoint 組裝能力)\n        let calculatedRestRoutePath = AI_SETTINGS.API_URL;\n        if (AI_SETTINGS.MODEL_NAME && AI_SETTINGS.API_KEY && AI_SETTINGS.API_URL.includes(\"googleapis\")) {\n            calculatedRestRoutePath = `${AI_SETTINGS.API_URL}${AI_SETTINGS.MODEL_NAME}:streamGenerateContent?key=${AI_SETTINGS.API_KEY}`;\n        }\n\n        // 相容最初此專案代碼之中，所採用類似乎 google SDK 形式相接的 Fetch Postbody 外觀骨幹：\n        const restBodyDefinitionData = {\n             contents: [ { parts:[{ text: inputDemandQuery }] } ]\n        };\n        \n        const headersConfig = { 'Content-Type': 'application/json' };\n        // --- 【您也可視自己的伺服後端需要加上】: ---\n        // if(AI_SETTINGS.API_KEY) headersConfig['Authorization'] = `Bearer ${AI_SETTINGS.API_KEY}`;\n\n        const apiRawFetchReq = await fetch(calculatedRestRoutePath, {\n            method: 'POST',\n            headers: headersConfig,\n            body: JSON.stringify(restBodyDefinitionData)\n        });\n\n        // 若遇連網回彈遭拒執行抓出真實文本提示原因阻止中斷\n        if (!apiRawFetchReq.ok) {\n            let throwBackCauseText = await apiRawFetchReq.text();\n            try {\n                const validJSONCause = JSON.parse(throwBackCauseText);\n                throwBackCauseText = validJSONCause.error ? validJSONCause.error : throwBackCauseText;\n            } catch(jsonErr) {}\n            throw new Error(`遠端連線異常回報 [\\n${apiRawFetchReq.status}]: ${throwBackCauseText}`);\n        }\n\n        // 正確開始針對其封包內容打接不斷更新送出狀態提供回呼呈現。維持原本強勁效果渲染功能之展演！\n        const resChunckBufferReadStream = apiRawFetchReq.body.getReader();\n        const charStringDecorderTool = new TextDecoder();\n        let accumulatingLiveAnswerContent = '';\n\n        while (true) {\n            const { done, value } = await resChunckBufferReadStream.read();\n            if (done) break;\n            \n            // 此方法採用了原裝代碼將收到推流之 Value Decode 去拼接 String (需注意：倘若是 SSE 或 OpenAI 等端點則需先剔除 `data:` 並再 JSON 解析之, 現在先完美依原本的模式即可完美接手)\n            accumulatingLiveAnswerContent += charStringDecorderTool.decode(value);\n            eventCallbackWithStr(accumulatingLiveAnswerContent);\n        }\n    }\n});\n"
-  }
-]
+/* ==================================================================
+ * ［第一區：模型API環境配置與金鑰設定］
+ * 若需要更換連接到其他的 API Endpoint 或是模型庫位置，直接於此操作設定。
+ * ================================================================== */
+const AI_SETTINGS = {
+    // <--- 【設定模型 API 位置】
+    // 若為自有後端或 OpenAI 相容端點，例如: "/api/chat" 或 "https://api.openai.com/v1/chat/completions"
+    API_URL: "/api/chat",                    
+    
+    // <--- 【設定模型名稱】 (如：gpt-4o, gpt-3.5-turbo, gemini-1.5-flash)
+    MODEL_NAME: "gpt-3.5-turbo",                          
+
+    // <--- 【設定您的 API 金鑰】(若打自有後端可留空)
+    API_KEY: "",                             
+};
+
+
+/* ==================================================================
+ * ［第二區：對話預設開頭文字、系統設定與提示指令］
+ * ================================================================== */
+const AI_CONTENT = {
+    SYSTEM_PROMPT: "你是一位專屬 ONYX DEEP TECH 的 AI 協作研究模型，專注於提供冷靜、結構化、可操作的分析，回答請一律使用流暢的繁體中文。",
+    WELCOME_MESSAGE: "我是 Onyx，奧尼克斯 Onyx Studio 的協作式研究模型，專注於提供清晰、結構化、可操作的分析。<span class=\"status-tag\">[SYS_OK]</span> 請問有什麼需要我協助的嗎？",
+    WELCOME_SUBTITLE: "System Link Active",
+    UPLINK_STATUS: "UPLINK_ESTABLISHING...",
+    RESPONSE_STATUS: "Response Signal",
+    ERROR_TEXT: "[ERR] 連線中斷或回應解析失敗，無法從中獲取最新資料。",
+    NODE_ANALYSIS_PROMPT_PREFIX: "目前的「ONYX 節點」即時數據：天氣狀態 ",
+    NODE_ANALYSIS_PROMPT_SUFFIX: "。請以繁體中文給出一段約 50 字以內的冷靜、專業的「系統營運評估」。",
+    NODE_ANALYSING_TEXT: "<i class=\"fa-solid fa-circle-notch fa-spin\"></i> 分析中...",
+    NODE_IDLE_TEXT: "<i class=\"fa-solid fa-sparkles\"></i> AI 分析"
+};
+
+
+/* ==================================================================
+ * ［第三區：網頁對象之 DOM 選取器與元件掛載運作邏輯初始化設定］
+ * ================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    const chatWindow   = document.getElementById("ai-chat-window");
+    const toggleBtn    = document.getElementById("ai-chat-trigger-btn");
+    const closeBtn     = document.getElementById("ai-chat-close-btn");
+    const sendBtn      = document.getElementById("ai-chat-send-btn");
+    const chatInput    = document.getElementById("ai-chat-input");
+    const msgContainer = document.getElementById("ai-chat-messages");
+    const nodeAiBtn    = document.getElementById("ai-node-btn");
+
+    let hasInitializedChat = false;
+
+    if (toggleBtn) toggleBtn.addEventListener("click", toggleChatVisibility);
+    if (closeBtn) closeBtn.addEventListener("click", toggleChatVisibility);
+    if (sendBtn) sendBtn.addEventListener("click", submitChatMessage);
+    if (chatInput) {
+        chatInput.addEventListener("keypress", (e) => {
+            if (e.key === 'Enter') submitChatMessage();
+        });
+    }
+    if (nodeAiBtn) nodeAiBtn.addEventListener("click", submitNodeEnvironmentAnalysis);
+
+
+    /* ==================================================================
+     * ［第四區：畫面視覺邏輯對應之應用交互核心與互動發信事件處理函式］
+     * ================================================================== */
+    function toggleChatVisibility() {
+        if (!chatWindow) return;
+        chatWindow.classList.toggle('hidden');
+        chatWindow.classList.toggle('flex');
+        
+        if (!hasInitializedChat && !chatWindow.classList.contains('hidden')) {
+            if(msgContainer) msgContainer.innerHTML = '';
+            generateAiBubbleElement(AI_CONTENT.WELCOME_SUBTITLE, AI_CONTENT.WELCOME_MESSAGE, false);
+            hasInitializedChat = true;
+        }
+    }
+
+    async function submitChatMessage() {
+        const rawQuery = chatInput.value.trim();
+        if (!rawQuery) return;
+
+        const userBubbleWrapper = document.createElement('div');
+        userBubbleWrapper.className = "self-end bg-white/5 border border-white/10 p-4 rounded-xl max-w-[85%] break-words text-gray-200";
+        userBubbleWrapper.textContent = rawQuery;
+        msgContainer.appendChild(userBubbleWrapper);
+        chatInput.value = ''; 
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+
+        const { aiTextUIContainer } = generateAiBubbleElement(
+            "UPLINK", 
+            `<span class="animate-pulse font-tech tracking-widest text-cyan-500">${AI_CONTENT.UPLINK_STATUS}</span>`, 
+            true
+        );
+
+        try {
+            await postStreamAIRequest(rawQuery, (updatedStreamString) => {
+                const replacedStyledHTML = updatedStreamString
+                    .replace(/\n/g, '<br>') 
+                    .replace(/\[([A-Z_]+)\]/g, '<span class="status-tag">[$1]</span>');
+                aiTextUIContainer.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${AI_CONTENT.RESPONSE_STATUS}</span>${replacedStyledHTML}`;
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            });
+        } catch (requestError) {
+            console.error("取得AI常規模型交流對答處理遭遇非預期打擊狀態:", requestError);
+            aiTextUIContainer.innerHTML = `<span class="text-red-400 font-tech text-[10px] uppercase">${AI_CONTENT.ERROR_TEXT}<br>${requestError.message}</span>`;
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+    }
+
+    async function submitNodeEnvironmentAnalysis() {
+        if (!nodeAiBtn) return;
+
+        const vWeather = document.getElementById('env-weather') ? document.getElementById('env-weather').innerText : '';
+        const vTemp    = document.getElementById('env-temp')    ? document.getElementById('env-temp').innerText : '';
+        const vFlow    = document.getElementById('traffic-vph') ? document.getElementById('traffic-vph').innerText : '';
+
+        nodeAiBtn.innerHTML = AI_CONTENT.NODE_ANALYSING_TEXT;
+        nodeAiBtn.disabled  = true;
+
+        const assembledFinalPrompt = `${AI_CONTENT.SYSTEM_PROMPT}\n${AI_CONTENT.NODE_ANALYSIS_PROMPT_PREFIX}${vWeather}，溫度 ${vTemp}，車流 ${vFlow} vph${AI_CONTENT.NODE_ANALYSIS_PROMPT_SUFFIX}`;
+        
+        try {
+            const visualLogsFrame = document.getElementById('log-container');
+            const specificLogOuterBody = document.createElement('div');
+            specificLogOuterBody.className = "border-l-[2px] border-luxury-gold pl-4 py-3 mt-2 mb-2 bg-luxury-gold/5 rounded-r";
+            
+            const headTitle = document.createElement('span');
+            headTitle.className = "text-luxury-gold font-bold text-[9px] tracking-widest mb-1 block";
+            headTitle.innerHTML = '<i class="fa-solid fa-sparkles"></i> AI_STRATEGIC_ANALYSIS_';
+            
+            const textContentTargetNode = document.createElement('span');
+            textContentTargetNode.className = "text-gray-300 text-[11px] leading-relaxed";
+            
+            specificLogOuterBody.appendChild(headTitle);
+            specificLogOuterBody.appendChild(textContentTargetNode);
+            if (visualLogsFrame) visualLogsFrame.prepend(specificLogOuterBody);
+
+            await postStreamAIRequest(assembledFinalPrompt, (updatedStreamString) => {
+                textContentTargetNode.innerHTML = updatedStreamString.replace(/\n/g, '<br>');
+            });
+
+        } catch (requestError) {
+            console.error("分析任務獲取處理過程中被干擾：", requestError);
+        } finally {
+            nodeAiBtn.innerHTML = AI_CONTENT.NODE_IDLE_TEXT;
+            nodeAiBtn.disabled  = false;
+        }
+    }
+
+
+    /* ==================================================================
+     * ［第五區：基礎公用封裝元件生成函式區］(已更新為 OpenAI SSE 相容)
+     * ================================================================== */
+    
+    function generateAiBubbleElement(captionSubtext, sourceInjectHtml, dynamicBindingMode = false) {
+        const containerLevelNode = document.createElement('div');
+        containerLevelNode.className = "self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed shadow-inner";
+        
+        if (!dynamicBindingMode) {
+            containerLevelNode.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${captionSubtext}</span>${sourceInjectHtml}`;
+            msgContainer.appendChild(containerLevelNode);
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+            return null;
+        } else {
+            containerLevelNode.innerHTML = sourceInjectHtml;
+            msgContainer.appendChild(containerLevelNode);
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+            return { aiTextUIContainer: containerLevelNode };
+        }
+    }
+
+    // 核心 API 呼叫區塊：改寫為相容 OpenAI/SSE 的 Payload 與流解析
+    async function postStreamAIRequest(inputDemandQuery, eventCallbackWithStr) {
+        // 準備 OpenAI 格式的 Payload
+        const restBodyDefinitionData = {
+            model: AI_SETTINGS.MODEL_NAME || "gpt-3.5-turbo",
+            messages: [
+                { role: "system", content: AI_CONTENT.SYSTEM_PROMPT },
+                { role: "user", content: inputDemandQuery }
+            ],
+            stream: true // 開啟 SSE 串流
+        };
+        
+        const headersConfig = { 'Content-Type': 'application/json' };
+        if(AI_SETTINGS.API_KEY) {
+            headersConfig['Authorization'] = `Bearer ${AI_SETTINGS.API_KEY}`;
+        }
+
+        const apiRawFetchReq = await fetch(AI_SETTINGS.API_URL, {
+            method: 'POST',
+            headers: headersConfig,
+            body: JSON.stringify(restBodyDefinitionData)
+        });
+
+        if (!apiRawFetchReq.ok) {
+            let throwBackCauseText = await apiRawFetchReq.text();
+            try {
+                const validJSONCause = JSON.parse(throwBackCauseText);
+                throwBackCauseText = validJSONCause.error ? (validJSONCause.error.message || validJSONCause.error) : throwBackCauseText;
+            } catch(jsonErr) {}
+            throw new Error(`遠端連線異常回報 [\n${apiRawFetchReq.status}]: ${throwBackCauseText}`);
+        }
+
+        // SSE (Server-Sent Events) 串流資料解析
+        const resChunckBufferReadStream = apiRawFetchReq.body.getReader();
+        const charStringDecorderTool = new TextDecoder("utf-8");
+        
+        let accumulatingLiveAnswerContent = '';
+        let chunkBuffer = ''; // 用來儲存可能被截斷的字串碎片
+
+        while (true) {
+            const { done, value } = await resChunckBufferReadStream.read();
+            if (done) break;
+            
+            // 解碼取得字串，並與前一次未處理完的碎片拼接
+            chunkBuffer += charStringDecorderTool.decode(value, { stream: true });
+            
+            // 透過換行符號切割每一筆資料
+            const lines = chunkBuffer.split('\n');
+            
+            // 將最後一行不完整的資料放回 buffer 等待下一個封包
+            chunkBuffer = lines.pop();
+
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                
+                // 確認是否為 OpenAI 規範的 data 格式
+                if (trimmedLine.startsWith('data: ')) {
+                    const dataStr = trimmedLine.slice(6);
+                    
+                    // 結束標記
+                    if (dataStr === '[DONE]') continue;
+
+                    try {
+                        const parsedData = JSON.parse(dataStr);
+                        // 提取 OpenAI 格式下的字串片段 (delta.content)
+                        const deltaContent = parsedData.choices?.[0]?.delta?.content || "";
+                        if (deltaContent) {
+                            accumulatingLiveAnswerContent += deltaContent;
+                            eventCallbackWithStr(accumulatingLiveAnswerContent);
+                        }
+                    } catch (parseError) {
+                        console.warn("SSE 解析碎片忽略:", parseError, dataStr);
+                    }
+                }
+            }
+        }
+    }
+});
