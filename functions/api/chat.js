@@ -2,16 +2,9 @@
  * ［第一區：模型API環境配置與金鑰設定］
  * 若需要更換連接到其他的 API Endpoint 或是模型庫位置，直接於此操作設定。
  * ================================================================== */
-const AI_SETTINGS = {
-    // <--- 【設定模型 API 位置】
-    // 若為自有後端或 OpenAI 相容端點，例如: "/api/chat" 或 "https://api.openai.com/v1/chat/completions"
-    API_URL: "curl "
-    // <--- 【設定模型名稱】 (如：gpt-4o, gpt-3.5-turbo, gemini-1.5-flash)
-    MODEL_NAME: "gemini-3.1-flash-image-preview",                          
-
-    // <--- 【設定您的 API 金鑰】(若打自有後端可留空)
-    API_KEY: "AIzaSyB3mlKHJUb9YM40NtnEikpZscdToRSdj68",                             
-};
+const AI_SETTINGS = {MODEL_NAME: "gemini-3.1-flash-image-preview",                          
+                     //"AIzaSyB3mlKHJUb9YM40NtnEikpZscdToRSdj68",
+                     };
 
 
 /* ==================================================================
