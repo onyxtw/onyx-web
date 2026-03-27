@@ -74,6 +74,7 @@
 </head>
 
 <body>
+    <!-- 開機載入畫面 -->
     <div id="boot-screen">
         <div class="text-center flex flex-col items-center">
             <img src="IMG_4879.png" alt="ONYX" class="h-16 md:h-20 w-auto object-contain mb-2" onerror="this.src='https://placehold.co/200x80/1a1a1a/00f0ff?text=ONYX'">
@@ -83,9 +84,11 @@
         </div>
     </div>
 
+    <!-- 3D 背景與網格 -->
     <div id="canvas-container"></div>
     <div class="grid-texture"></div>
 
+    <!-- 頂部導覽列 -->
     <header class="fixed top-0 w-full z-50 glass-card rounded-none border-x-0 border-t-0 h-24 flex items-center justify-between px-6 md:px-14">
         <div class="flex items-center group cursor-pointer" onclick="switchTab('home')">
             <img src="IMG_4879.png" alt="ONYX" class="h-14 md:h-18 w-auto object-contain transition-all duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/150x60/1a1a1a/00f0ff?text=ONYX'">
@@ -102,6 +105,7 @@
         <button class="xl:hidden text-white/60" onclick="toggleMobileMenu(true)"><i class="fa-solid fa-bars-staggered text-2xl"></i></button>
     </header>
 
+    <!-- 手機版導覽列 -->
     <div id="mobile-nav" class="fixed inset-0 z-[200] bg-[#05060a]/98 backdrop-blur-2xl pt-28 px-10 flex flex-col gap-6 transform translate-x-full transition-transform duration-500 xl:hidden">
         <button onclick="toggleMobileMenu(false)" class="absolute top-10 right-10 text-white/50"><i class="fa-solid fa-xmark text-3xl"></i></button>
         <button class="text-left text-2xl font-fashion text-gray-300" onclick="switchTab('home', true)">首頁 ORIGIN</button>
@@ -113,8 +117,9 @@
         <button class="text-left text-2xl font-fashion text-gray-300" onclick="switchTab('about', true)">關於 ABOUT</button>
     </div>
 
+    <!-- 主要內容區 -->
     <main class="pt-36 pb-32 px-6 md:px-14 max-w-[1440px] mx-auto flex-grow w-full">
-        <!-- ORIGIN -->
+        <!-- 1. ORIGIN 首頁 -->
         <section id="home" class="section-view active">
             <div class="flex flex-col justify-center min-h-[60vh] max-w-5xl space-y-16 pt-10 relative z-10">
                 <div class="border-l-[3px] border-luxury-gold pl-8 gsap-reveal">
@@ -137,7 +142,7 @@
             </div>
         </section>
 
-        <!-- INSIGHTS -->
+        <!-- 2. INSIGHTS 焦點訊息 -->
         <section id="insights" class="section-view">
             <div class="border-l-[3px] border-cyan-400 pl-8 mb-14">
                 <h2 class="text-4xl font-fashion text-white italic gsap-reveal">Insights</h2>
@@ -146,7 +151,7 @@
             <div id="articles-container" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
         </section>
 
-        <!-- RESEARCH -->
+        <!-- 3. RESEARCH 研究技術 -->
         <section id="research" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
                 <div class="space-y-10">
@@ -157,11 +162,14 @@
                         <div class="glass-card p-8 text-center gsap-reveal"><div class="text-3xl text-luxury-gold font-tech scramble-target" data-val="99.9%">----</div><div class="text-[10px] text-gray-500 uppercase">處理精度</div></div>
                     </div>
                 </div>
-                <div class="glass-card p-10 rounded-2xl min-h-[400px] flex items-center justify-center gsap-reveal"><canvas id="crystalChart"></canvas></div>
+                <div class="glass-card p-10 rounded-2xl min-h-[400px] flex items-center justify-center gsap-reveal">
+                    <!-- 雷達圖容器 -->
+                    <canvas id="crystalChart"></canvas>
+                </div>
             </div>
         </section>
 
-        <!-- NODE -->
+        <!-- 4. FIELD OPS 韌性節點 -->
         <section id="fieldops" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 space-y-8">
@@ -187,6 +195,7 @@
                 <div class="glass-card p-8 rounded-2xl flex flex-col border-white/5 gsap-reveal">
                     <div class="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
                         <h3 class="font-tech text-[11px] text-gray-400 tracking-widest">SYSTEM_LIVE_LOGS</h3>
+                        <!-- AI 節點分析按鈕 -->
                         <button id="ai-node-btn" class="px-3 py-1.5 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold font-tech text-[10px] rounded hover:bg-luxury-gold/20 transition flex items-center gap-2 cursor-pointer z-10"><i class="fa-solid fa-sparkles"></i> AI 分析</button>
                     </div>
                     <div id="log-container" class="flex-1 overflow-y-auto space-y-5 font-tech text-[11px] tracking-wider custom-scrollbar pr-4"></div>
@@ -194,25 +203,32 @@
             </div>
         </section>
 
-        <!-- ENERGY -->
+        <!-- 5. ENERGY 能源矩陣 -->
         <section id="energy" class="section-view">
             <div class="text-center mb-14">
                 <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase gsap-reveal">DEEP TECH INFRASTRUCTURE</span>
                 <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Energy <span class="text-luxury-gold">Matrix</span></h2>
             </div>
-            <!-- 地熱數據內容 ... 與之前相同 -->
-            <div class="glass-card p-10 rounded-2xl border-orange-500/10 gsap-reveal">
-                 <h3 class="font-tech text-[12px] text-orange-400 tracking-widest mb-6">海端鄉地熱探勘進程同步</h3>
-                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div><div class="text-[9px] text-gray-500 mb-1">CURRENT NODE</div><div id="geo-node-name" class="text-xl text-white font-tech">----</div></div>
-                    <div><div class="text-[9px] text-gray-500 mb-1">DRILLING DEPTH</div><div id="geo-depth" class="text-3xl text-white font-tech scramble-target" data-val="0">0</div></div>
-                    <div><div class="text-[9px] text-gray-500 mb-1">EST. CAPACITY</div><div id="geo-yield" class="text-3xl text-luxury-gold font-tech scramble-target" data-val="0">0</div></div>
-                 </div>
-                 <div id="geo-log" class="mt-8 pt-6 border-t border-white/5 text-[11px] text-gray-400 italic"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div class="lg:col-span-8 glass-card p-10 rounded-2xl border-orange-500/10 gsap-reveal">
+                     <h3 class="font-tech text-[12px] text-orange-400 tracking-widest mb-6">海端鄉地熱探勘進程同步</h3>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div><div class="text-[9px] text-gray-500 mb-1">CURRENT NODE</div><div id="geo-node-name" class="text-xl text-white font-tech truncate">----</div></div>
+                        <div><div class="text-[9px] text-gray-500 mb-1">DRILLING DEPTH</div><div class="text-3xl text-white font-tech"><span id="geo-depth" class="scramble-target" data-val="0">0</span><span class="text-sm ml-1 text-gray-500">m</span></div></div>
+                        <div><div class="text-[9px] text-gray-500 mb-1">EST. CAPACITY</div><div class="text-3xl text-luxury-gold font-tech"><span id="geo-yield" class="scramble-target" data-val="0">0</span><span class="text-sm ml-1 text-yellow-700">MW</span></div></div>
+                     </div>
+                     <div id="geo-log" class="mt-8 pt-6 border-t border-white/5 text-[11px] text-gray-400 italic">正在向地質雲平台建立連線...</div>
+                </div>
+                <div class="lg:col-span-4 glass-card p-8 rounded-2xl flex flex-col justify-center items-center gsap-reveal">
+                    <h4 class="font-tech text-[10px] text-gray-500 mb-4 w-full text-left tracking-widest">ENERGY MIX</h4>
+                    <!-- 甜甜圈圖容器 -->
+                    <div class="relative w-full max-w-[200px] aspect-square"><canvas id="energyChart"></canvas></div>
+                </div>
             </div>
         </section>
 
-        <!-- SUSTAINABILITY (New Section) -->
+        <!-- 6. SUSTAINABILITY 永續 -->
         <section id="sustainability" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
                 <div class="lg:col-span-7 space-y-12">
@@ -226,17 +242,28 @@
                             <div class="glass-card p-8 border-green-500/10 hover:border-green-500/30 transition">
                                 <i class="fa-solid fa-leaf text-green-500 text-3xl mb-6"></i>
                                 <h4 class="text-white font-fashion text-xl mb-4 italic">負碳邊緣運算</h4>
-                                <p class="text-sm text-gray-400 leading-relaxed">利用利稻節點的運算廢熱進行循環利用，支援高山溫室農業或生物質乾燥，將運算成本轉化為熱能資產。</p>
+                                <p class="text-sm text-gray-400 leading-relaxed">利用利稻節點的運算廢熱進行循環利用，支援高山溫室農業或生物質乾燥。</p>
                             </div>
                             <div class="glass-card p-8 border-green-500/10 hover:border-green-500/30 transition">
                                 <i class="fa-solid fa-tree text-green-500 text-3xl mb-6"></i>
-                                <h4 class="text-white font-fashion text-xl mb-4 italic">生態多樣性監測</h4>
-                                <p class="text-sm text-gray-400 leading-relaxed">部屬低功耗感測器陣列，透過 AI 辨識南橫區域珍稀物種與氣候變遷徵兆，達成科技與自然的深度共生。</p>
+                                <h4 class="text-white font-fashion text-xl mb-4 italic">生態監測模擬 ✨</h4>
+                                <p class="text-sm text-gray-400 leading-relaxed">結合 Gemini API 預測能源輸出對區域生物多樣性的影響，達成平衡。</p>
                             </div>
                         </div>
-                        <p class="border-t border-white/5 pt-10">
-                            在奧尼克斯，我們認為「深科技」不應是自然的對立面。透過精確的能源調度演算法，我們確保每一位元(Bit)的傳輸都能對環境友善，實現真正的數據韌性與綠色承諾。
-                        </p>
+                        
+                        <!-- AI 模擬器 -->
+                        <div class="bg-green-500/5 border border-green-500/20 p-8 rounded-2xl space-y-6">
+                            <h4 class="font-tech text-xs text-green-400 uppercase tracking-widest">✨ AI 生態共生模擬器</h4>
+                            <div class="flex flex-col md:flex-row gap-4">
+                                <select id="eco-factor" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-green-500/50">
+                                    <option value="geothermal_expansion">擴大地熱探勘範圍</option>
+                                    <option value="node_scaling">增加邊緣運算節點密度</option>
+                                    <option value="thermal_recycling">強化廢熱回收系統</option>
+                                </select>
+                                <button id="ai-simulate-btn" class="px-6 py-2 bg-green-600/20 border border-green-600/40 text-green-400 font-tech text-xs rounded-xl hover:bg-green-600/30 transition cursor-pointer">啟動模擬 ✨</button>
+                            </div>
+                            <div id="eco-sim-result" class="text-xs text-gray-400 font-light leading-relaxed min-h-[60px] italic">設定參數並啟動 AI 模擬以獲取環境影響預測...</div>
+                        </div>
                     </div>
                 </div>
 
@@ -247,26 +274,18 @@
                         </h3>
                         <div class="space-y-10">
                             <div>
-                                <div class="flex justify-between text-[10px] font-tech text-gray-500 mb-2 uppercase">碳抵銷進度 Carbon Offset</div>
+                                <div class="flex justify-between text-[10px] font-tech text-gray-500 mb-2">碳抵銷進度 Carbon Offset</div>
                                 <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden flex border border-white/5">
-                                    <div class="bg-green-500 h-full transition-all duration-[2000ms]" style="width: 74%"></div>
+                                    <div class="bg-green-500 h-full" style="width: 74%"></div>
                                 </div>
                                 <div class="mt-2 text-xl text-white font-tech">74.2% <span class="text-[10px] text-green-500 ml-2">REACHING NET ZERO</span></div>
                             </div>
                             <div>
-                                <div class="flex justify-between text-[10px] font-tech text-gray-500 mb-2 uppercase">廢熱回收效率 Heat Recovery</div>
+                                <div class="flex justify-between text-[10px] font-tech text-gray-500 mb-2">廢熱回收效率 Heat Recovery</div>
                                 <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden flex border border-white/5">
-                                    <div class="bg-orange-500 h-full transition-all duration-[2000ms]" style="width: 88%"></div>
+                                    <div class="bg-orange-500 h-full" style="width: 88%"></div>
                                 </div>
                                 <div class="mt-2 text-xl text-white font-tech">88.5% <span class="text-[10px] text-orange-500 ml-2">OPTIMIZED</span></div>
-                            </div>
-                            <div class="pt-6 border-t border-white/5">
-                                <div class="text-[9px] font-tech text-gray-500 mb-4 tracking-widest">ACTIVE ECO PROJECTS</div>
-                                <ul class="space-y-3 text-xs text-gray-300 font-tech">
-                                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-500"></i> 利稻 2.0 負碳農耕實驗</li>
-                                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-500"></i> 地熱廢水閉環過濾系統</li>
-                                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-green-500"></i> 南橫智慧物聯生態廊道</li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -274,7 +293,7 @@
             </div>
         </section>
 
-        <!-- ABOUT -->
+        <!-- 7. ABOUT 關於 -->
         <section id="about" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
                 <div class="lg:col-span-7 space-y-12">
@@ -283,17 +302,42 @@
                         <span class="text-cyan-400 text-xl font-tech tracking-[0.2em]">DEEP TECH STUDIO</span>
                     </div>
                     <div class="space-y-8 text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] text-justify tracking-wide gsap-reveal">
-                        <p>ONYX 來自於南橫公路利稻村，在極端環境中創造永續運作的「諾亞方舟」。</p>
+                        <p>ONYX 來自於南橫公路利稻村，在極端環境中，透過科技與自然環境的共生，創造永續運作的「諾亞方舟」。我們相信，最極致的科技，必須經得起最嚴酷的淬鍊。</p>
+                        <p>如同黑曜石經由地質壓力淬煉而成，我們的數據演算法與韌性節點設計，是為了在最嚴酷的挑戰下提供絕對的精準度。我們不只是科技的創造者，更是智慧數據的提煉者。</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- 底部資訊列 -->
     <div id="news-ticker-bar"><div class="ticker-content" id="ticker-content-inner"></div></div>
-    <footer><div class="max-w-[1440px] mx-auto"><p class="footer-text">奧尼克斯科技工作室 © ONYX DEEP TECH STUDIO.</p><p class="footer-text footer-tax-id">統一編號 Tax ID：00466122</p></div></footer>
+    <footer><div class="max-w-[1440px] mx-auto"><p class="footer-text">奧尼克斯科技工作室 版權所有 © ONYX DEEP TECH STUDIO.</p><p class="footer-text footer-tax-id">統一編號 Tax ID：00466122</p></div></footer>
 
-    <!-- AI CHAT WINDOW -->
+    <!-- 文章閱讀彈窗 (包含戰略摘要) -->
+    <div id="article-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4 md:p-12 opacity-0 transition-opacity duration-400">
+        <div class="absolute inset-0 bg-[#05060a]/90 backdrop-blur-md" onclick="closeArticleModal()"></div>
+        <div class="relative w-full max-w-4xl max-h-[90vh] bg-[#0b0c15] border border-white/10 rounded-xl overflow-hidden flex flex-col transform translate-y-8 transition-all duration-500 shadow-2xl" id="article-modal-content">
+            <div class="flex justify-between items-center p-8 border-b border-white/5 bg-white/[0.01]">
+                <div class="flex items-center gap-4">
+                    <span id="modal-category" class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 text-[9px] text-cyan-400 font-tech rounded-md uppercase tracking-widest"></span>
+                    <span id="modal-date" class="text-[10px] text-gray-500 font-tech tracking-widest"></span>
+                    <button id="ai-summarize-btn" class="ml-4 px-3 py-1 bg-luxury-gold/10 border border-luxury-gold/30 text-luxury-gold font-tech text-[9px] rounded-md hover:bg-luxury-gold/20 transition cursor-pointer">✨ AI 戰略摘要</button>
+                </div>
+                <button onclick="closeArticleModal()" class="text-gray-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/5"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-8 md:p-14 overflow-y-auto custom-scrollbar flex-1 bg-gradient-to-b from-transparent to-black/20">
+                <div id="ai-summary-box" class="hidden mb-10 p-6 bg-luxury-gold/5 border-l-2 border-luxury-gold rounded-r-xl">
+                    <h4 class="text-[10px] font-tech text-luxury-gold uppercase tracking-[0.2em] mb-3 italic">✨ Strategic Executive Summary</h4>
+                    <div id="ai-summary-text" class="text-gray-300 text-sm italic leading-relaxed"></div>
+                </div>
+                <h2 id="modal-title" class="text-3xl md:text-4xl font-fashion text-white leading-snug tracking-wide mb-10"></h2>
+                <div id="modal-body" class="text-gray-300 font-light text-[15px] leading-[2.2] space-y-6 text-justify tracking-wide"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 全局對話視窗 -->
     <button id="ai-chat-trigger-btn" class="fixed bottom-28 right-8 z-[150] w-14 h-14 bg-[#05060a]/90 border border-cyan-500/40 rounded-2xl flex items-center justify-center hover:shadow-[0_0_30px_rgba(0,240,255,0.5)] transition-all p-2 group overflow-hidden cursor-pointer">
         <img src="IMG_4889.jpeg" alt="AI" class="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform" onerror="this.src='https://placehold.co/100x100/1a1a1a/00f0ff?text=AI'">
     </button>
@@ -310,43 +354,110 @@
         </div>
     </div>
 
+    <!-- 核心腳本區：包含導覽列切換、動態圖表、數據模擬與完整的 AI 功能 -->
     <script>
-        // AI SETTINGS (包含永續服務概念)
+        // ==========================================
+        // 1. AI 系統配置與金鑰設定 (CRITICAL FIX)
+        // 必須精準設定 const apiKey = ""; 以允許環境注入
+        // ==========================================
+        const apiKey = ""; 
         const AI_SETTINGS = {
-            MODEL_NAME: "gemini-2.5-flash-preview-09-2025",                          
-            API_KEY: "", 
+            MODEL_NAME: "gemini-2.5-flash-preview-09-2025",
             API_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/models/" 
         };
 
         const AI_CONTENT = {
-            SYSTEM_PROMPT: "你是一位專屬 奧尼克斯科技工作室 ONYX DEEP TECH STUDIO 的 AI 協作研究模型。專注於提供冷靜、結構化、可操作的分析。特別擅長關於極端環境節點、地熱能源與「自然與環境永續」的深度見解。對於永續相關問題，請強調負碳運算與科技共生。回答請使用繁體中文。",
-            WELCOME_MESSAGE: "我是 奧尼克斯 Onyx。連結已建立。<span class=\"status-tag\">[SYS_OK]</span> 關於數據韌性、地熱探勘或自然永續，有什麼需要我分析的嗎？",
+            SYSTEM_PROMPT: "你是一位專屬 ONYX DEEP TECH 奧尼克斯科技工作室的 AI 協作研究模型。專注於提供冷靜、結構化、可操作的分析。對於極端環境節點、地熱探勘與永續生態問題，請強調數據驅動與科技共生。回答請全程使用繁體中文。",
+            WELCOME_MESSAGE: "我是 Onyx。連結已建立。<span class=\"status-tag\">[SYS_OK]</span> 隨時準備進行深科技分析與生態監測。",
             WELCOME_SUBTITLE: "System Link Active",
             UPLINK_STATUS: "UPLINK_ESTABLISHING...",
             RESPONSE_STATUS: "Response Signal",
-            ERROR_TEXT: "[ERR] 連線中斷。",
+            ERROR_TEXT: "[ERR] 連線中斷或金鑰驗證失敗。",
             NODE_ANALYSIS_PROMPT_PREFIX: "目前的「ONYX 節點」數據：天氣 ",
-            NODE_ANALYSIS_PROMPT_SUFFIX: "。請給出一段約 50 字以內的專業系統評估與環境永續建言。",
+            NODE_ANALYSIS_PROMPT_SUFFIX: "。請給出一段約 50 字以內的專業系統評估。",
             NODE_ANALYSING_TEXT: "<i class=\"fa-solid fa-circle-notch fa-spin\"></i> 分析中...",
             NODE_IDLE_TEXT: "<i class=\"fa-solid fa-sparkles\"></i> AI 分析"
         };
 
+        // ==========================================
+        // 2. 指數退避 API 請求核心 (Exponential Backoff)
+        // ==========================================
+        async function fetchAIWithRetry(query, systemPrompt = AI_CONTENT.SYSTEM_PROMPT, isStreaming = false, callback = null) {
+            let retries = 5;
+            let delay = 1000;
+
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const endpoint = isStreaming ? 'streamGenerateContent' : 'generateContent';
+                    const url = `${AI_SETTINGS.API_BASE_URL}${AI_SETTINGS.MODEL_NAME}:${endpoint}?key=${apiKey}${isStreaming ? '&alt=sse' : ''}`;
+                    
+                    const payload = {
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        contents: [{ role: "user", parts: [{ text: query }] }]
+                    };
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`API Error ${response.status}`);
+
+                    if (isStreaming && callback) {
+                        const reader = response.body.getReader();
+                        const decoder = new TextDecoder("utf-8");
+                        let fullText = '', buffer = '';
+                        while (true) {
+                            const { done, value } = await reader.read();
+                            if (done) break;
+                            buffer += decoder.decode(value, { stream: true });
+                            const lines = buffer.split('\n');
+                            buffer = lines.pop() || '';
+                            for (const line of lines) {
+                                const trimmed = line.trim();
+                                if (trimmed.startsWith('data: ')) {
+                                    const dataStr = trimmed.slice(6);
+                                    if (!dataStr || dataStr === '[DONE]') continue;
+                                    try {
+                                        const parsed = JSON.parse(dataStr);
+                                        const chunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                                        if (chunk) { fullText += chunk; callback(fullText); }
+                                    } catch (e) {}
+                                }
+                            }
+                        }
+                        return fullText;
+                    } else {
+                        const result = await response.json();
+                        return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    }
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        // ==========================================
+        // 3. 全局互動邏輯初始化 (Navigation & AI Chat)
+        // ==========================================
         let hasInitializedChat = false;
 
-        function initChatLogic() {
+        function initInteractions() {
+            // --- AI 聊天視窗綁定 ---
             const chatWindow   = document.getElementById("ai-chat-window");
             const toggleBtn    = document.getElementById("ai-chat-trigger-btn");
             const closeBtn     = document.getElementById("ai-chat-close-btn");
             const sendBtn      = document.getElementById("ai-chat-send-btn");
             const chatInput    = document.getElementById("ai-chat-input");
             const msgContainer = document.getElementById("ai-chat-messages");
-            const nodeAiBtn    = document.getElementById("ai-node-btn");
 
             function toggleChatVisibility() {
                 const isHidden = chatWindow.classList.contains('hidden');
                 if (isHidden) {
-                    chatWindow.classList.remove('hidden');
-                    chatWindow.classList.add('flex');
+                    chatWindow.classList.remove('hidden'); chatWindow.classList.add('flex');
                     setTimeout(() => { chatWindow.classList.remove('opacity-0', 'translate-y-4'); chatWindow.classList.add('opacity-100', 'translate-y-0'); }, 10);
                     if (!hasInitializedChat) {
                         msgContainer.innerHTML = '';
@@ -355,103 +466,148 @@
                     }
                     chatInput.focus();
                 } else {
-                    chatWindow.classList.add('opacity-0', 'translate-y-4');
-                    chatWindow.classList.remove('opacity-100', 'translate-y-0');
+                    chatWindow.classList.add('opacity-0', 'translate-y-4'); chatWindow.classList.remove('opacity-100', 'translate-y-0');
                     setTimeout(() => { chatWindow.classList.remove('flex'); chatWindow.classList.add('hidden'); }, 300);
-                }
-            }
-
-            async function submitChatMessage() {
-                const rawQuery = chatInput.value.trim();
-                if (!rawQuery) return;
-                const userBubble = document.createElement('div');
-                userBubble.className = "self-end bg-white/5 border border-white/10 p-4 rounded-xl max-w-[85%] break-words text-gray-200";
-                userBubble.textContent = rawQuery;
-                msgContainer.appendChild(userBubble);
-                chatInput.value = ''; 
-                msgContainer.scrollTop = msgContainer.scrollHeight;
-                const { aiTextUIContainer } = generateAiBubbleElement("UPLINK", `<span class="animate-pulse font-tech tracking-widest text-cyan-500">${AI_CONTENT.UPLINK_STATUS}</span>`, true);
-                try {
-                    await postStreamAIRequest(rawQuery, (updatedStreamString) => {
-                        const replacedStyledHTML = updatedStreamString.replace(/\n/g, '<br>').replace(/\[([A-Z_]+)\]/g, '<span class="status-tag">[$1]</span>');
-                        aiTextUIContainer.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${AI_CONTENT.RESPONSE_STATUS}</span>${replacedStyledHTML}`;
-                        msgContainer.scrollTop = msgContainer.scrollHeight;
-                    });
-                } catch (err) { aiTextUIContainer.innerHTML = AI_CONTENT.ERROR_TEXT; }
-            }
-
-            async function postStreamAIRequest(query, callback) {
-                const url = `${AI_SETTINGS.API_BASE_URL}${AI_SETTINGS.MODEL_NAME}:streamGenerateContent?key=${AI_SETTINGS.API_KEY}&alt=sse`;
-                const payload = { systemInstruction: { parts: [{ text: AI_CONTENT.SYSTEM_PROMPT }] }, contents: [{ role: "user", parts: [{ text: query }] }] };
-                const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const reader = res.body.getReader();
-                const decoder = new TextDecoder("utf-8");
-                let fullText = '', buffer = '';
-                while (true) {
-                    const { done, value } = await reader.read(); if (done) break;
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split('\n'); buffer = lines.pop() || '';
-                    for (const line of lines) {
-                        const trimmed = line.trim();
-                        if (trimmed.startsWith('data: ')) {
-                            const dataStr = trimmed.slice(6); if (dataStr === '[DONE]' || !dataStr) continue;
-                            try { const parsed = JSON.parse(dataStr); const chunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text || ""; if (chunk) { fullText += chunk; callback(fullText); } } catch (e) {}
-                        }
-                    }
                 }
             }
 
             function generateAiBubbleElement(caption, html, isDynamic) {
                 const bubble = document.createElement('div');
-                bubble.className = "self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] break-words text-cyan-50 leading-relaxed";
+                bubble.className = "self-start bg-cyan-500/10 border border-cyan-500/10 p-4 rounded-xl max-w-[85%] text-cyan-50 text-[13px] leading-relaxed";
                 if (!isDynamic) {
                     bubble.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${caption}</span>${html}`;
                     msgContainer.appendChild(bubble);
-                    msgContainer.scrollTop = msgContainer.scrollHeight;
-                    return null;
                 } else {
-                    bubble.innerHTML = html; msgContainer.appendChild(bubble); msgContainer.scrollTop = msgContainer.scrollHeight;
+                    bubble.innerHTML = html; msgContainer.appendChild(bubble);
                     return { aiTextUIContainer: bubble };
                 }
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            }
+
+            async function submitChatMessage() {
+                const query = chatInput.value.trim();
+                if (!query) return;
+                const userBubble = document.createElement('div');
+                userBubble.className = "self-end bg-white/5 border border-white/10 p-4 rounded-xl max-w-[85%] break-words text-gray-200 text-[13px]";
+                userBubble.textContent = query;
+                msgContainer.appendChild(userBubble);
+                chatInput.value = ''; msgContainer.scrollTop = msgContainer.scrollHeight;
+                
+                const { aiTextUIContainer } = generateAiBubbleElement("UPLINK", `<span class="animate-pulse font-tech text-cyan-500">${AI_CONTENT.UPLINK_STATUS}</span>`, true);
+                
+                try {
+                    await fetchAIWithRetry(query, AI_CONTENT.SYSTEM_PROMPT, true, (text) => {
+                        aiTextUIContainer.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${AI_CONTENT.RESPONSE_STATUS}</span>${text.replace(/\n/g, '<br>')}`;
+                        msgContainer.scrollTop = msgContainer.scrollHeight;
+                    });
+                } catch (e) { aiTextUIContainer.innerHTML = AI_CONTENT.ERROR_TEXT; }
             }
 
             toggleBtn?.addEventListener("click", toggleChatVisibility);
             closeBtn?.addEventListener("click", toggleChatVisibility);
             sendBtn?.addEventListener("click", submitChatMessage);
             chatInput?.addEventListener("keypress", (e) => e.key === 'Enter' && submitChatMessage());
+
+            // --- 其他 AI 功能按鈕綁定 ---
+            const nodeAiBtn    = document.getElementById("ai-node-btn");
+            const summarizeBtn = document.getElementById("ai-summarize-btn");
+            const simulateBtn  = document.getElementById("ai-simulate-btn");
+
+            nodeAiBtn?.addEventListener('click', async () => {
+                const vWeather = document.getElementById('env-weather')?.innerText || '未知';
+                const vTemp = document.getElementById('env-temp')?.innerText || '未知';
+                nodeAiBtn.innerHTML = AI_CONTENT.NODE_ANALYSING_TEXT;
+                nodeAiBtn.disabled = true;
+
+                const prompt = `${AI_CONTENT.NODE_ANALYSIS_PROMPT_PREFIX}${vWeather}，溫度 ${vTemp}${AI_CONTENT.NODE_ANALYSIS_PROMPT_SUFFIX}`;
+                try {
+                    const logContainer = document.getElementById('log-container');
+                    const logEl = document.createElement('div');
+                    logEl.className = "border-l-[2px] border-luxury-gold pl-4 py-3 bg-luxury-gold/5 rounded-r";
+                    logEl.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] mb-1 block">✨ AI_SYSTEM_REPORT_</span><span class="text-gray-300 text-[11px] animate-pulse">解析數據中...</span>`;
+                    logContainer.prepend(logEl);
+                    const target = logEl.querySelector('span:last-child');
+                    const reply = await fetchAIWithRetry(prompt);
+                    target.classList.remove('animate-pulse');
+                    target.innerHTML = reply.replace(/\n/g, '<br>');
+                } finally { nodeAiBtn.innerHTML = AI_CONTENT.NODE_IDLE_TEXT; nodeAiBtn.disabled = false; }
+            });
+
+            summarizeBtn?.addEventListener('click', async () => {
+                const title = document.getElementById('modal-title').innerText;
+                const body = document.getElementById('modal-body').innerText;
+                const summaryBox = document.getElementById('ai-summary-box');
+                const summaryText = document.getElementById('ai-summary-text');
+                
+                summarizeBtn.innerHTML = "<i class='fa-solid fa-circle-notch fa-spin'></i> 提煉中...";
+                summarizeBtn.disabled = true;
+                summaryBox.classList.remove('hidden');
+                summaryText.innerHTML = "<span class='animate-pulse'>正在深度讀取技術文件並生成戰略摘要...</span>";
+
+                try {
+                    const prompt = `請閱讀以下文章標題與內容，提煉出 3 個核心技術摘要。標題：${title}。內容：${body}`;
+                    const summary = await fetchAIWithRetry(prompt, "你是一位專業的技術總監。請用冷靜且具前瞻性的繁體中文提供摘要。");
+                    summaryText.innerHTML = summary.replace(/\n/g, '<br>');
+                } catch (e) { summaryText.innerText = "無法生成摘要。系統連線異常。"; }
+                finally { summarizeBtn.innerHTML = "✨ AI 戰略摘要"; summarizeBtn.disabled = false; }
+            });
+
+            simulateBtn?.addEventListener('click', async () => {
+                const factor = document.getElementById('eco-factor').value;
+                const resultEl = document.getElementById('eco-sim-result');
+                
+                simulateBtn.innerHTML = "<i class='fa-solid fa-microchip fa-spin'></i> 運算中...";
+                simulateBtn.disabled = true;
+                resultEl.innerHTML = "<span class='animate-pulse text-green-400'>正在分析海端鄉利稻村區域生態影響模型...</span>";
+
+                try {
+                    const prompt = `模擬場景：${factor}。請預測此舉對南橫利稻區域的「負碳指標」與「生物多樣性」之具體影響分析報告。`;
+                    const report = await fetchAIWithRetry(prompt, "你是一位環境科學 AI。請提供具備數據感的繁體中文模擬報告，長度約 100 字。");
+                    resultEl.innerHTML = report.replace(/\n/g, '<br>');
+                    resultEl.classList.remove('text-gray-400');
+                    resultEl.classList.add('text-green-300');
+                } catch (e) { resultEl.innerText = "模擬失敗。AI 核心無回應。"; }
+                finally { simulateBtn.innerHTML = "啟動模擬 ✨"; simulateBtn.disabled = false; }
+            });
         }
 
-        // 基本視覺初始化
-        gsap.registerPlugin(ScrollTrigger);
-        let scene, camera, renderer, stars, mouseX=0, mouseY=0;
-
-        function initThreeJS() {
-            const container = document.getElementById('canvas-container');
-            scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 4000);
-            camera.position.z = 1000; renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-            const photonCount = 400; const photonGeo = new THREE.BufferGeometry(); const photonPos = new Float32Array(photonCount*3);
-            for(let i=0; i<photonCount; i++) { photonPos[i*3]=(Math.random()-0.5)*3000; photonPos[i*3+1]=(Math.random()-0.5)*1000; photonPos[i*3+2]=Math.random()*2000-1000; }
-            photonGeo.setAttribute('position', new THREE.BufferAttribute(photonPos, 3));
-            stars = new THREE.Points(photonGeo, new THREE.PointsMaterial({ color: 0x00f0ff, size: 2 })); scene.add(stars);
-            animate();
-        }
-        function animate() { requestAnimationFrame(animate); renderer.render(scene, camera); }
-
+        // ==========================================
+        // 4. 選單切換與畫面特效控制 (Navigation Fixes)
+        // ==========================================
         function switchTab(id, isMobile = false) {
-            document.querySelectorAll('.section-view').forEach(s => { s.classList.remove('active'); s.style.display = 'none'; });
+            // 隱藏所有板塊
+            document.querySelectorAll('.section-view').forEach(s => { 
+                s.classList.remove('active'); 
+                s.style.display = 'none'; 
+            });
+            // 顯示目標板塊
             const target = document.getElementById(id);
-            if (target) { target.style.display = 'block'; setTimeout(() => target.classList.add('active'), 10); triggerPageSpecifics(id); }
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if (target) { 
+                target.style.display = 'block'; 
+                setTimeout(() => target.classList.add('active'), 10); 
+                triggerPageSpecifics(id); 
+            }
+            // 更新桌機導覽列 Active 狀態
+            const navLinks = Array.from(document.querySelectorAll('#desktop-nav .nav-link'));
+            navLinks.forEach(l => l.classList.remove('active'));
+            const indexMap = ['home', 'insights', 'research', 'fieldops', 'energy', 'sustainability', 'about'];
+            const activeIndex = indexMap.indexOf(id);
+            if(activeIndex !== -1 && navLinks[activeIndex]) {
+                navLinks[activeIndex].classList.add('active');
+            }
+            // 關閉手機選單並捲動到最上
             if (isMobile) toggleMobileMenu(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function triggerPageSpecifics(id) {
+            // GSAP 浮現特效
             gsap.fromTo(`#${id} .gsap-reveal`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, visibility: 'visible' });
+            // 動態文字亂碼解析
+            document.querySelectorAll(`#${id} .scramble-target`).forEach(el => scrambleText(el));
+            // 圖表載入
             if(id === 'research') initCrystalChart();
             if(id === 'energy') initEnergyChart();
-            document.querySelectorAll(`#${id} .scramble-target`).forEach(el => scrambleText(el));
         }
 
         function toggleMobileMenu(show) {
@@ -469,34 +625,175 @@
             }, 30);
         }
 
-        // 模擬數據輪播
-        let currentWellIndex = 0;
-        const wells = [
-            { name: '利稻探勘井 (LD-01)', depth: '2100', yield: '2.8', log: '利稻核心區：深度 2100m，溫度 156.5°C。' },
-            { name: '霧鹿探勘井 (WL-02)', depth: '1854', yield: '2.4', log: '霧鹿二號井：穩定產能中。' }
-        ];
+        // ==========================================
+        // 5. 動態圖表與資料庫模擬 (Data Restoration)
+        // ==========================================
+        let crystalChart, energyChart;
 
-        function syncGeotexData() {
-            const well = wells[currentWellIndex];
-            document.getElementById('geo-node-name').innerText = well.name;
-            document.getElementById('geo-depth').setAttribute('data-val', well.depth);
-            document.getElementById('geo-yield').setAttribute('data-val', well.yield);
-            document.getElementById('geo-log').innerText = well.log;
-            scrambleText(document.getElementById('geo-depth'));
-            scrambleText(document.getElementById('geo-yield'));
-            currentWellIndex = (currentWellIndex + 1) % wells.length;
+        function initCrystalChart() {
+            const ctx = document.getElementById('crystalChart')?.getContext('2d');
+            if(!ctx) return;
+            if (crystalChart) crystalChart.destroy();
+            crystalChart = new Chart(ctx, { 
+                type: 'radar', 
+                data: { labels:['效率', '精度', '穩定', '負碳', '響應'], datasets: [{ label: 'ONYX Protocol', data:[96, 99, 92, 88, 95], borderColor: '#00f0ff', backgroundColor: 'rgba(0, 240, 255, 0.1)' }] }, 
+                options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, angleLines: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } } }, plugins: { legend: { display: false } } } 
+            });
         }
 
-        function initCrystalChart() { /* Chart Logic ... */ }
-        function initEnergyChart() { /* Chart Logic ... */ }
+        function initEnergyChart() {
+            const ctx = document.getElementById('energyChart')?.getContext('2d');
+            if(!ctx) return;
+            if (energyChart) energyChart.destroy();
+            energyChart = new Chart(ctx, { 
+                type: 'doughnut', 
+                data: { labels: ['地熱', '太陽能'], datasets: [{ data:[83, 17], backgroundColor:['#f97316', '#eab308'], borderColor: '#05060a', borderWidth: 6 }] }, 
+                options: { cutout: '80%', plugins: { legend: { display: false } } } 
+            });
+        }
 
+        let geothermalWellsData = [
+            { name: '霧鹿探勘井 (WL-02)', depth: '1854', yield: '2.4', log: '霧鹿二號井：突破 1800m 深層岩覆帶，溫度穩定。' },
+            { name: '初來探勘井 (CL-01)', depth: '1205', yield: '1.2', log: '初來一號井：正在進行地質測井與地下水文分析。' },
+            { name: '利稻探勘井 (LD-01)', depth: '2100', yield: '2.8', log: '利稻核心區：探勘井進入高溫產能測試階段。' }
+        ];
+        let currentWellIndex = 0;
+
+        function syncGeotexData() {
+            const nodeEl = document.getElementById('geo-node-name');
+            const depthEl = document.getElementById('geo-depth');
+            const yieldEl = document.getElementById('geo-yield');
+            const logEl = document.getElementById('geo-log');
+            if (!nodeEl) return;
+
+            const well = geothermalWellsData[currentWellIndex];
+            nodeEl.innerText = well.name;
+            depthEl.setAttribute('data-val', well.depth);
+            yieldEl.setAttribute('data-val', well.yield);
+            logEl.innerText = well.log;
+            
+            scrambleText(depthEl);
+            scrambleText(yieldEl);
+            
+            currentWellIndex = (currentWellIndex + 1) % geothermalWellsData.length;
+        }
+
+        async function fetchTelemetry() {
+            try {
+                // 抓取台東縣海端鄉附近天氣
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m,weather_code');
+                const data = await res.json();
+                document.getElementById('env-temp').innerText = data.current.temperature_2m + "°C";
+                document.getElementById('env-hum').innerText = data.current.relative_humidity_2m + "%";
+                const weatherCodes = { 0: "Clear", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 61: "Rain" };
+                document.getElementById('env-weather').innerText = weatherCodes[data.current.weather_code] || "Nominal";
+            } catch(e) {}
+        }
+
+        function updateTicker() {
+            const msgs =["SYSTEM: SECURE", "CORE: ONLINE", "LOCATION: SECTOR ZERO", "STATUS: OPERATIONAL"];
+            document.getElementById('ticker-content-inner').innerHTML = msgs.map(m => `<span class="ticker-item"><span class="ticker-highlight">●</span> ${m}</span>`).join('') + " ".repeat(10);
+        }
+
+        function addLog() {
+            const lc = document.getElementById('log-container'); if(!lc) return;
+            const msgs =["Optimizing neural pathways...", "Thermal cycling nominal.", "Handshake active.", "Geo-scan complete."];
+            const log = document.createElement('div'); log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1"; log.innerHTML = `<span class="text-cyan-500">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${msgs[Math.floor(Math.random()*msgs.length)]}</span>`;
+            if(lc.childElementCount > 10) lc.lastChild.remove(); 
+            lc.prepend(log);
+        }
+
+        // ==========================================
+        // 6. 文章閱讀器系統
+        // ==========================================
+        let globalArticles = [
+            { id: "art-1", category: "RESEARCH", date: "2026-03-01", title: "逆熵運算在利稻節點的實踐", summary: "探討如何在極端氣候下，透過晶體生長演算法降低無謂的算力損耗。", content: "<p>我們拒絕盲目的暴力運算。ONYX 的核心技術「晶體生長演算法」採用逆熵架構，模擬自然界礦物的結構化過程...</p><p>透過在模型訓練初期便建立強大的邏輯骨架，我們成功將無謂的算力損耗降低了 68%。這在南橫利稻這類電力資源寶貴的極端環境中，是實現「數位韌性」的關鍵突破。</p>" },
+            { id: "art-2", category: "INSIGHTS", date: "2026-02-15", title: "數據主權的隱形守門人", summary: "解析 ONYX 節點的安全隔離架構與邊緣運算優勢。", content: "<p>未來的資料不應該全部送上雲端，真正的安全來自於邊緣端（Edge）的即時過濾與提純。</p><p>ONYX 節點架構確保核心資料在本地端即完成運算，這不僅大幅降低了延遲，更是為各行各業建立了一道堅不可摧的資料主權護城河。</p>" },
+            { id: "art-3", category: "UPDATE", date: "2026-01-20", title: "Sector Zero 地熱模組聯網", summary: "整合霧鹿地熱探勘數據，利稻微電網 2.0 正式投入測試。", content: "<p>根據最新的地熱探勘動態，我們已成功將 Wulu WL-02 探勘井的即時數據與我們的能源分配矩陣進行同步。</p><p>搭配高山光儲陣列，Sector Zero 節點已經具備了 100% 綠電自給的雛形，這是邁向「負碳運算」願景的重大里程碑。</p>" }
+        ];
+
+        function renderArticles() {
+            const container = document.getElementById('articles-container');
+            if(!container) return;
+            container.innerHTML = globalArticles.map(a => `
+                <div class="glass-card p-8 rounded-2xl flex flex-col h-full border-t border-t-cyan-500/20 group cursor-pointer" onclick="openArticleModal('${a.id}')">
+                    <div class="flex justify-between items-center mb-6"><span class="text-[9px] font-tech text-cyan-400 border border-cyan-500/20 px-2 py-1 bg-cyan-500/10 rounded-md">${a.category}</span><span class="text-[10px] font-tech text-gray-500">${a.date}</span></div>
+                    <h3 class="text-xl font-fashion text-white mb-4 group-hover:text-cyan-300 transition duration-500">${a.title}</h3>
+                    <p class="text-gray-400 text-[13px] leading-[1.8] font-light mb-8 flex-1">${a.summary}</p>
+                </div>
+            `).join('');
+        }
+
+        function openArticleModal(id) {
+            const article = globalArticles.find(a => a.id === id);
+            if (!article) return;
+            document.getElementById('modal-category').innerText = article.category;
+            document.getElementById('modal-date').innerText = article.date;
+            document.getElementById('modal-title').innerText = article.title;
+            document.getElementById('modal-body').innerHTML = article.content;
+            document.getElementById('ai-summary-box').classList.add('hidden'); // 重設摘要
+            const modal = document.getElementById('article-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('article-modal-content').classList.remove('translate-y-8'); }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('article-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 400);
+        }
+
+        // ==========================================
+        // 7. ThreeJS 背景系統
+        // ==========================================
+        let scene, camera, renderer, stars, mouseX=0, mouseY=0;
+
+        function initThreeJS() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 1, 4000);
+            camera.position.z = 1000; renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            const photonCount = 400; const photonGeo = new THREE.BufferGeometry(); const photonPos = new Float32Array(photonCount*3);
+            for(let i=0; i<photonCount; i++) { photonPos[i*3]=(Math.random()-0.5)*3000; photonPos[i*3+1]=(Math.random()-0.5)*1000; photonPos[i*3+2]=Math.random()*2000-1000; }
+            photonGeo.setAttribute('position', new THREE.BufferAttribute(photonPos, 3));
+            stars = new THREE.Points(photonGeo, new THREE.PointsMaterial({ color: 0x00f0ff, size: 2 })); scene.add(stars);
+            document.addEventListener('mousemove', (e) => { mouseX=(e.clientX-window.innerWidth/2)*0.1; mouseY=(e.clientY-window.innerHeight/2)*0.1; });
+            animate();
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        function animate() { 
+            requestAnimationFrame(animate); 
+            camera.position.x += (mouseX - camera.position.x)*0.02; camera.position.y += (-mouseY+200 - camera.position.y)*0.02; camera.lookAt(scene.position);
+            renderer.render(scene, camera); 
+        }
+
+        // ==========================================
+        // 8. 系統整體啟動點 (On Load)
+        // ==========================================
         window.addEventListener('load', () => {
-            initThreeJS(); initChatLogic();
+            gsap.registerPlugin(ScrollTrigger);
+            initThreeJS(); 
+            initInteractions(); // 啟動完整 AI 與按鈕監聽
+            renderArticles(); 
+            fetchTelemetry();
+            updateTicker();
+            
+            // 啟動定時數據模擬器
+            setInterval(fetchTelemetry, 60000); 
             setInterval(syncGeotexData, 15000);
-            syncGeotexData();
-            setTimeout(() => { document.getElementById('boot-screen').style.opacity = '0'; switchTab('home'); }, 2200);
+            setInterval(addLog, 4000);
+            syncGeotexData(); // 初始化第一次數據
+            
+            // 結束開機畫面
+            setTimeout(() => { 
+                document.getElementById('boot-screen').style.opacity = '0'; 
+                switchTab('home'); 
+                setTimeout(() => document.getElementById('boot-screen').style.visibility = 'hidden', 1000); 
+            }, 2200);
         });
     </script>
 </body>
 </html>
-
