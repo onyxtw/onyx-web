@@ -2,22 +2,51 @@
 <html lang="zh-TW" class="scroll-smooth">
 <head>
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RSL9FEM4NW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-RSL9FEM4NW');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RSL9FEM4NW"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RSL9FEM4NW');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONYX | DEEP TECH 奧尼克斯科技 - 未來流動數據與邊緣運算權威</title>
     
+    <!-- SEO Optimized Title & Description -->
+    <title>ONYX DEEP TECH 奧尼克斯科技｜GCP/Gemini 整合、永續 AI 運算節點、數位重構</title>
+    <meta name="description" content="ONYX DEEP TECH (奧尼克斯科技) 專注於 GCP/Gemini AI 整合、永續能源運算與智慧農業。我們透過 Project Onyx 計畫，為您的事業提供從雲端到土地的深度重構解決方案。">
+
     <link rel="icon" type="image/jpeg" href="IMG_4889.jpeg">
     <link rel="apple-touch-icon" href="IMG_4889.jpeg">
     <link rel="manifest" href="manifest.json">
-    <meta name="description" content="ONYX | DEEP TECH 奧尼克斯科技工作室。專注於極端環境韌性節點、高頻圖資與負碳運算技術、環境永續方案。">
     
+    <!-- SEO: Canonical Tag (VERY IMPORTANT) -->
+    <link rel="canonical" href="https://www.onyx.tw/" />
+
+    <!-- SEO: JSON-LD Structured Data (Updated with Primary Domain) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ONYX DEEP TECH STUDIO (奧尼克斯科技工作室)",
+      "alternateName": "ONYX 奧尼克斯科技",
+      "url": "https://www.onyx.tw/",
+      "logo": "https://www.onyx.tw/IMG_4879.png",
+      "foundingLocation": "台東縣海端鄉利稻村",
+      "founder": {
+        "@type": "Person",
+        "name": "創辦人姓名" 
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "service@onyx.tw"
+      },
+      "sameAs": [],
+      "taxID": "00466122"
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -33,7 +62,7 @@
             --font-tech: 'JetBrains Mono', monospace; --font-fashion: 'Playfair Display', serif; --font-body: 'Noto Serif TC', serif;
         }
         body { background-color: var(--deep-space); color: #e2e8f0; font-family: var(--font-body); overflow-x: hidden; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; min-height: 100vh; }
-        .font-tech { font-family: var(--font-tech); } .font-fashion { font-family: var(--font-fashion); }
+        .font-tech { font-family: var(--font-tech); } .font-fashion { font-family: var(--font-fashion); } 
         
         ::-webkit-scrollbar { width: 4px; } 
         ::-webkit-scrollbar-track { background: transparent; }
@@ -77,7 +106,7 @@
     <!-- 開機載入畫面 -->
     <div id="boot-screen">
         <div class="text-center flex flex-col items-center">
-            <img src="IMG_4879.png" alt="ONYX" class="h-16 md:h-20 w-auto object-contain mb-2" onerror="this.src='https://placehold.co/200x80/1a1a1a/00f0ff?text=ONYX'">
+            <img src="IMG_4879.png" alt="ONYX DEEP TECH 奧尼克斯科技 Logo" class="h-16 md:h-20 w-auto object-contain mb-2" onerror="this.src='https://placehold.co/200x80/1a1a1a/00f0ff?text=ONYX'">
             <p class="text-[10px] font-tech text-cyan-400 tracking-[0.5em] uppercase">Initializing System</p>
             <div class="loader-line"></div>
             <p id="boot-status" class="text-[9px] font-tech text-gray-700 mt-4 uppercase">Connecting to Sector Zero...</p>
@@ -91,7 +120,7 @@
     <!-- 頂部導覽列 -->
     <header class="fixed top-0 w-full z-50 glass-card rounded-none border-x-0 border-t-0 h-24 flex items-center justify-between px-6 md:px-14">
         <div class="flex items-center group cursor-pointer" onclick="switchTab('home')">
-            <img src="IMG_4879.png" alt="ONYX" class="h-14 md:h-18 w-auto object-contain transition-all duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/150x60/1a1a1a/00f0ff?text=ONYX'">
+            <img src="IMG_4879.png" alt="ONYX DEEP TECH 奧尼克斯科技 Logo" class="h-14 md:h-18 w-auto object-contain transition-all duration-700 group-hover:scale-105" onerror="this.src='https://placehold.co/150x60/1a1a1a/00f0ff?text=ONYX'">
         </div>
         <nav id="desktop-nav" class="hidden xl:flex gap-8 font-tech text-[9px] uppercase">
             <button class="nav-link active" onclick="switchTab('home')">首頁 Origin</button>
@@ -123,15 +152,15 @@
         <section id="home" class="section-view active">
             <div class="flex flex-col justify-center min-h-[60vh] max-w-5xl space-y-16 pt-10 relative z-10">
                 <div class="border-l-[3px] border-luxury-gold pl-8 gsap-reveal">
-                    <span class="font-tech text-[10px] text-luxury-gold tracking-[0.4em] block mb-6 italic opacity-80">FOUNDER'S VISION</span>
-                    <h2 class="text-5xl md:text-7xl lg:text-[80px] font-fashion text-white leading-[1.15] tracking-wide">極致科技，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-luxury-gold italic">淬煉於深處。</span></h2>
+                    <span class="font-tech text-[10px] text-luxury-gold tracking-[0.4em] block mb-6 italic opacity-80">CORE VALUE SLOGAN</span>
+                    <h1 class="text-5xl md:text-7xl lg:text-[80px] font-fashion text-white leading-[1.15] tracking-wide">精密重構系統，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-luxury-gold italic">科技賦能土地。</span></h1>
                 </div>
                 <div class="glass-card p-8 rounded-xl border border-white/10 gsap-reveal group">
                     <div class="flex flex-col md:flex-row gap-10 items-stretch justify-between">
                         <div class="space-y-5 flex-1 border-r border-white/5 pr-0 md:pr-10">
-                            <div class="flex gap-3 items-center"><span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span><span class="text-[10px] font-tech text-gray-400 uppercase">System Announcement</span></div>
-                            <h3 class="text-xl text-white font-fashion italic">ONYX Strategic Display</h3>
-                            <p class="text-gray-400 text-sm font-light leading-relaxed">歡迎蒞臨 ONYX 深科技生態系。我們致力於在極端環境中打造高韌性節點。</p>
+                            <div class="flex gap-3 items-center"><span class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span><span class="text-[10px] font-tech text-gray-400 uppercase">INTRODUCTION</span></div>
+                            <h2 class="text-xl text-white font-fashion italic">ONYX DEEP TECH STUDIO</h2>
+                            <p class="text-gray-400 text-sm font-light leading-relaxed">奧尼克斯科技工作室是一家以「深度重構」為核心的技術研發單位。我們透過 Project Onyx 計畫，將領先的 Gemini AI 模組與 GCP 雲端技術，與實體的永續能源及再生農業進行垂直整合。我們擅長從底層參數配置開始，為客戶建構具備高度韌性的數位生態系與實體生產線，實現從雲端運算到土地價值提升的全方位優化。</p>
                         </div>
                         <div class="w-full md:w-80 bg-black/40 border border-dashed border-gray-700/50 rounded-lg flex flex-col items-center justify-center cursor-pointer transition hover:border-cyan-500/50 hover:bg-cyan-500/5 group/ad" onclick="window.open('https://geotex.geologycloud.tw/main', '_blank')">
                             <i class="fa-solid fa-earth-asia text-gray-500 text-2xl mb-2 group-hover/ad:text-cyan-400 transition"></i>
@@ -153,18 +182,37 @@
 
         <!-- 3. RESEARCH 研究技術 -->
         <section id="research" class="section-view">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-                <div class="space-y-10">
-                    <h2 class="text-4xl font-fashion text-white italic gsap-reveal">Crystal Growth</h2>
-                    <p class="text-gray-300 leading-relaxed gsap-reveal">ONYX 核心技術「晶體生長演算法」採用逆熵架構。</p>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="glass-card p-8 text-center gsap-reveal"><div class="text-3xl text-cyan-400 font-tech scramble-target" data-val="-68%">----</div><div class="text-[10px] text-gray-500 uppercase">能耗降低</div></div>
-                        <div class="glass-card p-8 text-center gsap-reveal"><div class="text-3xl text-luxury-gold font-tech scramble-target" data-val="99.9%">----</div><div class="text-[10px] text-gray-500 uppercase">處理精度</div></div>
-                    </div>
+            <div class="space-y-14">
+                 <div class="border-l-[3px] border-cyan-400 pl-8">
+                    <h2 class="text-4xl font-fashion text-white italic gsap-reveal">Linear Analysis & System Reorganization</h2>
+                    <p class="text-gray-400 mt-4 gsap-reveal">堅持線性分析與精密重構，不提供零散的插件，只提供系統性的整合方案。</p>
                 </div>
-                <div class="glass-card p-10 rounded-2xl min-h-[400px] flex items-center justify-center gsap-reveal">
-                    <!-- 雷達圖容器 -->
-                    <canvas id="crystalChart"></canvas>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- M1 -->
+                    <div class="glass-card p-8 border-t-cyan-500/20 gsap-reveal">
+                        <div class="text-[10px] font-tech text-cyan-400 mb-4">M1</div>
+                        <h3 class="text-lg font-fashion text-white mb-3">全域數位門戶建構</h3>
+                        <p class="text-sm text-gray-400 font-light">高擴展性網站架構、SSR/ISR 渲染優化、品牌數位識別整合。</p>
+                    </div>
+                    <!-- M2 -->
+                    <div class="glass-card p-8 border-t-cyan-500/20 gsap-reveal">
+                        <div class="text-[10px] font-tech text-cyan-400 mb-4">M2</div>
+                        <h3 class="text-lg font-fashion text-white mb-3">GCP 雲端生態系佈署</h3>
+                        <p class="text-sm text-gray-400 font-light">Google Cloud 全架構建置、自動化維運 (IaC)、雲端安全防護。</p>
+                    </div>
+                    <!-- M3 -->
+                    <div class="glass-card p-8 border-t-cyan-500/20 gsap-reveal">
+                        <div class="text-[10px] font-tech text-cyan-400 mb-4">M3</div>
+                        <h3 class="text-lg font-fashion text-white mb-3">多終端交互式軟體工程</h3>
+                        <p class="text-sm text-gray-400 font-light">跨平台應用程式 (App) 開發、系統底層邏輯設計與優化。</p>
+                    </div>
+                    <!-- M4 -->
+                    <div class="glass-card p-8 border-t-cyan-500/20 gsap-reveal">
+                        <div class="text-[10px] font-tech text-cyan-400 mb-4">M4</div>
+                        <h3 class="text-lg font-fashion text-white mb-3">Gemini 驅動：AI 訓練</h3>
+                        <p class="text-sm text-gray-400 font-light">基於 Gemini 模組的特定領域 AI 訓練、LLM 應用整合。</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -174,7 +222,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-2 space-y-8">
                     <div class="glass-card p-10 md:p-14 rounded-2xl border-cyan-500/10 gsap-reveal">
-                        <h2 class="text-4xl md:text-5xl font-fashion text-white mb-6 italic tracking-wide">Sector Zero <span class="text-cyan-400">Node</span></h2>
+                        <h2 class="text-4xl md:text-5xl font-fashion text-white mb-2 italic tracking-wide">Project Onyx <span class="text-cyan-400">Node</span></h2>
+                        <p class="text-gray-400 font-light mb-6">於台東利稻打造的全球首創永續韌性 AI 運算節點，作為全球重組架構中的物理支點。</p>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/5 pt-10">
                             <div><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">LATENCY</div><div class="text-2xl text-white font-tech"><span id="latency-val" class="scramble-target" data-val="8">0</span>ms</div></div>
                             <div><div class="text-[9px] font-tech text-gray-500 mb-2 tracking-widest">STABILITY</div><div class="text-2xl text-green-400 font-tech scramble-target" data-val="99.98%">0.00%</div></div>
@@ -206,8 +255,9 @@
         <!-- 5. ENERGY 能源矩陣 -->
         <section id="energy" class="section-view">
             <div class="text-center mb-14">
-                <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase gsap-reveal">DEEP TECH INFRASTRUCTURE</span>
-                <h2 class="text-4xl md:text-6xl font-fashion text-white mb-6 italic tracking-wide gsap-reveal">Energy <span class="text-luxury-gold">Matrix</span></h2>
+                <span class="font-tech text-[10px] text-gray-500 tracking-[0.4em] block mb-4 uppercase gsap-reveal">M5: SUSTAINABLE COMPUTING</span>
+                <h2 class="text-4xl md:text-6xl font-fashion text-white mb-2 italic tracking-wide gsap-reveal">Energy <span class="text-luxury-gold">Matrix</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto gsap-reveal">綠能驅動運算中心設計、低 PUE (Power Usage Effectiveness) 冷卻系統、能源備援架構。PUE 數值越接近 1.0，代表運算中心越省電，是我們在能源研發中的核心參數。</p>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -232,22 +282,22 @@
         <section id="sustainability" class="section-view">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
                 <div class="lg:col-span-7 space-y-12">
-                    <div class="border-l-[3px] border-green-500 pl-8 gsap-reveal">
-                        <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-4">Nature & Sustainability</h2>
-                        <span class="text-green-500 text-xl font-tech tracking-[0.2em]">環境與自然永續戰略</span>
+                     <div class="border-l-[3px] border-green-500 pl-8 gsap-reveal">
+                        <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-4">Regenerative Symbiosis</h2>
+                        <span class="text-green-500 text-xl font-tech tracking-[0.2em]">生態循環與價值鏈設計</span>
                     </div>
                     
-                    <div class="space-y-10 text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] tracking-wide gsap-reveal">
+                    <div class="space-y-10 text-gray-300 font-light leading-[2.2] tracking-wide gsap-reveal">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="glass-card p-8 border-green-500/10 hover:border-green-500/30 transition">
-                                <i class="fa-solid fa-leaf text-green-500 text-3xl mb-6"></i>
-                                <h4 class="text-white font-fashion text-xl mb-4 italic">負碳邊緣運算</h4>
-                                <p class="text-sm text-gray-400 leading-relaxed">利用利稻節點的運算廢熱進行循環利用，支援高山溫室農業或生物質乾燥。</p>
+                                <span class="font-tech text-green-400 text-xs mb-4 block">M6</span>
+                                <h3 class="text-white font-fashion text-xl mb-4 italic">生態循環再生農法</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">透過農業數據監測、土壤碳匯技術、環境感測網路 (IoT) 佈署，實現土地的永續利用。</p>
                             </div>
                             <div class="glass-card p-8 border-green-500/10 hover:border-green-500/30 transition">
-                                <i class="fa-solid fa-tree text-green-500 text-3xl mb-6"></i>
-                                <h4 class="text-white font-fashion text-xl mb-4 italic">生態監測模擬 ✨</h4>
-                                <p class="text-sm text-gray-400 leading-relaxed">結合 Gemini API 預測能源輸出對區域生物多樣性的影響，達成平衡。</p>
+                                <span class="font-tech text-green-400 text-xs mb-4 block">M7</span>
+                                <h3 class="text-white font-fashion text-xl mb-4 italic">智慧農產價值鏈</h3>
+                                <p class="text-sm text-gray-400 leading-relaxed">自動化加工流程規劃、符合 HACCP/ISO22000 的數位溯源系統、冷鏈物流監控架構。</p>
                             </div>
                         </div>
                         
@@ -274,7 +324,7 @@
                         </h3>
                         <div class="space-y-10">
                             <div>
-                                <div class="flex justify-between text-[10px] font-tech text-gray-500 mb-2">碳抵銷進度 Carbon Offset</div>
+                                <div class="flex justify-between text-[10px] font-tech text-gray-500 mb-2">土壤碳匯進度 Soil Carbon Sequestration</div>
                                 <div class="w-full bg-black/50 h-2 rounded-full overflow-hidden flex border border-white/5">
                                     <div class="bg-green-500 h-full" style="width: 74%"></div>
                                 </div>
@@ -299,11 +349,12 @@
                 <div class="lg:col-span-7 space-y-12">
                     <div class="border-l-[3px] border-white pl-8 gsap-reveal">
                         <h2 class="text-4xl md:text-5xl font-fashion text-white italic tracking-wide mb-4">About ONYX</h2>
-                        <span class="text-cyan-400 text-xl font-tech tracking-[0.2em]">DEEP TECH STUDIO</span>
+                        <span class="text-cyan-400 text-xl font-tech tracking-[0.2em]">奧尼克斯科技工作室</span>
                     </div>
                     <div class="space-y-8 text-gray-300 font-light text-[15px] md:text-[17px] leading-[2.2] text-justify tracking-wide gsap-reveal">
-                        <p>ONYX 來自於南橫公路利稻村，在極端環境中，透過科技與自然環境的共生，創造永續運作的「諾亞方舟」。我們相信，最極致的科技，必須經得起最嚴酷的淬鍊。</p>
-                        <p>如同黑曜石經由地質壓力淬煉而成，我們的數據演算法與韌性節點設計，是為了在最嚴酷的挑戰下提供絕對的精準度。我們不只是科技的創造者，更是智慧數據的提煉者。</p>
+                        <p><strong>核心願景：</strong> 透過「Project Onyx」計畫，在台東利稻打造全球首創的永續韌性 AI 運算節點，實現技術、能源與土地的深度重組。</p>
+                        <p><strong>技術哲學：</strong> 我們堅持<span class="text-luxury-gold">線性分析 (Linear Analysis)</span> 與精密重構。這是一種排斥模糊、追求精準的研發方法，強調從 A 到 B 的邏輯鏈條必須透明且可驗證，確保系統的絕對穩定性。</p>
+                        <p><strong>全球重組 (Global Reorganization)：</strong> 我們針對組織或系統的既有架構進行拆解，並利用現代技術模組進行優化編排，以達成最高效能的資源利用，建構從雲端到土地的全方位解決方案。</p>
                     </div>
                 </div>
             </div>
@@ -362,19 +413,19 @@
         // ==========================================
         const apiKey = ""; 
         const AI_SETTINGS = {
-            MODEL_NAME: "gemini-2.5-flash-preview-09-2025",
+            MODEL_NAME: "gemini-1.5-flash-latest",
             API_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/models/" 
         };
 
         const AI_CONTENT = {
-            SYSTEM_PROMPT: "你是一位專屬 ONYX DEEP TECH 奧尼克斯科技工作室的 AI 協作研究模型。專注於提供冷靜、結構化、可操作的分析。對於極端環境節點、地熱探勘與永續生態問題，請強調數據驅動與科技共生。回答請全程使用繁體中文。",
-            WELCOME_MESSAGE: "我是 Onyx。連結已建立。<span class=\"status-tag\">[SYS_OK]</span> 隨時準備進行深科技分析與生態監測。",
+            SYSTEM_PROMPT: "你是一位專為「ONYX DEEP TECH 奧尼克斯科技工作室」打造的 AI 協作模型。你的溝通風格必須冷靜、精準、結構化。請以「深度重構」與「線性分析」為核心思維，強調數據驅動、系統性整合，以及從雲端到土地的垂直技術鏈。溝通全程使用繁體中文。",
+            WELCOME_MESSAGE: "我是 Onyx。系統鏈結已建立。<span class=\"status-tag\">[SYS_OK]</span> 準備執行深度重構分析。",
             WELCOME_SUBTITLE: "System Link Active",
             UPLINK_STATUS: "UPLINK_ESTABLISHING...",
             RESPONSE_STATUS: "Response Signal",
             ERROR_TEXT: "[ERR] 連線中斷或金鑰驗證失敗。",
             NODE_ANALYSIS_PROMPT_PREFIX: "目前的「ONYX 節點」數據：天氣 ",
-            NODE_ANALYSIS_PROMPT_SUFFIX: "。請給出一段約 50 字以內的專業系統評估。",
+            NODE_ANALYSIS_PROMPT_SUFFIX: "。請基於 Project Onyx 的韌性節點標準，給出一段約 50 字以內的專業系統評估。",
             NODE_ANALYSING_TEXT: "<i class=\"fa-solid fa-circle-notch fa-spin\"></i> 分析中...",
             NODE_IDLE_TEXT: "<i class=\"fa-solid fa-sparkles\"></i> AI 分析"
         };
@@ -631,14 +682,7 @@
         let crystalChart, energyChart;
 
         function initCrystalChart() {
-            const ctx = document.getElementById('crystalChart')?.getContext('2d');
-            if(!ctx) return;
-            if (crystalChart) crystalChart.destroy();
-            crystalChart = new Chart(ctx, { 
-                type: 'radar', 
-                data: { labels:['效率', '精度', '穩定', '負碳', '響應'], datasets: [{ label: 'ONYX Protocol', data:[96, 99, 92, 88, 95], borderColor: '#00f0ff', backgroundColor: 'rgba(0, 240, 255, 0.1)' }] }, 
-                options: { scales: { r: { grid: { color: 'rgba(255,255,255,0.05)' }, angleLines: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } } }, plugins: { legend: { display: false } } } 
-            });
+            // This function is kept for future use but is not triggered in the new layout.
         }
 
         function initEnergyChart() {
@@ -647,7 +691,7 @@
             if (energyChart) energyChart.destroy();
             energyChart = new Chart(ctx, { 
                 type: 'doughnut', 
-                data: { labels: ['地熱', '太陽能'], datasets: [{ data:[83, 17], backgroundColor:['#f97316', '#eab308'], borderColor: '#05060a', borderWidth: 6 }] }, 
+                data: { labels: ['地熱', '太陽能', '備援'], datasets: [{ data:[75, 15, 10], backgroundColor:['#f97316', '#eab308', '#4b5563'], borderColor: '#05060a', borderWidth: 6 }] }, 
                 options: { cutout: '80%', plugins: { legend: { display: false } } } 
             });
         }
@@ -691,13 +735,13 @@
         }
 
         function updateTicker() {
-            const msgs =["SYSTEM: SECURE", "CORE: ONLINE", "LOCATION: SECTOR ZERO", "STATUS: OPERATIONAL"];
+            const msgs =["SYSTEM: SECURE", "CORE: ONLINE", "PROJECT ONYX: ACTIVE", "STATUS: OPERATIONAL"];
             document.getElementById('ticker-content-inner').innerHTML = msgs.map(m => `<span class="ticker-item"><span class="ticker-highlight">●</span> ${m}</span>`).join('') + " ".repeat(10);
         }
 
         function addLog() {
             const lc = document.getElementById('log-container'); if(!lc) return;
-            const msgs =["Optimizing neural pathways...", "Thermal cycling nominal.", "Handshake active.", "Geo-scan complete."];
+            const msgs =["Optimizing data stream...", "Thermal cycle nominal.", "IaC handshake active.", "Geo-scan complete."];
             const log = document.createElement('div'); log.className = "border-l-[2px] border-cyan-500/30 pl-4 py-1"; log.innerHTML = `<span class="text-cyan-500">[${new Date().toLocaleTimeString()}]</span> <span class="text-gray-400">${msgs[Math.floor(Math.random()*msgs.length)]}</span>`;
             if(lc.childElementCount > 10) lc.lastChild.remove(); 
             lc.prepend(log);
@@ -706,11 +750,7 @@
         // ==========================================
         // 6. 文章閱讀器系統
         // ==========================================
-        let globalArticles = [
-            { id: "art-1", category: "RESEARCH", date: "2026-03-01", title: "逆熵運算在利稻節點的實踐", summary: "探討如何在極端氣候下，透過晶體生長演算法降低無謂的算力損耗。", content: "<p>我們拒絕盲目的暴力運算。ONYX 的核心技術「晶體生長演算法」採用逆熵架構，模擬自然界礦物的結構化過程...</p><p>透過在模型訓練初期便建立強大的邏輯骨架，我們成功將無謂的算力損耗降低了 68%。這在南橫利稻這類電力資源寶貴的極端環境中，是實現「數位韌性」的關鍵突破。</p>" },
-            { id: "art-2", category: "INSIGHTS", date: "2026-02-15", title: "數據主權的隱形守門人", summary: "解析 ONYX 節點的安全隔離架構與邊緣運算優勢。", content: "<p>未來的資料不應該全部送上雲端，真正的安全來自於邊緣端（Edge）的即時過濾與提純。</p><p>ONYX 節點架構確保核心資料在本地端即完成運算，這不僅大幅降低了延遲，更是為各行各業建立了一道堅不可摧的資料主權護城河。</p>" },
-            { id: "art-3", category: "UPDATE", date: "2026-01-20", title: "Sector Zero 地熱模組聯網", summary: "整合霧鹿地熱探勘數據，利稻微電網 2.0 正式投入測試。", content: "<p>根據最新的地熱探勘動態，我們已成功將 Wulu WL-02 探勘井的即時數據與我們的能源分配矩陣進行同步。</p><p>搭配高山光儲陣列，Sector Zero 節點已經具備了 100% 綠電自給的雛形，這是邁向「負碳運算」願景的重大里程碑。</p>" }
-        ];
+        let globalArticles = []; // Will be populated from articles.json
 
         function renderArticles() {
             const container = document.getElementById('articles-container');
@@ -743,7 +783,7 @@
             modal.classList.add('opacity-0');
             setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 400);
         }
-
+        
         // ==========================================
         // 7. ThreeJS 背景系統
         // ==========================================
@@ -773,11 +813,47 @@
         // ==========================================
         // 8. 系統整體啟動點 (On Load)
         // ==========================================
-        window.addEventListener('load', () => {
+        async function loadArticles() {
+            try {
+                // For this self-contained example, we embed the JSON content directly.
+                globalArticles = [
+                  {
+                    "id": "article-01",
+                    "date": "2026-02-01",
+                    "category": "RESEARCH REPORT",
+                    "title": "逆熵運算架構在極端高山環境的潛力分析",
+                    "summary": "探討如何利用晶體生長演算法，在無穩定電網的南橫高山區域建立高韌性的邊緣運算節點，並達到數據提純的目標...",
+                    "content": "<p class='mb-4'>隨著全球邊緣運算需求的急遽上升，傳統的伺服器農場已無法滿足極端環境下的即時運算需求。本研究報告深入探討了 ONYX 的核心技術「逆熵運算架構」。</p><p class='mb-4'>我們在南橫利稻村的實驗節點證實，透過模擬礦物結晶過程的演算法，我們能在初期排除 68% 的無效數據運算，大幅降低能耗。</p><p class='mb-4'>未來展望：我們將持續推動負碳協議，將伺服器廢熱導入微電網的溫室循環系統，實現真正的深科技生態共生。</p>"
+                  },
+                  {
+                    "id": "article-02",
+                    "date": "2025-10-28",
+                    "category": "FOUNDER'S INSIGHT",
+                    "title": "數據權威的隱形守門人：為什麼我們選擇深科技",
+                    "summary": "在這個充滿雜訊的 AI 時代，真正的價值不在於擁有最大的算力，而在於對底層邏輯的絕對掌握與提純能力。",
+                    "content": "<p class='mb-4'>許多人問我，為什麼 ONYX 要將據點設在遠離城市喧囂的極端環境中？答案很簡單：最極致的科技，必須經得起最嚴酷的淬鍊。</p><p class='mb-4'>如同黑曜石，我們不追求表面的浮華。在這個充滿雜訊的 AI 時代，我們專注於深科技 (Deep Tech) 的底層邏輯，我們相信，未來的數據權威將屬於那些能夠在極端條件下，依然維持 99.9% 精度與穩定性的隱形守門人。</p>"
+                  },
+                  {
+                    "id": "article-03",
+                    "date": "2025-12-31",
+                    "category": "TECH UPDATE",
+                    "title": "Sector Zero 節點 RTK 定位系統升級公告",
+                    "summary": "針對高頻圖資與動態流量監測，ONYX 已完成最新一波的 RTK+ 協定更新，穩定度提升至 99.98%。",
+                    "content": "<p class='mb-4'><strong>系統升級報告：</strong></p><ul class='list-disc pl-5 mb-4 space-y-2'><li>RTK 校正訊號延遲已縮減至 8ms 以內。</li><li>結合低軌衛星 (LEO) 的無縫切換機制已通過極端氣候壓力測試。</li><li>南橫公路的動態車流預測準確率提升 14%。</li></ul><p>感謝工程團隊的努力，這代表我們的韌性節點在面對地質與氣候挑戰時，具備了更強大的生存與服務能力。</p>"
+                  }
+                ];
+
+                renderArticles();
+            } catch (error) {
+                console.error("Failed to load articles:", error);
+            }
+        }
+
+        window.addEventListener('load', async () => {
             gsap.registerPlugin(ScrollTrigger);
             initThreeJS(); 
             initInteractions(); // 啟動完整 AI 與按鈕監聽
-            renderArticles(); 
+            await loadArticles(); // 載入文章
             fetchTelemetry();
             updateTicker();
             
