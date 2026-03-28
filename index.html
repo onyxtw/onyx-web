@@ -108,6 +108,7 @@
 </head>
 
 <body>
+
     <!-- 開機載入畫面 -->
     <div id="boot-screen">
         <div class="text-center flex flex-col items-center">
@@ -413,22 +414,16 @@
     <!-- 核心腳本區：包含導覽列切換、動態圖表、數據模擬與完整的 AI 功能 -->
     <script>
         // ==========================================
-        // 1. AI 系統配置與金鑰設定 (CRITICAL FIX)
-        // 必須精準設定 const apiKey = ""; 以允許環境注入
+        // 1. AI 系統配置 (安全優化)
         // ==========================================
-        const apiKey = ""; 
-        const AI_SETTINGS = {
-            MODEL_NAME: "gemini-3.1-flash-lite-preview",
-            API_BASE_URL: "https://generativelanguage.googleapis.com/v1beta/models/" 
-        };
-
+        const AI_PROXY_URL = "/api/gemini"; // 所有 AI 請求將通過此伺服器代理路徑
         const AI_CONTENT = {
             SYSTEM_PROMPT: "你是一位專為「ONYX DEEP TECH 奧尼克斯科技工作室」打造的 AI 協作模型。你的溝通風格必須冷靜、精準、結構化。請以「深度重構」與「線性分析」為核心思維，強調數據驅動、系統性整合，以及從雲端到土地的垂直技術鏈。溝通全程使用繁體中文。",
             WELCOME_MESSAGE: "我是 Onyx。系統鏈結已建立。<span class=\"status-tag\">[SYS_OK]</span> 準備執行深度重構分析。",
             WELCOME_SUBTITLE: "System Link Active",
             UPLINK_STATUS: "UPLINK_ESTABLISHING...",
             RESPONSE_STATUS: "Response Signal",
-            ERROR_TEXT: "[ERR] 連線中斷或金鑰驗證失敗。",
+            ERROR_TEXT: "[ERR] AI 代理連線失敗或無回應。",
             NODE_ANALYSIS_PROMPT_PREFIX: "目前的「ONYX 節點」數據：天氣 ",
             NODE_ANALYSIS_PROMPT_SUFFIX: "。請基於 Project Onyx 的韌性節點標準，給出一段約 50 字以內的專業系統評估。",
             NODE_ANALYSING_TEXT: "<i class=\"fa-solid fa-circle-notch fa-spin\"></i> 分析中...",
@@ -436,59 +431,34 @@
         };
 
         // ==========================================
-        // 2. 指數退避 API 請求核心 (Exponential Backoff)
+        // 2. 安全的 API 請求核心 (呼叫伺服器代理)
         // ==========================================
-        async function fetchAIWithRetry(query, systemPrompt = AI_CONTENT.SYSTEM_PROMPT, isStreaming = false, callback = null) {
-            let retries = 5;
+        async function fetchAIWithRetry(query, systemPrompt = AI_CONTENT.SYSTEM_PROMPT) {
+            // Streaming is handled by the proxy, frontend receives the final stream
+            let retries = 3;
             let delay = 1000;
 
             for (let i = 0; i < retries; i++) {
                 try {
-                    const endpoint = isStreaming ? 'streamGenerateContent' : 'generateContent';
-                    const url = `${AI_SETTINGS.API_BASE_URL}${AI_SETTINGS.MODEL_NAME}:${endpoint}?key=${apiKey}${isStreaming ? '&alt=sse' : ''}`;
-                    
                     const payload = {
-                        systemInstruction: { parts: [{ text: systemPrompt }] },
-                        contents: [{ role: "user", parts: [{ text: query }] }]
+                        query: query,
+                        systemPrompt: systemPrompt,
                     };
 
-                    const response = await fetch(url, {
+                    const response = await fetch(AI_PROXY_URL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
-                    if (!response.ok) throw new Error(`API Error ${response.status}`);
-
-                    if (isStreaming && callback) {
-                        const reader = response.body.getReader();
-                        const decoder = new TextDecoder("utf-8");
-                        let fullText = '', buffer = '';
-                        while (true) {
-                            const { done, value } = await reader.read();
-                            if (done) break;
-                            buffer += decoder.decode(value, { stream: true });
-                            const lines = buffer.split('\n');
-                            buffer = lines.pop() || '';
-                            for (const line of lines) {
-                                const trimmed = line.trim();
-                                if (trimmed.startsWith('data: ')) {
-                                    const dataStr = trimmed.slice(6);
-                                    if (!dataStr || dataStr === '[DONE]') continue;
-                                    try {
-                                        const parsed = JSON.parse(dataStr);
-                                        const chunk = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                                        if (chunk) { fullText += chunk; callback(fullText); }
-                                    } catch (e) {}
-                                 }
-                            }
-                        }
-                        return fullText;
-                    } else {
-                        const result = await response.json();
-                        return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                    if (!response.ok) {
+                        throw new Error(`Proxy Error ${response.status}: ${await response.text()}`);
                     }
+                    
+                    return response; // Return the whole response object for streaming
+
                 } catch (error) {
+                    console.error(`AI Request Failed (Attempt ${i + 1}/${retries}):`, error);
                     if (i === retries - 1) throw error;
                     await new Promise(r => setTimeout(r, delay));
                     delay *= 2;
@@ -540,29 +510,63 @@
                 msgContainer.scrollTop = msgContainer.scrollHeight;
             }
 
+            async function handleStream(response, uiContainer, caption) {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let fullText = '';
+                uiContainer.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${caption}</span>`;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    fullText += decoder.decode(value, { stream: true });
+                    // Basic markdown conversion for display
+                    let formattedText = fullText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+                    uiContainer.querySelector('span:last-of-type').innerHTML = formattedText;
+                    msgContainer.scrollTop = msgContainer.scrollHeight;
+                }
+                return fullText;
+            }
+
             async function submitChatMessage() {
                 const query = chatInput.value.trim();
                 if (!query) return;
+
                 const userBubble = document.createElement('div');
                 userBubble.className = "self-end bg-white/5 border border-white/10 p-4 rounded-xl max-w-[85%] break-words text-gray-200 text-[13px]";
                 userBubble.textContent = query;
                 msgContainer.appendChild(userBubble);
-                chatInput.value = ''; msgContainer.scrollTop = msgContainer.scrollHeight;
+                chatInput.value = '';
+                msgContainer.scrollTop = msgContainer.scrollHeight;
                 
                 const { aiTextUIContainer } = generateAiBubbleElement("UPLINK", `<span class="animate-pulse font-tech text-cyan-500">${AI_CONTENT.UPLINK_STATUS}</span>`, true);
                 
                 try {
-                    await fetchAIWithRetry(query, AI_CONTENT.SYSTEM_PROMPT, true, (text) => {
-                        aiTextUIContainer.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${AI_CONTENT.RESPONSE_STATUS}</span>${text.replace(/\n/g, '<br>')}`;
-                        msgContainer.scrollTop = msgContainer.scrollHeight;
-                    });
-                } catch (e) { aiTextUIContainer.innerHTML = AI_CONTENT.ERROR_TEXT; }
+                    const response = await fetchAIWithRetry(query, AI_CONTENT.SYSTEM_PROMPT);
+                    aiTextUIContainer.innerHTML = `<span class="text-[9px] font-tech text-cyan-500 block mb-2 uppercase tracking-widest">${AI_CONTENT.RESPONSE_STATUS}</span><span></span>`;
+                    await handleStream(response, aiTextUIContainer, AI_CONTENT.RESPONSE_STATUS);
+                } catch (e) {
+                    aiTextUIContainer.innerHTML = AI_CONTENT.ERROR_TEXT;
+                }
             }
 
             toggleBtn?.addEventListener("click", toggleChatVisibility);
             closeBtn?.addEventListener("click", toggleChatVisibility);
             sendBtn?.addEventListener("click", submitChatMessage);
             chatInput?.addEventListener("keypress", (e) => e.key === 'Enter' && submitChatMessage());
+
+            async function getNonStreamedResponse(prompt, systemPrompt) {
+                const response = await fetchAIWithRetry(prompt, systemPrompt);
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullText = '';
+                while(true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    fullText += decoder.decode(value);
+                }
+                return fullText;
+            }
 
             // --- 其他 AI 功能按鈕綁定 ---
             const nodeAiBtn    = document.getElementById("ai-node-btn");
@@ -583,10 +587,15 @@
                     logEl.innerHTML = `<span class="text-luxury-gold font-bold text-[9px] mb-1 block">✨ AI_SYSTEM_REPORT_</span><span class="text-gray-300 text-[11px] animate-pulse">解析數據中...</span>`;
                     logContainer.prepend(logEl);
                     const target = logEl.querySelector('span:last-child');
-                    const reply = await fetchAIWithRetry(prompt);
+                    
+                    const reply = await getNonStreamedResponse(prompt);
+
                     target.classList.remove('animate-pulse');
                     target.innerHTML = reply.replace(/\n/g, '<br>');
-                } finally { nodeAiBtn.innerHTML = AI_CONTENT.NODE_IDLE_TEXT; nodeAiBtn.disabled = false; }
+                } finally {
+                    nodeAiBtn.innerHTML = AI_CONTENT.NODE_IDLE_TEXT;
+                    nodeAiBtn.disabled = false;
+                }
             });
 
             summarizeBtn?.addEventListener('click', async () => {
@@ -602,10 +611,14 @@
 
                 try {
                     const prompt = `請閱讀以下文章標題與內容，提煉出 3 個核心技術摘要。標題：${title}。內容：${body}`;
-                    const summary = await fetchAIWithRetry(prompt, "你是一位專業的技術總監。請用冷靜且具前瞻性的繁體中文提供摘要。");
+                    const summary = await getNonStreamedResponse(prompt, "你是一位專業的技術總監。請用冷靜且具前瞻性的繁體中文提供摘要。");
                     summaryText.innerHTML = summary.replace(/\n/g, '<br>');
-                } catch (e) { summaryText.innerText = "無法生成摘要。系統連線異常。"; }
-                finally { summarizeBtn.innerHTML = "✨ AI 戰略摘要"; summarizeBtn.disabled = false; }
+                } catch (e) {
+                    summaryText.innerText = "無法生成摘要。系統連線異常。";
+                } finally {
+                    summarizeBtn.innerHTML = "✨ AI 戰略摘要";
+                    summarizeBtn.disabled = false;
+                }
             });
 
             simulateBtn?.addEventListener('click', async () => {
@@ -618,12 +631,16 @@
 
                 try {
                     const prompt = `模擬場景：${factor}。請預測此舉對南橫利稻區域的「負碳指標」與「生物多樣性」之具體影響分析報告。`;
-                    const report = await fetchAIWithRetry(prompt, "你是一位環境科學 AI。請提供具備數據感的繁體中文模擬報告，長度約 100 字。");
+                    const report = await getNonStreamedResponse(prompt, "你是一位環境科學 AI。請提供具備數據感的繁體中文模擬報告，長度約 100 字。");
                     resultEl.innerHTML = report.replace(/\n/g, '<br>');
                     resultEl.classList.remove('text-gray-400');
                     resultEl.classList.add('text-green-300');
-                } catch (e) { resultEl.innerText = "模擬失敗。AI 核心無回應。"; }
-                finally { simulateBtn.innerHTML = "啟動模擬 ✨"; simulateBtn.disabled = false; }
+                } catch (e) {
+                    resultEl.innerText = "模擬失敗。AI 核心無回應。";
+                } finally {
+                    simulateBtn.innerHTML = "啟動模擬 ✨";
+                    simulateBtn.disabled = false;
+                }
             });
         }
 
@@ -631,19 +648,16 @@
         // 4. 選單切換與畫面特效控制 (Navigation Fixes)
         // ==========================================
         function switchTab(id, isMobile = false) {
-            // 隱藏所有板塊
             document.querySelectorAll('.section-view').forEach(s => { 
                 s.classList.remove('active'); 
                 s.style.display = 'none'; 
             });
-            // 顯示目標板塊
             const target = document.getElementById(id);
             if (target) { 
                 target.style.display = 'block'; 
                 setTimeout(() => target.classList.add('active'), 10); 
                 triggerPageSpecifics(id); 
             }
-            // 更新桌機導覽列 Active 狀態
             const navLinks = Array.from(document.querySelectorAll('#desktop-nav .nav-link'));
             navLinks.forEach(l => l.classList.remove('active'));
             const indexMap = ['home', 'insights', 'research', 'fieldops', 'energy', 'sustainability', 'about'];
@@ -651,18 +665,13 @@
             if(activeIndex !== -1 && navLinks[activeIndex]) {
                 navLinks[activeIndex].classList.add('active');
             }
-            // 關閉手機選單並捲動到最上
             if (isMobile) toggleMobileMenu(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function triggerPageSpecifics(id) {
-            // GSAP 浮現特效
             gsap.fromTo(`#${id} .gsap-reveal`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, visibility: 'visible' });
-            // 動態文字亂碼解析
             document.querySelectorAll(`#${id} .scramble-target`).forEach(el => scrambleText(el));
-            // 圖表載入
-            if(id === 'research') initCrystalChart();
             if(id === 'energy') initEnergyChart();
         }
 
@@ -684,11 +693,7 @@
         // ==========================================
         // 5. 動態圖表與資料庫模擬 (Data Restoration)
         // ==========================================
-        let crystalChart, energyChart;
-
-        function initCrystalChart() {
-            // This function is kept for future use but is not triggered in the new layout.
-        }
+        let energyChart;
 
         function initEnergyChart() {
             const ctx = document.getElementById('energyChart')?.getContext('2d');
@@ -714,7 +719,6 @@
             const yieldEl = document.getElementById('geo-yield');
             const logEl = document.getElementById('geo-log');
             if (!nodeEl) return;
-
             const well = geothermalWellsData[currentWellIndex];
             nodeEl.innerText = well.name;
             depthEl.setAttribute('data-val', well.depth);
@@ -729,14 +733,15 @@
 
         async function fetchTelemetry() {
             try {
-                // 抓取台東縣海端鄉附近天氣
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m,weather_code');
                 const data = await res.json();
                 document.getElementById('env-temp').innerText = data.current.temperature_2m + "°C";
                 document.getElementById('env-hum').innerText = data.current.relative_humidity_2m + "%";
                 const weatherCodes = { 0: "Clear", 1: "Mainly Clear", 2: "Partly Cloudy", 3: "Overcast", 45: "Fog", 61: "Rain" };
                 document.getElementById('env-weather').innerText = weatherCodes[data.current.weather_code] || "Nominal";
-            } catch(e) {}
+            } catch(e) {
+                console.error("Telemetry fetch failed:", e);
+            }
         }
 
         function updateTicker() {
@@ -755,7 +760,7 @@
         // ==========================================
         // 6. 文章閱讀器系統
         // ==========================================
-        let globalArticles = []; // Will be populated from articles.json
+        let globalArticles = []; 
 
         function renderArticles() {
             const container = document.getElementById('articles-container');
@@ -776,7 +781,7 @@
             document.getElementById('modal-date').innerText = article.date;
             document.getElementById('modal-title').innerText = article.title;
             document.getElementById('modal-body').innerHTML = article.content;
-            document.getElementById('ai-summary-box').classList.add('hidden'); // 重設摘要
+            document.getElementById('ai-summary-box').classList.add('hidden');
             const modal = document.getElementById('article-modal');
             modal.classList.remove('hidden'); modal.classList.add('flex');
             setTimeout(() => { modal.classList.remove('opacity-0'); document.getElementById('article-modal-content').classList.remove('translate-y-8'); }, 10);
@@ -818,47 +823,41 @@
         // ==========================================
         // 8. 系統整體啟動點 (On Load)
         // ==========================================
-        async function loadArticles() {
-            try {
-                // For this self-contained example, we embed the JSON content directly.
-                globalArticles = [
-                  {
-                    "id": "article-01",
-                    "date": "2026-02-01",
-                    "category": "RESEARCH REPORT",
-                    "title": "逆熵運算架構在極端高山環境的潛力分析",
-                    "summary": "探討如何利用晶體生長演算法，在無穩定電網的南橫高山區域建立高韌性的邊緣運算節點，並達到數據提純的目標...",
-                    "content": "<p class='mb-4'>隨著全球邊緣運算需求的急遽上升，傳統的伺服器農場已無法滿足極端環境下的即時運算需求。本研究報告深入探討了 ONYX 的核心技術「逆熵運算架構」。</p><p class='mb-4'>我們在南橫利稻村的實驗節點證實，透過模擬礦物結晶過程的演算法，我們能在初期排除 68% 的無效數據運算，大幅降低能耗。</p><p class='mb-4'>未來展望：我們將持續推動負碳協議，將伺服器廢熱導入微電網的溫室循環系統，實現真正的深科技生態共生。</p>"
-                  },
-                  {
-                    "id": "article-02",
-                    "date": "2025-10-28",
-                    "category": "FOUNDER'S INSIGHT",
-                    "title": "數據權威的隱形守門人：為什麼我們選擇深科技",
-                    "summary": "在這個充滿雜訊的 AI 時代，真正的價值不在於擁有最大的算力，而在於對底層邏輯的絕對掌握與提純能力。",
-                    "content": "<p class='mb-4'>許多人問我，為什麼 ONYX 要將據點設在遠離城市喧囂的極端環境中？答案很簡單：最極致的科技，必須經得起最嚴酷的淬鍊。</p><p class='mb-4'>如同黑曜石，我們不追求表面的浮華。在這個充滿雜訊的 AI 時代，我們專注於深科技 (Deep Tech) 的底層邏輯，我們相信，未來的數據權威將屬於那些能夠在極端條件下，依然維持 99.9% 精度與穩定性的隱形守門人。</p>"
-                  },
-                  {
-                    "id": "article-03",
-                    "date": "2025-12-31",
-                    "category": "TECH UPDATE",
-                    "title": "Sector Zero 節點 RTK 定位系統升級公告",
-                    "summary": "針對高頻圖資與動態流量監測，ONYX 已完成最新一波的 RTK+ 協定更新，穩定度提升至 99.98%。",
-                    "content": "<p class='mb-4'><strong>系統升級報告：</strong></p><ul class='list-disc pl-5 mb-4 space-y-2'><li>RTK 校正訊號延遲已縮減至 8ms 以內。</li><li>結合低軌衛星 (LEO) 的無縫切換機制已通過極端氣候壓力測試。</li><li>南橫公路的動態車流預測準確率提升 14%。</li></ul><p>感謝工程團隊的努力，這代表我們的韌性節點在面對地質與氣候挑戰時，具備了更強大的生存與服務能力。</p>"
-                  }
-                ];
-
-                renderArticles();
-            } catch (error) {
-                console.error("Failed to load articles:", error);
-            }
+        function loadArticles() {
+            globalArticles = [
+              {
+                "id": "article-01",
+                "date": "2026-02-01",
+                "category": "RESEARCH REPORT",
+                "title": "逆熵運算架構在極端高山環境的潛力分析",
+                "summary": "探討如何利用晶體生長演算法，在無穩定電網的南橫高山區域建立高韌性的邊緣運算節點，並達到數據提純的目標...",
+                "content": "<p class='mb-4'>隨著全球邊緣運算需求的急遽上升，傳統的伺服器農場已無法滿足極端環境下的即時運算需求。本研究報告深入探討了 ONYX 的核心技術「逆熵運算架構」。</p><p class='mb-4'>我們在南橫利稻村的實驗節點證實，透過模擬礦物結晶過程的演算法，我們能在初期排除 68% 的無效數據運算，大幅降低能耗。</p><p class='mb-4'>未來展望：我們將持續推動負碳協議，將伺服器廢熱導入微電網的溫室循環系統，實現真正的深科技生態共生。</p>"
+              },
+              {
+                "id": "article-02",
+                "date": "2025-10-28",
+                "category": "FOUNDER'S INSIGHT",
+                "title": "數據權威的隱形守門人：為什麼我們選擇深科技",
+                "summary": "在這個充滿雜訊的 AI 時代，真正的價值不在於擁有最大的算力，而在於對底層邏輯的絕對掌握與提純能力。",
+                "content": "<p class='mb-4'>許多人問我，為什麼 ONYX 要將據點設在遠離城市喧囂的極端環境中？答案很簡單：最極致的科技，必須經得起最嚴酷的淬鍊。</p><p class='mb-4'>如同黑曜石，我們不追求表面的浮華。在這個充滿雜訊的 AI 時代，我們專注於深科技 (Deep Tech) 的底層邏輯，我們相信，未來的數據權威將屬於那些能夠在極端條件下，依然維持 99.9% 精度與穩定性的隱形守門人。</p>"
+              },
+              {
+                "id": "article-03",
+                "date": "2025-12-31",
+                "category": "TECH UPDATE",
+                "title": "Sector Zero 節點 RTK 定位系統升級公告",
+                "summary": "針對高頻圖資與動態流量監測，ONYX 已完成最新一波的 RTK+ 協定更新，穩定度提升至 99.98%。",
+                "content": "<p class='mb-4'><strong>系統升級報告：</strong></p><ul class='list-disc pl-5 mb-4 space-y-2'><li>RTK 校正訊號延遲已縮減至 8ms 以內。</li><li>結合低軌衛星 (LEO) 的無縫切換機制已通過極端氣候壓力測試。</li><li>南橫公路的動態車流預測準確率提升 14%。</li></ul><p>感謝工程團隊的努力，這代表我們的韌性節點在面對地質與氣候挑戰時，具備了更強大的生存與服務能力。</p>"
+              }
+            ];
+            renderArticles();
         }
 
         window.addEventListener('load', async () => {
             gsap.registerPlugin(ScrollTrigger);
             initThreeJS(); 
-            initInteractions(); // 啟動完整 AI 與按鈕監聽
-            await loadArticles(); // 載入文章
+            initInteractions();
+            loadArticles();
             fetchTelemetry();
             updateTicker();
             
@@ -866,13 +865,13 @@
             setInterval(fetchTelemetry, 60000); 
             setInterval(syncGeotexData, 15000);
             setInterval(addLog, 4000);
-            syncGeotexData(); // 初始化第一次數據
+            syncGeotexData();
             
             // 結束開機畫面
             setTimeout(() => { 
                 document.getElementById('boot-screen').style.opacity = '0'; 
                 switchTab('home'); 
-                setTimeout(() => document.getElementById('boot-screen').style.visibility = 'hidden', 1000); 
+                setTimeout(() => { document.getElementById('boot-screen').style.visibility = 'hidden'; }, 1000); 
             }, 2200);
         });
     </script>
