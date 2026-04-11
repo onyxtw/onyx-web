@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ONYX Simple Deploy</title>
+  <meta name="description" content="ONYX simple deploy version." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="index.html">
+        <div class="brand-logo"><img src="IMG_4889.jpeg" alt="ONYX" onerror="this.remove(); this.parentNode.textContent='O';"></div>
+        <div style="min-width:0">
+          <div class="brand-title">ONYX DEEP TECH STUDIO</div>
+          <div class="brand-sub">Litu / Lidao Base · Haiduan Township · Taitung County · Taiwan</div>
+        </div>
+      </a>
+      <button id="menuBtn" class="menu-btn">Menu</button>
+      <nav id="siteNav" class="nav">
+        <a class="" href="index.html">Home</a>
+        <a class="" href="about.html">About</a>
+        <a class="active" href="project-onyx.html">Project</a>
+        <a class="" href="litu-base.html">Litu Base</a>
+        <a class="" href="research.html">Research</a>
+        <a class="" href="updates.html">Updates</a>
+        <a class="" href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container">
+<section class="section"><div class="panel"><div class="panel-inner">
+<div class="eyebrow">Project Onyx</div>
+<h1>Project Onyx</h1>
+<p>Project Onyx 是把 terrain、energy、network、data、compute 與 node operation 串成同一個系統邏輯的框架。</p>
+<div class="grid-3">
+  <div class="card"><div class="k">G.E.M.S.</div><h3>Heat-coupled resource logic</h3><p>將運算熱負載與地熱 / 水熱條件重新耦合。</p></div>
+  <div class="card"><div class="k">T.C.P.</div><h3>Terrain-aware protocol</h3><p>高限制環境下的能源流、資料流與節點生存能力。</p></div>
+  <div class="card"><div class="k">Litu</div><h3>Physical validation layer</h3><p>讓概念進入場域限制、部署條件與驗證路徑。</p></div>
+</div>
+</div></div></section>
+</main>
+  <button id="chatTrigger" class="chat-trigger" aria-label="Open AI chat">
+    <img src="IMG_4889.jpeg" alt="AI" onerror="this.remove(); this.parentNode.textContent='AI';">
+  </button>
+  <div id="chatWindow" class="chat-window">
+    <div class="chat-head"><strong>ONYX AI WINDOW</strong><button id="chatClose" class="chat-close">Close</button></div>
+    <div id="chatMessages" class="chat-messages"></div>
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" class="chat-input" placeholder="Ask about Litu / G.E.M.S. / T.C.P.">
+      <button class="chat-send" type="submit">Send</button>
+    </form>
+  </div>
+  <script src="assets/app.js"></script>
+</body>
+</html>
