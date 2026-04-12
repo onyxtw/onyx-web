@@ -1,0 +1,133 @@
+```html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>利稻 Litu Node | ONYX</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="/assets/js/layout.js"></script>
+  <script src="/assets/js/ai-widget.js"></script>
+  <style>
+    /* 觀測站專屬樣式 */
+    #litu-3d-canvas { position: fixed; inset: 0; z-index: -1; background: #05060a; }
+    .hud-layer { position: relative; z-index: 10; pointer-events: none; padding-top: 20px; min-height: 85vh; display: flex; flex-direction: column; justify-content: space-between; }
+    .hud-panels { display: grid; grid-template-columns: 320px 1fr 320px; gap: 20px; align-items: end; }
+    .hud-box { pointer-events: auto; background: rgba(7,10,15,0.75); border: 1px solid rgba(0,232,223,0.3); border-radius: 16px; padding: 24px; backdrop-filter: blur(12px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .kpi-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .kpi-row:last-child { border-bottom: none; }
+    .label { font-size: 11px; color: #98a2b3; text-transform: uppercase; letter-spacing: 0.1em; }
+    .val { font-family: ui-monospace, monospace; font-weight: bold; color: #fff; font-size: 16px; }
+    .val.cyan { color: #00e8df; text-shadow: 0 0 10px rgba(0,232,223,0.5); }
+    .val.gold { color: #d4af37; }
+    .crosshair { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 1px solid rgba(0,232,223,0.2); border-radius: 50%; pointer-events: none; }
+  </style>
+</head>
+<body data-page="litu">
+  <div id="site-header"></div>
+  <div id="litu-3d-canvas"></div>
+  <div class="crosshair"></div>
+
+  <main class="page-shell">
+    <div class="hud-layer">
+      <div style="max-width: 500px; pointer-events: auto;">
+        <div class="eyebrow">Observatory · Haiduan</div>
+        <h1 class="hero-title">Litu Node Telemetry</h1>
+        <p style="color:var(--muted); font-size: 14px; margin-top: 10px;">
+          即時監控南橫利稻基地之自治微電網、全光通訊鏈路與地質能量輸出。數據透過邊緣節點每 5 秒同步一次。
+        </p>
+      </div>
+
+      <div class="hud-panels">
+        <!-- 左側面板 -->
+        <div class="hud-box">
+          <div class="eyebrow" style="margin-bottom: 15px;">Core Metrics</div>
+          <div class="kpi-row"><span class="label">Grid Status</span><span class="val" id="status">Syncing...</span></div>
+          <div class="kpi-row"><span class="label">Optical Link</span><span class="val cyan" id="link">-- Gbps</span></div>
+          <div class="kpi-row"><span class="label">Latency</span><span class="val" id="latency">-- ms</span></div>
+          <div class="kpi-row"><span class="label">Stability</span><span class="val gold" id="stability">-- %</span></div>
+        </div>
+
+        <div></div> <!-- 中央空間 -->
+
+        <!-- 右側面板 -->
+        <div class="hud-box">
+          <div class="eyebrow" style="margin-bottom: 15px;">Environment</div>
+          <div class="kpi-row"><span class="label">Weather</span><span class="val" id="weather">--</span></div>
+          <div class="kpi-row"><span class="label">Air Temp</span><span class="val" id="temp">-- °C</span></div>
+          <div class="kpi-row"><span class="label">Output</span><span class="val cyan" id="power">-- MW</span></div>
+          <div class="kpi-row"><span class="label">Last Sync</span><span class="val" id="sync" style="font-size:10px; color:#98a2b3;">--</span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <div id="site-footer"></div>
+
+  <script>
+    // 3D 渲染與資料同步邏輯
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('litu-3d-canvas');
+      if (!window.THREE) return;
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x05060a, 0.008);
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 1000);
+      camera.position.set(0, 35, 70);
+      camera.lookAt(0, 0, 0);
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      container.appendChild(renderer.domElement);
+      
+      // 生成網格地形
+      const geo = new THREE.PlaneGeometry(200, 200, 50, 50);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i), y = pos.getY(i);
+        const dist = Math.sqrt(x*x + y*y);
+        pos.setZ(i, dist > 15 ? Math.sin(x*0.1)*Math.cos(y*0.1)*10 : 0);
+      }
+      geo.computeVertexNormals();
+      const terrain = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0x00e8df, wireframe: true, transparent: true, opacity: 0.1 }));
+      terrain.rotation.x = -Math.PI/2;
+      scene.add(terrain);
+
+      // 動畫迴圈
+      function animate() {
+        requestAnimationFrame(animate);
+        terrain.rotation.z += 0.0005;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // 資料同步
+      async function updateData() {
+        try {
+          const res = await fetch('/api/geodata');
+          const d = await res.json();
+          document.getElementById('status').textContent = d.microgridStatus;
+          document.getElementById('link').textContent = "100.0 Gbps";
+          document.getElementById('latency').textContent = d.latencyMs + ' ms';
+          document.getElementById('stability').textContent = d.stabilityPct + ' %';
+          document.getElementById('weather').textContent = "Mountain Fog";
+          document.getElementById('temp').textContent = d.airTempC + ' °C';
+          document.getElementById('power').textContent = d.outputMw + ' MW';
+          document.getElementById('sync').textContent = new Date(d.updatedAt).toLocaleTimeString();
+        } catch (e) { console.error("Data sync failed"); }
+      }
+      setInterval(updateData, 5000); updateData();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    });
+  </script>
+</body>
+</html>
+
+```
