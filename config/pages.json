@@ -1,0 +1,32 @@
+[
+  {
+    "key": "home",
+    "title": "首頁 Home",
+    "path": "index.html"
+  },
+  {
+    "key": "solutions",
+    "title": "系統 Solutions",
+    "path": "pages/solutions.html"
+  },
+  {
+    "key": "insights",
+    "title": "洞察 Insights",
+    "path": "pages/insights.html"
+  },
+  {
+    "key": "litu",
+    "title": "利稻 Litu Node",
+    "path": "pages/litu-node.html"
+  },
+  {
+    "key": "about",
+    "title": "關於 About",
+    "path": "pages/about.html"
+  },
+  {
+    "key": "contact",
+    "title": "聯絡 Contact",
+    "path": "pages/contact.html"
+  }
+]
