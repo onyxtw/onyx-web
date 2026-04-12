@@ -24,9 +24,6 @@
     "content": "<p class='mb-4'><strong>系統升級報告：</strong></p><ul class='list-disc pl-5 mb-4 space-y-2'><li>RTK 校正訊號延遲已縮減至 8ms 以內。</li><li>結合低軌衛星 (LEO) 的無縫切換機制已通過極端氣候壓力測試。</li><li>南橫公路的動態車流預測準確率提升 14%。</li></ul><p>感謝工程團隊的努力，這代表我們的韌性節點在面對地質與氣候挑戰時，具備了更強大的生存與服務能力。</p>"
   }
 ]
-```json
-[
-  {
     "id": "insight-001",
     "category": "Research Report",
     "date": "2026-04-12",
@@ -51,6 +48,4 @@
     "contentHtml": "<p>ONYX 的故事始於南橫公路。我們最早從本地無線電呼叫技術開始，後續將 AI、能源、通訊與場域部署整合為真正可運作的 Regenerative Infrastructure。我們擁有超過 10 年的山區通訊部署經驗。</p>"
   }
 ]
-
-```
 
