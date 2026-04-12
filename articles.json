@@ -24,3 +24,33 @@
     "content": "<p class='mb-4'><strong>系統升級報告：</strong></p><ul class='list-disc pl-5 mb-4 space-y-2'><li>RTK 校正訊號延遲已縮減至 8ms 以內。</li><li>結合低軌衛星 (LEO) 的無縫切換機制已通過極端氣候壓力測試。</li><li>南橫公路的動態車流預測準確率提升 14%。</li></ul><p>感謝工程團隊的努力，這代表我們的韌性節點在面對地質與氣候挑戰時，具備了更強大的生存與服務能力。</p>"
   }
 ]
+```json
+[
+  {
+    "id": "insight-001",
+    "category": "Research Report",
+    "date": "2026-04-12",
+    "title": "Litu Node 自主電網與全光通訊傳輸架構",
+    "summary": "描述自主電網運算、光通訊傳輸與山區節點部署之間的結構關係。",
+    "contentHtml": "<p>ONYX 在 Litu 基地建立了高限制環境下的主權韌性節點。核心在於將能源流、資料流與運算流整合，即使在極端氣候下也能維持 99.99% 的 AI 推論可用性。我們使用了特製的全光纖傳輸協議，確保延遲低於 8ms。</p>"
+  },
+  {
+    "id": "insight-002",
+    "category": "Deployment Update",
+    "date": "2026-04-05",
+    "title": "G.E.M.S. 地質元素代謝系統現地驗證",
+    "summary": "透過熱交換技術將 AI 伺服器廢熱轉化為設施保溫機制。",
+    "contentHtml": "<p>G.E.M.S. 在利稻基地實際測試環境溫差高達 15 度，成功將運算廢熱轉化為資源代謝循環，達成能源再生利用。這是目前全球唯一將深層地熱與高效能運算結合的實體案例。</p>"
+  },
+  {
+    "id": "insight-003",
+    "category": "System Note",
+    "date": "2026-03-28",
+    "title": "從南橫無線電呼叫服務到 Regenerative Infrastructure",
+    "summary": "從本地實際服務與現場通訊需求，逐步延展為電信、AI、能源與節點整合能力。",
+    "contentHtml": "<p>ONYX 的故事始於南橫公路。我們最早從本地無線電呼叫技術開始，後續將 AI、能源、通訊與場域部署整合為真正可運作的 Regenerative Infrastructure。我們擁有超過 10 年的山區通訊部署經驗。</p>"
+  }
+]
+
+```
+
