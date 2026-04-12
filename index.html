@@ -1,280 +1,873 @@
+```html
 <!DOCTYPE html>
-<html lang="zh-TW" class="scroll-smooth">
+<html lang="zh-TW">
 <head>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RSL9FEM4NW"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-RSL9FEM4NW');
-  </script>
-
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-  <!-- SEO -->
-  <title>ONYX｜Litu Node Infra & AI Systems Integration</title>
-  <meta name="description" content="ONYX 提供 AI · 雲端 · 資料 · 節點整合的系統解決方案，在臺東利稻 Litu Node 建立全球首創的 Regenerative Infra。">
-  <link rel="canonical" href="https://www.onyx.tw/"/>
-
-  <!-- PWA / Icons -->
-  <link rel="icon" href="IMG_4889.jpeg">
-  <link rel="apple-touch-icon" href="IMG_4889.jpeg">
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Fonts & Libs -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Playfair+Display:wght@400;600&family=Noto+Serif+TC:wght@300;500&display=swap" rel="stylesheet"/>
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>首頁 | ONYX DEEP TECH STUDIO</title>
   <style>
+    /* ========== CSS 樣式 ========== */
     :root{
-      --bg:#05060a;--cyan:#00f0ff;--gold:#d4af37;--green:#10b981;
-      --glass:rgba(255,255,255,.015);--border:rgba(255,255,255,.05);
-      --tech:'JetBrains Mono',monospace;--serif:'Playfair Display',serif;--body:'Noto Serif TC',serif
+      --bg:#05060a;
+      --bg-soft:#0a0d14;
+      --surface:rgba(255,255,255,.04);
+      --surface-strong:rgba(255,255,255,.07);
+      --line:rgba(255,255,255,.10);
+      --text:#edf2f7;
+      --muted:#98a2b3;
+      --cyan:#00e8df;
+      --gold:#d4af37;
+      --green:#10b981;
+      --danger:#ff6b6b;
+      --shadow:0 24px 80px rgba(0,0,0,.42);
+      --radius:24px;
+      --max:1280px;
     }
-    html,body{background:var(--bg);color:#e2e8f0;font-family:var(--body);scroll-behavior:smooth}
-    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:rgba(0,240,255,.25)}
-    .font-tech{font-family:var(--tech)}.font-serif{font-family:var(--serif)}
-    .glass{background:var(--glass);backdrop-filter:blur(18px);border:1px solid var(--border)}
-    .nav-btn{opacity:.55;transition:.3s;letter-spacing:.15em}.nav-btn:hover,.nav-btn.active{opacity:1;color:#fff}
-    .grid-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;
-      background-image:linear-gradient(rgba(0,240,255,.07)1px,transparent 1px),
-                      linear-gradient(90deg,rgba(0,240,255,.07)1px,transparent 1px);
-      background-size:42px 42px}
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#05060a 0%,#070a12 45%,#05060a 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,"Noto Sans TC",sans-serif;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:44px 44px;
+      mask-image:radial-gradient(circle at center, black 26%, transparent 82%);
+      opacity:.18;
+      z-index:-2;
+    }
+
+    #photon-bg{
+      position:fixed;
+      inset:0;
+      z-index:-3;
+    }
+
+    .grid-overlay{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0,232,223,.06), transparent 24%),
+        radial-gradient(circle at 80% 15%, rgba(212,175,55,.05), transparent 20%),
+        radial-gradient(circle at 70% 78%, rgba(16,185,129,.04), transparent 26%);
+    }
+
+    .container{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:60;
+      backdrop-filter:blur(20px);
+      background:rgba(5,6,10,.72);
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      padding:14px 0;
+    }
+
+    .brand{
+      color:#fff;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .brand-mark{
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(0,232,223,.28);
+      background:linear-gradient(135deg, rgba(0,232,223,.12), rgba(212,175,55,.08));
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+      font-weight:700;
+      letter-spacing:.08em;
+    }
+
+    .brand-copy strong{
+      display:block;
+      font-size:12px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    .brand-copy span{
+      display:block;
+      font-size:11px;
+      color:var(--muted);
+      margin-top:4px;
+      letter-spacing:.08em;
+    }
+
+    .nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .nav-link{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      position:relative;
+      padding-bottom:4px;
+      transition:all .25s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active{
+      color:#fff;
+    }
+
+    .nav-link::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height:2px;
+      transform:scaleX(0);
+      transform-origin:left;
+      background:linear-gradient(90deg,var(--cyan),var(--gold));
+      transition:transform .25s ease;
+    }
+
+    .nav-link.active::after,
+    .nav-link:hover::after{
+      transform:scaleX(1);
+    }
+
+    .mobile-menu-btn{
+      display:none;
+      border:1px solid var(--line);
+      color:#fff;
+      background:rgba(255,255,255,.03);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+    }
+
+    .mobile-sheet{
+      position:fixed;
+      inset:0;
+      z-index:70;
+      background:rgba(5,6,10,.96);
+      backdrop-filter:blur(20px);
+      display:none;
+      padding:88px 24px 24px;
+    }
+
+    .mobile-sheet.open{
+      display:block;
+    }
+
+    .mobile-sheet nav{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .mobile-sheet .nav-link{
+      font-size:22px;
+      letter-spacing:.08em;
+      text-transform:none;
+    }
+
+    .mobile-close{
+      position:absolute;
+      top:18px;
+      right:18px;
+      border:1px solid var(--line);
+      color:#fff;
+      background:rgba(255,255,255,.03);
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+    }
+
+    .page-shell{
+      width:min(var(--max), calc(100% - 32px));
+      margin:0 auto;
+      padding:42px 0 88px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:24px;
+      align-items:stretch;
+      padding-top:30px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+    }
+
+    .panel-inner{
+      padding:30px;
+    }
+
+    .eyebrow{
+      font-size:11px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--gold);
+      font-weight:700;
+      margin-bottom:14px;
+    }
+
+    .hero-title{
+      font-size:clamp(38px,6vw,78px);
+      line-height:.98;
+      letter-spacing:-.05em;
+      margin:0;
+      color:#fff;
+    }
+
+    .hero-copy{
+      margin-top:20px;
+      font-size:17px;
+      line-height:1.95;
+      color:var(--muted);
+      max-width:760px;
+    }
+
+    .hero-copy strong{
+      color:#fff;
+    }
+
+    .btn-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-top:24px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:999px;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:700;
+      transition:transform .2s ease, opacity .2s ease;
+      cursor:pointer;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+      opacity:.96;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, rgba(0,232,223,.95), rgba(0,232,223,.78));
+      color:#041014;
+    }
+
+    .btn-secondary{
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      border:1px solid var(--line);
+    }
+
+    .hero-card-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .mini-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .mini-card .k{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+
+    .mini-card .v{
+      color:#fff;
+      font-size:18px;
+      line-height:1.35;
+      font-weight:700;
+    }
+
+    .section{
+      margin-top:28px;
+    }
+
+    .section-head{
+      margin-bottom:18px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(28px,4vw,48px);
+      letter-spacing:-.04em;
+      line-height:1.05;
+    }
+
+    .section-head p{
+      margin:12px 0 0;
+      color:var(--muted);
+      line-height:1.9;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.03);
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h3{
+      margin:0;
+      font-size:22px;
+      letter-spacing:-.03em;
+    }
+
+    .card p{
+      margin:12px 0 0;
+      color:var(--muted);
+      line-height:1.85;
+    }
+
+    .card .tag{
+      display:inline-block;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:var(--gold);
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    .footer{
+      margin-top:42px;
+      border-top:1px solid var(--line);
+      padding:24px 0 38px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+
+    /* AI Widget CSS */
+    .ai-trigger{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:120;
+      width:64px;
+      height:64px;
+      border-radius:18px;
+      border:1px solid rgba(0,232,223,.34);
+      background:linear-gradient(180deg, rgba(13,17,24,.96), rgba(6,9,14,.98));
+      color:#fff;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      box-shadow:0 16px 40px rgba(0,0,0,.42);
+      font-weight:700;
+      letter-spacing:.08em;
+    }
+
+    .ai-window{
+      position:fixed;
+      right:18px;
+      bottom:96px;
+      z-index:120;
+      width:min(380px, calc(100% - 24px));
+      height:520px;
+      display:none;
+      flex-direction:column;
+      border-radius:22px;
+      border:1px solid rgba(0,232,223,.28);
+      background:rgba(7,10,15,.96);
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .ai-window.open{
+      display:flex;
+    }
+
+    .ai-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--line);
+      background:rgba(0,232,223,.06);
+    }
+
+    .ai-head strong{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--cyan);
+    }
+
+    .ai-head button{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:#fff;
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+
+    .ai-log{
+      flex:1;
+      overflow:auto;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .ai-msg{
+      max-width:86%;
+      border-radius:16px;
+      padding:12px 14px;
+      line-height:1.75;
+      font-size:14px;
+      white-space:pre-wrap;
+    }
+
+    .ai-msg.user{
+      align-self:flex-end;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .ai-msg.bot{
+      align-self:flex-start;
+      background:rgba(0,232,223,.08);
+      border:1px solid rgba(0,232,223,.16);
+    }
+
+    .ai-form{
+      display:flex;
+      gap:8px;
+      padding:12px;
+      border-top:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+    }
+
+    .ai-form input{
+      flex:1;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      padding:12px 14px;
+    }
+
+    .ai-form button{
+      border:none;
+      border-radius:14px;
+      background:rgba(0,232,223,.18);
+      color:#fff;
+      padding:12px 14px;
+      cursor:pointer;
+    }
+
+    .badge-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .badge{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr 1fr;}
+    }
+
+    @media (max-width: 760px){
+      .topbar-inner{padding:12px 0}
+      .nav{display:none}
+      .mobile-menu-btn{display:block}
+      .page-shell{padding-top:30px}
+      .hero-title{font-size:clamp(34px, 12vw, 54px)}
+      .cards{grid-template-columns:1fr;}
+      .panel-inner{padding:22px}
+      .brand-copy span{max-width:190px}
+    }
   </style>
+  
+  <!-- 引入 Three.js 供背景使用 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body class="min-h-screen flex flex-col overflow-x-hidden">
 
-<!-- Boot Screen -->
-<div id="boot" class="fixed inset-0 flex flex-col items-center justify-center bg-[#05060a] z-[9998]">
-  <img src="IMG_4879.png" alt="ONYX" class="h-20 w-auto mb-4 animate-pulse"/>
-  <p class="font-tech text-[11px] tracking-[.4em] text-cyan-400 uppercase">Initializing Litu Node Infra</p>
-  <div class="w-44 h-[2px] bg-white/5 overflow-hidden mt-6 relative">
-    <div class="absolute inset-0 animate-[loading_1.5s_infinite] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
-  </div>
-</div>
+<body data-page="home" data-title="首頁">
+  <div id="photon-bg"></div>
+  <div class="grid-overlay"></div>
+  
+  <div id="site-header"></div>
 
-<!-- 3D BG -->
-<div id="canvas" class="fixed inset-0 -z-10"></div>
-<div class="grid-bg"></div>
-
-<!-- Header -->
-<header class="glass fixed top-0 inset-x-0 h-20 px-6 md:px-12 flex items-center justify-between z-50">
-  <div class="flex items-center cursor-pointer" onclick="nav('home')">
-    <img src="IMG_4879.png" alt="ONYX" class="h-12 w-auto"/>
-  </div>
-  <nav class="hidden lg:flex gap-8 font-tech text-[10px] uppercase">
-    <button class="nav-btn active" onclick="nav('home')">Home</button>
-    <button class="nav-btn" onclick="nav('solutions')">Solutions</button>
-    <button class="nav-btn" onclick="nav('litu')">Litu Node</button>
-    <button class="nav-btn" onclick="nav('insight')">Insights</button>
-    <button class="nav-btn" onclick="nav('about')">About</button>
-  </nav>
-  <button class="lg:hidden text-xl text-white/70" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
-</header>
-
-<!-- Mobile Nav -->
-<div id="mnav" class="fixed inset-0 bg-[#05060a]/95 backdrop-blur-xl pt-28 px-10 flex-col gap-6 translate-x-full transition-transform duration-500 z-40 lg:hidden">
-  <button class="absolute top-10 right-10 text-2xl text-white/60" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
-  <a class="text-2xl font-serif text-gray-100 mb-4" onclick="nav('home',true)">Home</a>
-  <a class="text-2xl font-serif text-gray-100 mb-4" onclick="nav('solutions',true)">Solutions</a>
-  <a class="text-2xl font-serif text-gray-100 mb-4" onclick="nav('litu',true)">Litu Node</a>
-  <a class="text-2xl font-serif text-gray-100 mb-4" onclick="nav('insight',true)">Insights</a>
-  <a class="text-2xl font-serif text-gray-100" onclick="nav('about',true)">About</a>
-</div>
-
-<main class="pt-32 pb-24 px-6 md:px-12 max-w-[1440px] mx-auto flex-grow">
-
-  <!-- HERO ==================== -->
-  <section id="home" class="sec active">
-    <div class="max-w-4xl">
-      <h1 class="text-5xl md:text-7xl font-serif text-white leading-tight mb-10">
-        <span class="block">從 AI 到實體場域，</span>
-        <span class="bg-gradient-to-r from-cyan-300 to-gold bg-clip-text text-transparent italic">建構可部署的系統。</span>
-      </h1>
-      <p class="text-gray-300 max-w-xl mb-10 leading-relaxed">
-        ONYX 提供 AI・雲端・資料與節點整合的 <span class="text-cyan-400">System Integration</span>，
-        以 <span class="text-gold">Litu Node</span> 為核心，打造可運作、可擴展、可維運的 Regenerative Infrastructure。
-      </p>
-      <div class="flex gap-4">
-        <a href="#solutions" class="px-6 py-3 bg-cyan-500/20 border border-cyan-400 text-cyan-200 font-tech text-sm rounded-lg hover:bg-cyan-500/30 transition">查看解決方案</a>
-        <a href="mailto:contact@onyx.tw" class="px-6 py-3 bg-gold/20 border border-gold text-gold font-tech text-sm rounded-lg hover:bg-gold/30 transition">啟動專案</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- SOLUTIONS =============== -->
-  <section id="solutions" class="sec hidden">
-    <div class="border-l-4 border-cyan-400 pl-8 mb-14">
-      <h2 class="text-4xl font-serif text-white mb-4">Solutions</h2>
-      <p class="text-gray-400">AI·Cloud·Data·Edge — 模組化系統，一次交付。</p>
-    </div>
-
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-      <div class="glass p-8 rounded-xl">
-        <h3 class="font-serif text-xl text-white mb-3">AI Systems Integration</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">企業級 AI 協作／決策系統、知識庫、流程自動化。</p>
-      </div>
-      <div class="glass p-8 rounded-xl">
-        <h3 class="font-serif text-xl text-white mb-3">Cloud & Data Infra</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">API Gateway、資料湖、權限治理與 IaC 自動化。</p>
-      </div>
-      <div class="glass p-8 rounded-xl">
-        <h3 class="font-serif text-xl text-white mb-3">Edge & Field Systems</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">感測器、遠端節點、監測／控制與自癒式部署。</p>
-      </div>
-      <div class="glass p-8 rounded-xl">
-        <h3 class="font-serif text-xl text-white mb-3">Sustainable Compute</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">低 PUE 運算、廢熱循環、能源調度與碳負設計。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- LITU NODE ================= -->
-  <section id="litu" class="sec hidden">
-    <div class="border-l-4 border-gold pl-8 mb-14">
-      <h2 class="text-4xl font-serif text-white mb-4">Litu Node</h2>
-      <p class="text-gray-400 max-w-2xl">
-        位於臺東利稻的 <span class="text-gold">G.E.M.S. 研究基地</span>，結合
-        <span class="text-cyan-400">AI HPC</span> 與 <span class="text-green-400">地熱能</span>，
-        達成碳負計算與主權韌性。
-      </p>
-    </div>
-
-    <div class="grid lg:grid-cols-12 gap-10">
-      <div class="lg:col-span-8 glass p-10 rounded-2xl">
-        <h3 class="font-tech text-cyan-400 text-xs tracking-widest mb-4">Live Telemetry</h3>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center font-tech">
-          <div>
-            <div class="text-[10px] text-gray-400 mb-1">Latency</div>
-            <div class="text-2xl text-white"><span id="lat">8</span> ms</div>
+  <main class="page-shell">
+    <section class="hero">
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="eyebrow">Autonomous Grid · Optical Compute · Litu Node</div>
+          <h1 class="hero-title">從自主電網運算到全光通訊傳輸，<br>重塑可部署的系統。</h1>
+          <p class="hero-copy">
+            ONYX DEEP TECH STUDIO 以 <strong>全球唯一自主電網運算與全光通訊傳輸架構</strong> 為品牌主張，
+            將 AI、資料、能源與通訊整合為真正可維運、可擴展、可部署的 <strong>Regenerative Infrastructure</strong>。
+            一切從 <strong>Litu / Lidao Base</strong> 作為現地節點出發。
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-primary" onclick="alert('預覽模式：前往解決方案頁面')">查看解決方案</a>
+            <a class="btn btn-secondary" onclick="alert('預覽模式：前往 Litu Node 即時監控')">查看 Litu Node</a>
           </div>
-          <div>
-            <div class="text-[10px] text-gray-400 mb-1">Stability</div>
-            <div class="text-2xl text-green-400">99.98 %</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-gray-400 mb-1">Temp</div>
-            <div class="text-2xl text-white" id="temp">-- °C</div>
-          </div>
-          <div>
-            <div class="text-[10px] text-gray-400 mb-1">Humidity</div>
-            <div class="text-2xl text-white" id="hum">-- %</div>
+
+          <div class="badge-row">
+            <span class="badge">AI Systems Integration</span>
+            <span class="badge">Autonomous Microgrid</span>
+            <span class="badge">Optical Transmission</span>
+            <span class="badge">Field-Validated Infra</span>
           </div>
         </div>
       </div>
 
-      <div class="lg:col-span-4 glass p-8 rounded-2xl flex flex-col">
-        <div class="flex justify-between items-center mb-4">
-          <h4 class="font-tech text-xs tracking-widest text-gray-300">System Logs</h4>
-          <button id="node-ai" class="px-3 py-1 bg-gold/10 border border-gold/30 text-gold text-[11px] font-tech rounded hover:bg-gold/20 transition">
-            <i class="fa-solid fa-sparkles"></i> AI 分析
-          </button>
+      <div class="panel">
+        <div class="panel-inner">
+          <div class="eyebrow">Core Proof Layer</div>
+          <div class="hero-card-grid">
+            <div class="mini-card">
+              <div class="k">Node</div>
+              <div class="v">Litu / Lidao Base</div>
+            </div>
+            <div class="mini-card">
+              <div class="k">Power</div>
+              <div class="v">Autonomous Microgrid</div>
+            </div>
+            <div class="mini-card">
+              <div class="k">Network</div>
+              <div class="v">Optical Backbone</div>
+            </div>
+            <div class="mini-card">
+              <div class="k">Compute</div>
+              <div class="v">AI + Thermal Reuse</div>
+            </div>
+          </div>
         </div>
-        <div id="logbox" class="flex-1 overflow-y-auto text-[11px] font-tech space-y-4 pr-2"></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- INSIGHTS (簡版，只保留容器) -->
-  <section id="insight" class="sec hidden">
-    <div class="border-l-4 border-cyan-400 pl-8 mb-14">
-      <h2 class="text-4xl font-serif text-white mb-4">Insights</h2>
-      <p class="text-gray-400">技術白皮書與運營日誌</p>
-    </div>
-    <div id="articles" class="grid gap-8 md:grid-cols-3"></div>
-  </section>
+    <section class="section">
+      <div class="section-head">
+        <h2>核心系統</h2>
+        <p>不是單點功能，而是從能源、資料、運算到場域維運的一體化設計。</p>
+      </div>
 
-  <!-- ABOUT =================== -->
-  <section id="about" class="sec hidden">
-    <div class="border-l-4 border-white pl-8 mb-14">
-      <h2 class="text-4xl font-serif text-white mb-4">About ONYX</h2>
-    </div>
-    <p class="text-gray-300 leading-loose max-w-3xl">
-      ONYX 專注於 <span class="text-cyan-400">Engineering over Consulting</span>。
-      我們將 AI、雲端、資料流程與場域節點，以 <span class="text-gold">System Over Feature</span> 的方式重構，
-      以 <span class="text-green-400">Deployment Ready</span> 為唯一標準，實踐
-      <span class="text-cyan-400">Regenerative、Sovereign、Resilient</span> Infrastructure。
-    </p>
-  </section>
+      <div class="cards">
+        <article class="card">
+          <span class="tag">G.E.M.S.</span>
+          <h3>Geo-Elemental Metabolism System</h3>
+          <p>將運算熱負載與地熱 / 水熱結構重新耦合，形成新的資源代謝與能源循環邏輯。</p>
+        </article>
 
-</main>
+        <article class="card">
+          <span class="tag">T.C.P.</span>
+          <h3>Terrain Compute Protocol</h3>
+          <p>在高限制地形中，將能源流、資料流與節點生存能力統整為可持續運作的 protocol。</p>
+        </article>
 
-<!-- FOOTER -->
-<footer class="glass border-t border-white/5 py-4 text-center text-[11px] text-gray-500">
-  © ONYX DEEP TECH STUDIO — Litu Node Infra
-</footer>
+        <article class="card">
+          <span class="tag">L.C.A.</span>
+          <h3>Lifecycle Compute Autonomy</h3>
+          <p>在斷網與斷電等極端條件下，節點依然具備本機模型推論與自我修復之基礎能力。</p>
+        </article>
+      </div>
+    </section>
+  </main>
 
-<!-- MOBILE NAV SCRIPT -->
-<script>
-function toggleMenu(){
-  const m=document.getElementById('mnav');
-  m.classList.toggle('translate-x-full');
-}
-function nav(id,mobile=false){
-  document.querySelectorAll('.sec').forEach(s=>s.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const map={home:0,solutions:1,litu:2,insight:3,about:4};
-  document.querySelectorAll('.nav-btn')[map[id]]?.classList.add('active');
-  if(mobile)toggleMenu();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-</script>
+  <div id="site-footer"></div>
 
-<!-- DUMMY LOG / TELEMETRY -->
-<script>
-const logbox=document.getElementById('logbox');
-function addLog(msg){
-  const e=document.createElement('div');
-  e.innerHTML=`<span class="text-cyan-400">[${new Date().toLocaleTimeString()}]</span> ${msg}`;
-  logbox.prepend(e);if(logbox.childElementCount>12)logbox.lastChild.remove();
-}
-setInterval(()=>addLog('Node heartbeat nominal.'),4000);
+  <script>
+    /* ========== JavaScript 邏輯整合 ========== */
+    
+    // 1. Layout.js 邏輯 (預覽環境中寫死資料)
+    (() => {
+      const DEFAULT_PAGES = [
+        { key: "home", title: "首頁 Home", path: "#" },
+        { key: "solutions", title: "系統 Solutions", path: "#" },
+        { key: "insights", title: "洞察 Insights", path: "#" },
+        { key: "litu", title: "利稻 Litu Node", path: "#" },
+        { key: "about", title: "關於 About", path: "#" },
+        { key: "contact", title: "聯絡 Contact", path: "#" }
+      ];
 
-async function telemetry(){
-  try{
-    const d=await fetch('https://api.open-meteo.com/v1/forecast?latitude=23.187&longitude=121.021&current=temperature_2m,relative_humidity_2m').then(r=>r.json());
-    document.getElementById('temp').textContent=d.current.temperature_2m+' °C';
-    document.getElementById('hum').textContent=d.current.relative_humidity_2m+' %';
-  }catch{}}
-telemetry();setInterval(telemetry,60000);
-</script>
+      function headerHtml(pages, currentKey) {
+        const links = pages.map(
+          (p) => `<a href="${p.path}" class="nav-link ${p.key === currentKey ? "active" : ""}">${p.title}</a>`
+        ).join("");
 
-<!-- Three.js minimal starfield -->
-<script>
-let scene,camera,renderer,stars,mouseX=0,mouseY=0;
-function init3D(){
-  scene=new THREE.Scene();
-  camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,1,4000);
-  camera.position.z=1200;
-  renderer=new THREE.WebGLRenderer({alpha:true});renderer.setSize(innerWidth,innerHeight);
-  document.getElementById('canvas').appendChild(renderer.domElement);
-  const g=new THREE.BufferGeometry(),cnt=400,pos=new Float32Array(cnt*3);
-  for(let i=0;i<cnt;i++){pos[i*3]=(Math.random()-0.5)*3000;pos[i*3+1]=(Math.random()-0.5)*1000;pos[i*3+2]=Math.random()*-2000}
-  g.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  stars=new THREE.Points(g,new THREE.PointsMaterial({color:0x00f0ff,size:2}));
-  scene.add(stars);
-  document.addEventListener('mousemove',e=>{mouseX=(e.clientX-innerWidth/2)*.1;mouseY=(e.clientY-innerHeight/2)*.1});
-  window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
-  animate();}
-function animate(){requestAnimationFrame(animate);
-  camera.position.x+=(mouseX-camera.position.x)*.02;
-  camera.position.y+=(-mouseY-camera.position.y)*.02;
-  camera.lookAt(scene.position);renderer.render(scene,camera)}
-init3D();
-</script>
+        return `
+          <header class="topbar">
+            <div class="topbar-inner">
+              <a class="brand" href="#">
+                <div class="brand-mark">O</div>
+                <div class="brand-copy">
+                  <strong>ONYX DEEP TECH STUDIO</strong>
+                  <span>Litu / Lidao Base · Autonomous Microgrid</span>
+                </div>
+              </a>
+              <nav class="nav">${links}</nav>
+              <button class="mobile-menu-btn" id="mobileMenuBtn">Menu</button>
+            </div>
+          </header>
+          <div class="mobile-sheet" id="mobileSheet">
+            <button class="mobile-close" id="mobileCloseBtn">Close</button>
+            <nav style="display:flex; flex-direction:column; gap:18px;">${links}</nav>
+          </div>
+        `;
+      }
 
-<!-- BOOT END -->
-<script>
-setTimeout(()=>document.getElementById('boot').style.opacity=0,1800);
-setTimeout(()=>document.getElementById('boot').style.display='none',2600);
-</script>
+      function initLayout() {
+        const headerMount = document.getElementById("site-header");
+        const footerMount = document.getElementById("site-footer");
+
+        if (headerMount) headerMount.innerHTML = headerHtml(DEFAULT_PAGES, "home");
+        if (footerMount) {
+          footerMount.innerHTML = `<footer class="footer">© ${new Date().getFullYear()} ONYX DEEP TECH STUDIO · Litu Node Infrastructure · AI · Energy · Optical Transmission</footer>`;
+        }
+
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const mobileCloseBtn = document.getElementById("mobileCloseBtn");
+        const mobileSheet = document.getElementById("mobileSheet");
+
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener("click", () => mobileSheet.classList.add("open"));
+        if (mobileCloseBtn) mobileCloseBtn.addEventListener("click", () => mobileSheet.classList.remove("open"));
+      }
+
+      document.addEventListener("DOMContentLoaded", initLayout);
+    })();
+
+    // 2. Photon-bg.js 邏輯 (Three.js 4D 光子背景)
+    (() => {
+      document.addEventListener("DOMContentLoaded", () => {
+        // 等待 Three.js 載入
+        const initThree = setInterval(() => {
+          if (!window.THREE) return;
+          clearInterval(initThree);
+
+          const mount = document.getElementById("photon-bg");
+          if (!mount) return;
+
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 4000);
+          camera.position.z = 1100;
+
+          const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          mount.appendChild(renderer.domElement);
+
+          const isMobile = window.innerWidth < 768;
+          const count = isMobile ? 420 : 900;
+
+          const geometry = new THREE.BufferGeometry();
+          const positions = new Float32Array(count * 3);
+
+          for (let i = 0; i < count; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 2600;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 1600;
+            positions[i * 3 + 2] = Math.random() * -1800;
+          }
+
+          geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+
+          const material = new THREE.PointsMaterial({
+            color: 0x00e8df,
+            size: isMobile ? 1.8 : 2.6,
+            transparent: true,
+            opacity: 0.85,
+            sizeAttenuation: true
+          });
+
+          const stars = new THREE.Points(geometry, material);
+          scene.add(stars);
+
+          let mouseX = 0;
+          let mouseY = 0;
+
+          document.addEventListener("mousemove", (e) => {
+            mouseX = (e.clientX - window.innerWidth / 2) * 0.08;
+            mouseY = (e.clientY - window.innerHeight / 2) * 0.08;
+          });
+
+          function animate() {
+            requestAnimationFrame(animate);
+            stars.rotation.y += 0.0008;
+            stars.rotation.x += 0.0002;
+            camera.position.x += (mouseX - camera.position.x) * 0.02;
+            camera.position.y += (-mouseY - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+          }
+
+          animate();
+
+          window.addEventListener("resize", () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          });
+        }, 100);
+      });
+    })();
+
+    // 3. AI-Widget.js 邏輯 (預覽環境改為模擬打字機回覆，不打真實 API)
+    (() => {
+      function createWidget() {
+        const trigger = document.createElement("button");
+        trigger.className = "ai-trigger";
+        trigger.id = "aiTrigger";
+        trigger.textContent = "AI";
+
+        const panel = document.createElement("div");
+        panel.className = "ai-window";
+        panel.id = "aiWindow";
+        panel.innerHTML = `
+          <div class="ai-head">
+            <strong>ONYX AI STREAM</strong>
+            <button id="aiCloseBtn">Close</button>
+          </div>
+          <div class="ai-log" id="aiLog"></div>
+          <form class="ai-form" id="aiForm">
+            <input id="aiInput" placeholder="輸入你的問題…" autocomplete="off" />
+            <button type="submit">送出</button>
+          </form>
+        `;
+
+        document.body.appendChild(trigger);
+        document.body.appendChild(panel);
+        return { trigger, panel };
+      }
+
+      function appendMessage(logEl, role, text) {
+        const div = document.createElement("div");
+        div.className = `ai-msg ${role}`;
+        div.textContent = text;
+        logEl.appendChild(div);
+        logEl.scrollTop = logEl.scrollHeight;
+        return div;
+      }
+
+      // 模擬 Stream 回覆
+      async function mockStreamReply(query, logEl) {
+        const botBubble = appendMessage(logEl, "bot", "連線中…");
+        await new Promise(r => setTimeout(r, 600));
+
+        const replies = [
+          "我們在利稻 Litu 節點的實測顯示，目前的微電網系統能完美支撐高負載推論運算。",
+          "您好。關於 G.E.M.S. 地質元素代謝系統，它透過熱交換技術重新利用了 AI 伺服器的廢熱。",
+          "全光骨幹傳輸 (Optical Backbone) 目前運作正常，節點延遲低於 8ms。",
+          "這正是 Regenerative Infrastructure 的目標：在嚴酷環境下保持系統的主權與韌性。"
+        ];
+        const text = replies[Math.floor(Math.random() * replies.length)];
+        
+        botBubble.textContent = "";
+        for(let i = 0; i < text.length; i++) {
+          botBubble.textContent += text[i];
+          logEl.scrollTop = logEl.scrollHeight;
+          await new Promise(r => setTimeout(r, 30));
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const { trigger, panel } = createWidget();
+        const logEl = document.getElementById("aiLog");
+        const inputEl = document.getElementById("aiInput");
+        const formEl = document.getElementById("aiForm");
+        const closeBtn = document.getElementById("aiCloseBtn");
+
+        appendMessage(logEl, "bot", "ONYX AI 已就緒。這是在預覽環境的模擬對話。你可以詢問：Litu Node、G.E.M.S. 或自主電網。");
+
+        trigger.addEventListener("click", () => panel.classList.toggle("open"));
+        closeBtn.addEventListener("click", () => panel.classList.remove("open"));
+
+        formEl.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const query = inputEl.value.trim();
+          if (!query) return;
+
+          appendMessage(logEl, "user", query);
+          inputEl.value = "";
+          
+          await mockStreamReply(query, logEl);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
+
+```
