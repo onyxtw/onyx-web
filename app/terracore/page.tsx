@@ -1,5 +1,5 @@
 // app/terracore/page.tsx
-import TerraCoreFlow from "@/components/TerraCoreFlow";
+import TerraCoreFlow from "../components/TerraCoreFlow";
 
 export default function Page() {
   return (

@@ -1,6 +1,6 @@
 // app/global-grid/page.tsx
-import TerraCoreFlow from "@/components/TerraCoreFlow";
-import AtlasGlobe from "@/components/AtlasGlobe";
+import TerraCoreFlow from "../components/TerraCoreFlow";
+import AtlasGlobe from "../components/AtlasGlobe";
 
 export default function Page() {
   return (
