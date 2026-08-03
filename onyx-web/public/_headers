@@ -20,8 +20,12 @@
 /manifest.json
   Cache-Control: public, max-age=0, must-revalidate
 
-# 3. Next.js 靜態編譯資產 (帶有獨立 Hash，實施 1 年永久 immutable 快取)
+# 3. Next.js 編譯 JS / CSS 靜態 Bundle (深層比對 + 副檔名雙重覆蓋)
 /_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+/*.css
   Cache-Control: public, max-age=31536000, immutable
 
 # 4. 媒體與 3D 模型資產 (快取 30 天 + 背景自動更新)
