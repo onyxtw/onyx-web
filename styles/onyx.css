@@ -1,0 +1,115 @@
+:root {
+  --onyx-bg: #020617;
+  --onyx-panel: #020617;
+  --onyx-border-soft: rgba(148, 163, 184, 0.25);
+  --onyx-border-strong: rgba(148, 163, 184, 0.45);
+  --onyx-text-main: #e5e7eb;
+  --onyx-text-soft: #9ca3af;
+
+  /* PoRC‑SCS 色譜 */
+  --onyx-spectrum-energy: #f97316;
+  --onyx-spectrum-sovereign: #22c55e;
+  --onyx-spectrum-symbol: #38bdf8;
+  --onyx-spectrum-nature: #a3e635;
+  --onyx-spectrum-global: #0ea5e9;
+  --onyx-spectrum-matrix: #6366f1;
+  --onyx-spectrum-identity: #ec4899;
+}
+
+/* 全域背景 */
+body {
+  background: radial-gradient(circle at top, #0f172a 0%, #020617 45%, #000000 100%);
+  color: var(--onyx-text-main);
+}
+
+/* 主面板 */
+.onyx-panel {
+  background: var(--onyx-panel);
+  border-radius: 1rem;
+  border: 1px solid var(--onyx-border-soft);
+  box-shadow:
+    0 40px 80px rgba(15, 23, 42, 0.85),
+    0 0 0 1px rgba(15, 23, 42, 0.9);
+}
+
+/* 色譜標籤 */
+.onyx-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--onyx-border-soft);
+  color: var(--onyx-text-soft);
+}
+
+/* PoRC‑SCS 色譜變體 */
+.onyx-tag-energy {
+  border-color: rgba(249, 115, 22, 0.5);
+  color: #fed7aa;
+}
+.onyx-tag-sovereign {
+  border-color: rgba(34, 197, 94, 0.5);
+  color: #bbf7d0;
+}
+.onyx-tag-symbol {
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #bae6fd;
+}
+.onyx-tag-global {
+  border-color: rgba(14, 165, 233, 0.5);
+  color: #7dd3fc;
+}
+
+/* 節點網格 */
+.onyx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* 節點卡片 */
+.onyx-node {
+  position: relative;
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid var(--onyx-border-soft);
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.95));
+}
+
+/* 節點光點 */
+.onyx-node::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(56, 189, 248, 0.25), transparent 55%),
+    radial-gradient(circle at 90% 100%, rgba(249, 115, 22, 0.18), transparent 55%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* 小標題 */
+.onyx-subtitle {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--onyx-text-soft);
+}
+
+/* 主標題 */
+.onyx-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* 文本弱化 */
+.onyx-muted {
+  color: var(--onyx-text-soft);
+}
+

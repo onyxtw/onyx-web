@@ -25,3 +25,17 @@ export default function Page() {
   );
 }
 
+import TerraCoreFlow from "../components/TerraCoreFlow";
+
+export default function Page() {
+  return (
+    <main className="px-8 py-16 max-w-5xl mx-auto text-gray-200">
+      {/* 原本內容 */}
+      <section className="mt-12">
+        <h2 className="text-xl font-semibold mb-4">TerraCore 能量流視覺化</h2>
+        <TerraCoreFlow />
+      </section>
+    </main>
+  );
+}
+
