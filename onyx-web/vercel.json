@@ -1,3 +1,7 @@
 {
-  "framework": "nextjs"
+  "functions": {
+    "api/**/*.php": {
+      "runtime": "now-php@1.0.0"  // ❌ 舊版或無效的 Runtime 格式
+    }
+  }
 }
