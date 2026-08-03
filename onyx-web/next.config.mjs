@@ -1,3 +1,5 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -6,7 +8,7 @@ const nextConfig = {
     unoptimized: true,
   },
   turbopack: {
-    root: process.cwd(),
+    root: path.resolve(process.cwd()),
   },
 };
 
