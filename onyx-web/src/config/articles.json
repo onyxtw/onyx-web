@@ -1,0 +1,14 @@
+cat << 'EOF' > src/config/articles.json
+{
+  "articles": [
+    {
+      "id": "onyx-intro",
+      "title": "ONYX 主權級系統介紹",
+      "summary": "ONYX COPILOT OS 的核心理念與架構。",
+      "category": "system",
+      "date": "2026-08-01",
+      "link": "/articles/onyx-intro"
+    }
+  ]
+}
+EOF

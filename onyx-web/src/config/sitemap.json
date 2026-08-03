@@ -1,0 +1,15 @@
+cat << 'EOF' > src/config/sitemap.json
+{
+  "routes": [
+    { "path": "/", "page": "app/page.tsx" },
+    { "path": "/copilot-os", "page": "app/copilot-os/page.tsx" },
+    { "path": "/matrix", "page": "app/matrix/page.tsx" },
+    { "path": "/atlas", "page": "app/atlas/page.tsx" },
+    { "path": "/terra-core", "page": "app/terra-core/page.tsx" },
+    { "path": "/porc-scs", "page": "app/porc-scs/page.tsx" },
+    { "path": "/symbol-language", "page": "app/symbol-language/page.tsx" },
+    { "path": "/gems-tcp", "page": "app/gems-tcp/page.tsx" },
+    { "path": "/articles", "page": "app/articles/page.tsx" }
+  ]
+}
+EOF

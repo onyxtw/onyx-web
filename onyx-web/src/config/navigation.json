@@ -1,0 +1,15 @@
+cat << 'EOF' > src/config/navigation.json
+{
+  "navigation": [
+    { "label": "HOME", "path": "/" },
+    { "label": "COPILOT OS", "path": "/copilot-os" },
+    { "label": "MATRIX", "path": "/matrix" },
+    { "label": "ATLAS", "path": "/atlas" },
+    { "label": "TERRA CORE", "path": "/terra-core" },
+    { "label": "PoRC-SCS", "path": "/porc-scs" },
+    { "label": "SYMBOL LANGUAGE", "path": "/symbol-language" },
+    { "label": "GEMS-TCP", "path": "/gems-tcp" },
+    { "label": "ARTICLES", "path": "/articles" }
+  ]
+}
+EOF
