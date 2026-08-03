@@ -5,7 +5,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  trailingSlash: false,
+  experimental: {
+    turbo: {
+      root: process.cwd(),
+    },
+  },
 };
 
 export default nextConfig;
