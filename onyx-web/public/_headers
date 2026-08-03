@@ -1,4 +1,4 @@
-# 1. 全域 Security Headers (套用至所有頁面與資產)
+# 1. 全域 Security Headers
 /*
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Frame-Options: DENY
