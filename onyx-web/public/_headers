@@ -1,18 +1,30 @@
+# 1. 全域 Security Headers (套用至所有頁面與資產)
 /*
-  # 1. 安全防禦標頭 (Security Headers)
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Cross-Origin-Opener-Policy: same-origin
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; worker-src 'self' blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'self';
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; worker-src 'self' blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
 
-# 2. Next.js 靜態建置資產 (帶有 Hash 檔名，永久快取 1 年)
+# 2. 即時入口頁面 (強迫每次回源 Revalidate，確保部署更新零延遲)
+/
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/robots.txt
+  Cache-Control: public, max-age=0, must-revalidate
+/sitemap.xml
+  Cache-Control: public, max-age=0, must-revalidate
+/manifest.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 3. Next.js 靜態編譯資產 (帶有獨立 Hash，實施 1 年永久 immutable 快取)
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
-# 3. 媒體與 3D 靜態模型資產 (快取 1 個月 + 背景自動更新)
+# 4. 媒體與 3D 模型資產 (快取 30 天 + 背景自動更新)
 /*.png
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 /*.jpg
@@ -25,19 +37,5 @@
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 /*.gltf
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
-
-# 4. 字型資產 (永久快取 1 年)
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
-
-# 5. 即時性入口檔案 (無快取，每次強制導向 Edge 驗證)
-/
-  Cache-Control: public, max-age=0, must-revalidate
-/index.html
-  Cache-Control: public, max-age=0, must-revalidate
-/robots.txt
-  Cache-Control: public, max-age=0, must-revalidate
-/sitemap.xml
-  Cache-Control: public, max-age=0, must-revalidate
-/manifest.json
-  Cache-Control: public, max-age=0, must-revalidate
