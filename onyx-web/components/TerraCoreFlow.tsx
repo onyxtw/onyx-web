@@ -1,11 +1,9 @@
 import React from 'react';
 
-const TerraCoreFlow: React.FC = () => {
+export default function TerraCoreFlow() {
   return (
-    <div className="w-full h-[400px] bg-gray-900 border-2 border-dashed border-cyan-800 flex items-center justify-center text-cyan-300 font-monospace">
-      [ TERRACORE DATA FLOW VISUALIZATION STUB ]
+    <div className="w-full h-[400px] bg-black/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono">
+      [ TERRACORE DATA FLOW PIPELINE ACTIVE ]
     </div>
   );
-};
-
-export default TerraCoreFlow;
+}

@@ -1,11 +1,9 @@
 import React from 'react';
 
-const AtlasGlobe: React.FC = () => {
+export default function AtlasGlobe() {
   return (
-    <div className="w-full h-[500px] bg-gray-900 border-2 border-dashed border-cyan-800 flex items-center justify-center text-cyan-300 font-monospace">
-      [ 3D ATLAS GLOBE VISUALIZATION STUB ]
+    <div className="w-full h-[500px] bg-black/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono">
+      [ 3D ATLAS GLOBE SYSTEM ACTIVE ]
     </div>
   );
-};
-
-export default AtlasGlobe;
+}
