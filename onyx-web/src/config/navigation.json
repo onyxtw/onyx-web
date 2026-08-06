@@ -1,4 +1,3 @@
-cat << 'EOF' > src/config/navigation.json
 {
   "navigation": [
     { "label": "HOME", "path": "/" },
@@ -12,4 +11,3 @@ cat << 'EOF' > src/config/navigation.json
     { "label": "ARTICLES", "path": "/articles" }
   ]
 }
-EOF
