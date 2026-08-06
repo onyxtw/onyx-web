@@ -1,4 +1,3 @@
-cat << 'EOF' > src/config/sitemap.json
 {
   "routes": [
     { "path": "/", "page": "app/page.tsx" },
@@ -12,4 +11,3 @@ cat << 'EOF' > src/config/sitemap.json
     { "path": "/articles", "page": "app/articles/page.tsx" }
   ]
 }
-EOF
